@@ -206,8 +206,9 @@ SMODS.Joker{
     loc_txt = { -- local text
         name = 'Spinning Top',
         text = {
-          '{C:mult}+#2#{} mult per hand',
-          'size (currently {C:mult}+#1#{})'
+          'Create a {C:attention}The Wheel of Fortune{}',
+          '{C:tarot}Tarot{} card when {C:attention}Blind{}', 
+          'is selected',
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -222,7 +223,7 @@ SMODS.Joker{
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 3, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 4, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
         
@@ -249,6 +250,52 @@ SMODS.Joker{
                             return true
                         end)}))
                 end
+        end
+    end,
+    in_pool = function(self,wawa,wawa2)
+        --whether or not this card is in the pool, return true if it is, return false if its not
+        return true
+    end,
+}
+SMODS.Joker{
+    key = 'mushroom', --joker key
+    loc_txt = { -- local text
+        name = 'Mushroom',
+        text = {
+          'Levels up the next',
+          '{C:tarot}#1#{} hands played'
+        },
+        --[[unlock = {
+            'Be {C:legendary}cool{}',
+        }]]
+    },
+    atlas = 'Jokers', --atlas' key
+    rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
+    --soul_pos = { x = 0, y = 0 },
+    cost = 5, --cost
+    unlocked = true, --where it is unlocked or not: if true, 
+    discovered = true, --whether or not it starts discovered
+    blueprint_compat = true, --can it be blueprinted/brainstormed/other
+    eternal_compat = false, --can it be eternal
+    perishable_compat = true, --can it be perishable
+    pos = {x = 4, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    config = { 
+      extra = {
+        remaining = 4
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.remaining}} --#1# is replaced with card.ability.extra.Xmult
+    end,
+    calculate = function(self,card,context)
+        if context.joker_main then
+            card.ability.extra.remaining = card.ability.extra.remaining - 1
+            return {
+                card = card,
+                level_up = true,
+                message = 'mushroom',
+                colour = G.C.MULT
+            }
         end
     end,
     in_pool = function(self,wawa,wawa2)
