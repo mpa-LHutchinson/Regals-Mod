@@ -45,12 +45,6 @@ SMODS.Joker{
     loc_vars = function(self,info_queue,center)
         return {vars = {center.ability.extra.Xmult}} --#1# is replaced with card.ability.extra.Xmult
     end,
-    check_for_unlock = function(self, args)
-        if args.type == 'derek_loves_you' then --not a real type, just a joke
-            unlock_card(self)
-        end
-        unlock_card(self) --unlocks the card if it isnt unlocked
-    end,
     calculate = function(self,card,context)
         if context.joker_main and G.GAME.dollars < 0 then
             return {
@@ -88,7 +82,7 @@ SMODS.Joker{
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 0, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 1, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
         mult = 5 --configurable value
@@ -96,12 +90,6 @@ SMODS.Joker{
     },
     loc_vars = function(self,info_queue,center)
         return {vars = {center.ability.extra.mult}} --#1# is replaced with card.ability.extra.Xmult
-    end,
-    check_for_unlock = function(self, args)
-        if args.type == 'derek_loves_you' then --not a real type, just a joke
-            unlock_card(self)
-        end
-        unlock_card(self) --unlocks the card if it isnt unlocked
     end,
     calculate = function(self,card,context)
         if context.cardarea == G.hand and context.individual and not context.end_of_round and context.other_card:is_suit("Hearts") then
@@ -149,12 +137,6 @@ SMODS.Joker{
     loc_vars = function(self,info_queue,center)
         return {vars = {center.ability.extra.mult}} --#1# is replaced with card.ability.extra.Xmult
     end,
-    check_for_unlock = function(self, args)
-        if args.type == 'derek_loves_you' then --not a real type, just a joke
-            unlock_card(self)
-        end
-        unlock_card(self) --unlocks the card if it isnt unlocked
-    end,
     calculate = function(self,card,context)
         if context.selling_self then
             G.E_MANAGER:add_event(Event({
@@ -177,9 +159,8 @@ SMODS.Joker{
     loc_txt = { -- local text
         name = 'Artistic Joker',
         text = {
-          'Each {C:hearts}Heart{} card',
-          'held in hand',
-          'scores {C:mult}+#1#{} mult'
+          '{C:mult}+#2#{} mult per hand',
+          'size (currently {C:mult}+#1#{})'
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -197,24 +178,20 @@ SMODS.Joker{
     pos = {x = 0, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
-        mult = 5 --configurable value
+        mult = 16, --configurable value
+        mult_mod = 2
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.mult}} --#1# is replaced with card.ability.extra.Xmult
-    end,
-    check_for_unlock = function(self, args)
-        if args.type == 'derek_loves_you' then --not a real type, just a joke
-            unlock_card(self)
-        end
-        unlock_card(self) --unlocks the card if it isnt unlocked
+        return {vars = {center.ability.extra.mult, center.ability.extra.mult_mod}} --#1# is replaced with card.ability.extra.Xmult
     end,
     calculate = function(self,card,context)
         if context.joker_main then
+            card.ability.extra.mult = G.hand.config.card_limit * card.ability.extra.mult_mod
             return {
                 card = card,
                 mult_mod = card.ability.extra.mult,
-                message = '+' .. G.hand.shuffle_amt,
+                message = '+' .. card.ability.extra.mult,
                 colour = G.C.MULT
             }
         end
