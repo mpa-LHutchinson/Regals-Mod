@@ -112,8 +112,8 @@ SMODS.Joker{
         name = 'Cotton Candy',
         text = {
           'Sell this card to',
-          'create a free',
-          '{C:attention}Voucher Tag',
+          'create 2 free',
+          '{C:attention}Voucher Tags',
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -139,6 +139,14 @@ SMODS.Joker{
     end,
     calculate = function(self,card,context)
         if context.selling_self then
+            G.E_MANAGER:add_event(Event({
+                func = (function()
+                    add_tag(Tag('tag_voucher'))
+                    play_sound('generic1', 0.9 + math.random()*0.1, 0.8)
+                    play_sound('holo1', 1.2 + math.random()*0.1, 0.4)
+                    return true
+                end)
+            }))
             G.E_MANAGER:add_event(Event({
                 func = (function()
                     add_tag(Tag('tag_voucher'))
@@ -207,8 +215,8 @@ SMODS.Joker{
         name = 'Spinning Top',
         text = {
           'Create a {C:attention}The Wheel of Fortune{}',
-          '{C:tarot}Tarot{} card when {C:attention}Blind{}', 
-          'is selected. {C:inactive}(Must have room)',
+          '{C:tarot}Tarot{} card at the end of the', 
+          '{C:attention}Blind{} {C:inactive}(Must have room)',
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -233,7 +241,7 @@ SMODS.Joker{
         return {vars = {}} --#1# is replaced with card.ability.extra.Xmult
     end,
     calculate = function(self,card,context)
-        if context.setting_blind then
+        if context.ending_shop then
             if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
                     G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
                     G.E_MANAGER:add_event(Event({
@@ -365,7 +373,7 @@ SMODS.Joker{
         return {vars = {center.ability.extra.mult, center.ability.extra.mult_mod}} --#1# is replaced with card.ability.extra.Xmult
     end,
     calculate = function(self, card, context)
-        if context.cardarea == G.play and context.repetition and #context.scoring_hand == 5 and not context.blueprint then
+        if context.before and context.cardarea == G.jokers and #context.scoring_hand == 5 and not context.blueprint then
             card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
             return {
                 card = card,
