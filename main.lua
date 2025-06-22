@@ -389,9 +389,9 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = '3dglasses', --joker key
+    key = '3djoker', --joker key
     loc_txt = { -- local text
-        name = '3D Glasses',
+        name = '3D Joker',
         text = {
           "{C:attention}Bonus Cards{} also",
           "score {C:mult}+#2# mult{}.",
@@ -411,7 +411,7 @@ SMODS.Joker{
     blueprint_compat = false, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 6, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 7, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
         chips_mod = 30,
@@ -470,14 +470,40 @@ SMODS.Joker{
     calculate = function(self, card, context)
         if context.before and context.cardarea == G.jokers then
             for k, v in ipairs(context.scoring_hand) do
-                card.ability.extra.remaining = card.ability.extra.remaining - 1 
-                v.change_suit(v, 'Spades')
+                if card.ability.extra.remaining > 0 then
+                    card.ability.extra.remaining = card.ability.extra.remaining - 1 
+                    v.change_suit(v, 'Spades')
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            v:juice_up()
+                            return true
+                        end
+                    })) 
+                end
+            end
+            if card.ability.extra.remaining <= 0 then
                 G.E_MANAGER:add_event(Event({
                     func = function()
-                        v:juice_up()
+                        play_sound('tarot1')
+                        card.T.r = -0.2
+                        card:juice_up(0.3, 0.4)
+                        card.states.drag.is = true
+                        card.children.center.pinch.x = true
+                        G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+                            func = function()
+                                G.jokers:remove_card(self)
+                                card:remove()
+                                card = nil
+                                return true
+                            end
+                        }))
                         return true
                     end
-                })) 
+                }))
+                return {
+                    message = 'Used up!',
+                    colour = G.C.MONEY
+                }
             end
             return {message = 'Spades', colour = G.C.SUITS['Spades']}
         end
