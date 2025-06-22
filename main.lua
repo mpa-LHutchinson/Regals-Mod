@@ -278,7 +278,7 @@ SMODS.Joker{
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = false, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 4, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 5, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
         remaining = 4
@@ -287,17 +287,45 @@ SMODS.Joker{
     loc_vars = function(self,info_queue,center)
         return {vars = {center.ability.extra.remaining}} --#1# is replaced with card.ability.extra.Xmult
     end,
-    calculate = function(self,card,context)
-        if context.joker_main then
-            card.ability.extra.remaining = card.ability.extra.remaining - 1
+    calculate = function(self, card, context)
+        if context.before then
+            level_up_hand(context.blueprint_card or card, context.scoring_name, nil, 1)
+            if not context.blueprint then
+                card.ability.extra.remaining = card.ability.extra.remaining - 1
+                if card.ability.extra.remaining <= 0 then
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            play_sound('tarot1')
+                            card.T.r = -0.2
+                            card:juice_up(0.3, 0.4)
+                            card.states.drag.is = true
+                            card.children.center.pinch.x = true
+                            G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+                                func = function()
+                                    G.jokers:remove_card(self)
+                                    card:remove()
+                                    card = nil
+                                    return true
+                                end
+                            }))
+                            return true
+                        end
+                    }))
+                    return {
+                        message = localize('k_eaten_ex'),
+                        colour = G.C.MONEY
+                    }
+                end
+            end
+
             return {
                 card = card,
-                level_up = true,
-                message = 'mushroom',
+                message = '-1',
                 colour = G.C.MULT
             }
         end
     end,
+
     in_pool = function(self,wawa,wawa2)
         --whether or not this card is in the pool, return true if it is, return false if its not
         return true
