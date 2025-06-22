@@ -128,7 +128,7 @@ SMODS.Joker{
     blueprint_compat = false, --can it be blueprinted/brainstormed/other
     eternal_compat = false, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 0, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 2, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
         mult = 5 --configurable value
@@ -186,8 +186,8 @@ SMODS.Joker{
         return {vars = {center.ability.extra.mult, center.ability.extra.mult_mod}} --#1# is replaced with card.ability.extra.Xmult
     end,
     calculate = function(self,card,context)
+        card.ability.extra.mult = G.hand.config.card_limit * card.ability.extra.mult_mod
         if context.joker_main then
-            card.ability.extra.mult = G.hand.config.card_limit * card.ability.extra.mult_mod
             return {
                 card = card,
                 mult_mod = card.ability.extra.mult,
