@@ -545,7 +545,7 @@ SMODS.Joker{
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 4, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 9, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
         odds = 3
@@ -601,9 +601,8 @@ SMODS.Joker{
     loc_txt = { -- local text
         name = 'Welfare',
         text = {
-          'Sets money to {C:money}$#1#{}',
-          'if money is under {C:money}$#1#{}',
-          'when round ends'
+          'If money is under {C:money}$#1#{}',
+          'when round ends, earn {C:money}$#2#{}'
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -615,29 +614,24 @@ SMODS.Joker{
     cost = 5, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
+    blueprint_compat = false, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
     pos = {x = 0, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
-        money_cap = 10 --configurable value
+        money_cap = 10,
+        money = 5
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.money_cap}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.money_cap, center.ability.extra.money}} --#1# is replaced with card.ability.extra.Xmult
     end,
-    calculate = function(self,card,context)
-        if context.end_of_round and not context.individual and not context.repetition and G.GAME.dollars < card.ability.extra.money_cap then
-            return {
-                card = card,
-                dollars = card.ability.extra.money_cap - G.GAME.dollars
-            }
+    
+    calc_dollar_bonus = function(self,card)
+        if G.GAME.dollars < card.ability.extra.money_cap then
+            return card.ability.extra.money
         end
-    end,
-    in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
-        return true
     end,
 }
 SMODS.Joker{
@@ -755,7 +749,7 @@ SMODS.Joker{
         text = {
           'cycles between {C:chips}+#1#{} chips,',
           '{C:mult}+#2#{} mult, and {X:mult,C:white}X#3#{} mult',
-          'every round {C:inactive}(Currently #4#{C:inactive})'
+          'every round (Currently #4#))'
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -837,6 +831,47 @@ SMODS.Joker{
             return {
                 message = 'Shift',
                 colour = G.C.MONEY
+            }
+        end
+    end,
+}
+SMODS.Joker{
+    key = 'middlefinger', --joker key
+    loc_txt = { -- local text
+        name = 'Middle Finger',
+        text = {
+          '{X:mult,C:white}X#1#{} Mult during',
+          '{C:attention}boss blinds{}'
+        },
+        --[[unlock = {
+            'Be {C:legendary}cool{}',
+        }]]
+    },
+    atlas = 'Jokers', --atlas' key
+    rarity = 3, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
+    --soul_pos = { x = 0, y = 0 },
+    cost = 8, --cost
+    unlocked = true, --where it is unlocked or not: if true, 
+    discovered = true, --whether or not it starts discovered
+    blueprint_compat = true, --can it be blueprinted/brainstormed/other
+    eternal_compat = true, --can it be eternal
+    perishable_compat = true, --can it be perishable
+    pos = {x = 0, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    config = { 
+      extra = {
+        Xmult = 3 --configurable value
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.Xmult}} --#1# is replaced with card.ability.extra.Xmult
+    end,
+    calculate = function(self,card,context)
+        if context.joker_main and G.GAME.blind.boss then
+            return {
+                card = card,
+                Xmult_mod = card.ability.extra.Xmult,
+                message = 'X' .. card.ability.extra.Xmult,
+                colour = G.C.MULT
             }
         end
     end,
