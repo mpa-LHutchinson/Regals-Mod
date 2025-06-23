@@ -640,6 +640,64 @@ SMODS.Joker{
         return true
     end,
 }
+SMODS.Joker{
+    key = 'pocketaces', --joker key
+    loc_txt = { -- local text
+        name = 'Pocket Aces',
+        text = {
+          'When 1 hand remains,',
+          'add {C:attention}2{} random {C:attention}Enhanced',
+          '{C:attention}Aces{} to your hand'
+        },
+        --[[unlock = {
+            'Be {C:legendary}cool{}',
+        }]]
+    },
+    atlas = 'Jokers', --atlas' key
+    rarity = 3, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
+    --soul_pos = { x = 0, y = 0 },
+    cost = 8, --cost
+    unlocked = true, --where it is unlocked or not: if true, 
+    discovered = true, --whether or not it starts discovered
+    blueprint_compat = true, --can it be blueprinted/brainstormed/other
+    eternal_compat = true, --can it be eternal
+    perishable_compat = true, --can it be perishable
+    pos = {x = 0, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    config = { 
+      extra = {
+        stop = false
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.stop}} --#1# is replaced with card.ability.extra.Xmult
+    end,
+    calculate = function(self,card,context)
+        if G.GAME.current_round.hands_left == 1 and not card.ability.extra.stop then
+            local cen_pool = {}
+            for i=1, 2 do
+                _suit = pseudorandom_element({'S','H','D','C'}, pseudoseed('grim_create'))
+                for k, v in pairs(G.P_CENTER_POOLS["Enhanced"]) do
+                    if v.key ~= 'm_stone' then 
+                        cen_pool[#cen_pool+1] = v
+                    end
+                end
+                create_playing_card({front = G.P_CARDS[_suit..'_'..'A'], center = pseudorandom_element(cen_pool, pseudoseed('spe_card'))}, G.hand, nil, i ~= 1, {G.C.SECONDARY_SET.Spectral})
+            end
+            card.ability.extra.stop = true
+            return {
+                message = 'Aces!',
+                colour = G.C.MULT
+            }
+        end
+        if context.end_of_round and not context.individual and not context.repetition then
+            card.ability.extra.stop = false
+        end
+    end,
+    in_pool = function(self,wawa,wawa2)
+        --whether or not this card is in the pool, return true if it is, return false if its not
+        return true
+    end,
+}
 ----------------------------------------------
 ------------MOD CODE END----------------------
     
