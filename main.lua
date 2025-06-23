@@ -628,7 +628,7 @@ SMODS.Joker{
         return {vars = {center.ability.extra.money_cap}} --#1# is replaced with card.ability.extra.Xmult
     end,
     calculate = function(self,card,context)
-        if context.end_of_round and not context.individual and G.GAME.dollars < card.ability.extra.money_cap then
+        if context.end_of_round and not context.individual and not context.repetition and G.GAME.dollars < card.ability.extra.money_cap then
             return {
                 card = card,
                 dollars = card.ability.extra.money_cap - G.GAME.dollars
