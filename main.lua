@@ -656,7 +656,7 @@ SMODS.Joker{
     blueprint_compat = false, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 0, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 1, y = 1}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
         stop = false
@@ -747,9 +747,11 @@ SMODS.Joker{
     loc_txt = { -- local text
         name = 'Workout Routine',
         text = {
-          'cycles between {C:chips}+#1#{} chips,',
-          '{C:mult}+#2#{} mult, and {X:mult,C:white}X#3#{} mult',
-          'every round (Currently #4#))'
+          'cycles between reps',
+          '1. {C:chips}+#1#{} chips',
+          '2. {C:mult}+#2#{} mult',
+          '3. {X:mult,C:white}X#3#{} mult',
+          'each round (Currently rep {C:attention}#4#{}))'
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -770,8 +772,7 @@ SMODS.Joker{
         chips = 100,
         mult = 20,
         Xmult = 2,
-        cycle = 0,
-        cycle_text = '{C:chips}+#1#{} chips'
+        cycle = 1
       }
     },
     loc_vars = function(self, info_queue, center)
@@ -780,35 +781,26 @@ SMODS.Joker{
         local xmult = center.ability.extra.Xmult
 
         local cycle = center.ability.extra.cycle
-        local cycle_text
 
-        if cycle == 0 then
-            cycle_text = '{C:chips}+#1#'
-        elseif cycle == 1 then
-            cycle_text = '{C:mult}+#2#'
-        elseif cycle == 2 then
-            cycle_text = '{X:mult,C:white}X#3#'
-        end
-
-        return {vars = {chips, mult, xmult, cycle_text}}
+        return {vars = {chips, mult, xmult, cycle}}
     end,
     calculate = function(self,card,context)
         if context.joker_main then
-            if card.ability.extra.cycle == 0 then
+            if card.ability.extra.cycle == 1 then
                 return {
                     card = card,
-                    chips_mod = card.ability.extra.chips,
+                    chip_mod = card.ability.extra.chips,
                     message = '+' .. card.ability.extra.chips,
                     colour = G.C.CHIPS
                 }
-            elseif card.ability.extra.cycle == 1 then
+            elseif card.ability.extra.cycle == 2 then
                 return {
                     card = card,
                     mult_mod = card.ability.extra.mult,
                     message = '+' .. card.ability.extra.mult,
                     colour = G.C.MULT
                 }
-            elseif card.ability.extra.cycle == 2 then
+            elseif card.ability.extra.cycle == 3 then
                 return {
                     card = card,
                     Xmult_mod = card.ability.extra.Xmult,
@@ -818,15 +810,12 @@ SMODS.Joker{
             end
         end
         if context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
-            if card.ability.extra.cycle == 0 then
-                card.ability.extra.cycle = 1
-                card.ability.extra.cycle_text = '{C:mult}+#2#{} mult'
-            elseif card.ability.extra.cycle == 1 then
+            if card.ability.extra.cycle == 1 then
                 card.ability.extra.cycle = 2
-                card.ability.extra.cycle_text = '{X:mult,C:white}X#3#{} mult'
             elseif card.ability.extra.cycle == 2 then
-                card.ability.extra.cycle = 0
-                card.ability.extra.cycle_text = '{C:chips}+#1#{} chips'
+                card.ability.extra.cycle = 3
+            elseif card.ability.extra.cycle == 3 then
+                card.ability.extra.cycle = 1
             end
             return {
                 message = 'Shift',
