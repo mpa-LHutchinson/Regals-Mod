@@ -216,7 +216,7 @@ SMODS.Joker{
         text = {
           'Create a {C:attention}The Wheel of Fortune{}',
           '{C:tarot}Tarot{} card at the end of the', 
-          '{C:attention}Blind{} {C:inactive}(Must have room)',
+          '{C:attention}Shop{} {C:inactive}(Must have room)',
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -530,7 +530,7 @@ SMODS.Joker{
           'When {C:attention}Blind{} is selected,',
           'generate a {C:tarot}Tarot{} card or {C:planet}Planet{}', 
           'card. {C:green}#1# in #2#{} chance to also',
-          'create a {C:spectral}spectral{} card'
+          'create a {C:spectral}spectral{} card {C:inactive}(Must have room)'
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -697,7 +697,7 @@ SMODS.Joker{
     loc_txt = { -- local text
         name = 'Medusa',
         text = {
-          'Converts all played cards',
+          'Converts all scored cards',
           'cards from {C:attention}first hand{}',
           'each round into {C:attention}Stone cards{}'
         },
@@ -714,7 +714,7 @@ SMODS.Joker{
     blueprint_compat = false, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 1, y = 2}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 2, y = 1}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
       }
@@ -724,7 +724,7 @@ SMODS.Joker{
     end,
     calculate = function(self, card, context)
         if context.before and context.cardarea == G.jokers and G.GAME.current_round.hands_played == 0 then
-            for k, v in ipairs(context.full_hand) do
+            for k, v in ipairs(context.scored_hand) do
                 v:set_ability(G.P_CENTERS.m_stone, nil, true)
                 G.E_MANAGER:add_event(Event({
                     func = function()
