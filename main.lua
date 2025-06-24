@@ -326,11 +326,13 @@ SMODS.Joker{
                 end
             end
 
-            return {
-                card = card,
-                message = '-1',
-                colour = G.C.MULT
-            }
+            if not context.blueprint then
+                return {
+                    card = card,
+                    message = '-1',
+                    colour = G.C.MULT
+                }
+            end
         end
     end,
 
