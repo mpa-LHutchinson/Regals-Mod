@@ -1171,6 +1171,89 @@ SMODS.Joker{
         return false
     end,
 }
+SMODS.Joker{
+    key = 'dragonegg', --joker key
+    loc_txt = { -- local text
+        name = 'Dragon Egg',
+        text = {
+          'Will transform into a random',
+          '{C:red}Rare{C:attention} Joker{} after {C:attention}#2# rounds',
+          '{C:inactive}(Currently {C:attention}#1#{C:inactive}/#2#)'
+        },
+        --[[unlock = {
+            'Be {C:legendary}cool{}',
+        }]]
+    },
+    atlas = 'Jokers', --atlas' key
+    rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
+    --soul_pos = { x = 0, y = 0 },
+    cost = 5, --cost
+    unlocked = false, --where it is unlocked or not: if true, 
+    discovered = false, --whether or not it starts discovered
+    blueprint_compat = false, --can it be blueprinted/brainstormed/other
+    eternal_compat = false, --can it be eternal
+    perishable_compat = true, --can it be perishable
+    pos = {x = 1, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    config = { 
+      extra = {
+        rounds = 0,
+        required = 3
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.rounds, center.ability.extra.required}} --#1# is replaced with card.ability.extra.Xmult
+    end,
+    calculate = function(self,card,context)
+        if context.end_of_round and not context.individual and not context.repetition then
+            if card.ability.extra.rounds < card.ability.extra.required then
+                card.ability.extra.rounds = card.ability.extra.rounds + 1
+                    if card.ability.extra.rounds >= card.ability.extra.required then
+                        G.E_MANAGER:add_event(Event({
+                            func = function()
+                                play_sound('tarot1')
+                                card.T.r = -0.2
+                                card:juice_up(0.3, 0.4)
+                                card.states.drag.is = true
+                                card.children.center.pinch.x = true
+                                G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+                                    func = function()
+                                        G.jokers:remove_card(self)
+                                        card:remove()
+                                        card = nil
+                                        return true
+                                    end
+                                }))
+                                return true
+                            end
+                        }))
+                        G.E_MANAGER:add_event(Event({
+                            func = function() 
+                                    local card = create_card('Joker', G.jokers, nil, 2, nil, nil, nil, 'dra')
+                                    card:add_to_deck()
+                                    G.jokers:emplace(card)
+                                    card:start_materialize()
+                                return true
+                            end}))  
+                        return {
+                            card = card,
+                            message = 'Hatched!',
+                            colour = G.C.MONEY,
+                        }
+                    end 
+                return {
+                    card = card,
+                    message = card.ability.extra.rounds .. '/' .. card.ability.extra.required,
+                    colour = G.C.MONEY,
+                }
+            end
+            
+        end
+    end,
+    in_pool = function(self,wawa,wawa2)
+        --whether or not this card is in the pool, return true if it is, return false if its not
+        return false
+    end,
+}
 ----------------------------------------------
 ------------MOD CODE END----------------------
     
