@@ -724,7 +724,7 @@ SMODS.Joker{
     end,
     calculate = function(self, card, context)
         if context.before and context.cardarea == G.jokers and G.GAME.current_round.hands_played == 0 then
-            for k, v in ipairs(context.scored_hand) do
+            for k, v in ipairs(context.scoring_hand) do
                 v:set_ability(G.P_CENTERS.m_stone, nil, true)
                 G.E_MANAGER:add_event(Event({
                     func = function()
