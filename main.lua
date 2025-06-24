@@ -586,7 +586,7 @@ SMODS.Joker{
                                     G.GAME.consumeable_buffer = 0
                                     return true
                                 end}))   
-                                card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_plus_tarot'), colour = G.C.PURPLE})                       
+                                card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_plus_spectral'), colour = G.C.PURPLE})                       
                             return true
                         end)}))
                 end
@@ -873,7 +873,7 @@ SMODS.Joker{
         name = 'Vengeful Spirit',
         text = {
           '{X:mult,C:white}X#2#{} mult per {C:spectral}spectral{} card',
-          'used this run {C:inactive}(Currently {X:mult,C:white}X#1#{})'
+          'used this run {C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive})'
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -946,7 +946,7 @@ SMODS.Joker{
     end,
     calculate = function(self,card,context)
         if context.selling_self then 
-            if pseudorandom('phoe') < G.GAME.probabilities.normal / card.ability.extra.odds then
+            if pseudorandom('lott') < G.GAME.probabilities.normal / card.ability.extra.odds then
                 return {
                     card = card,
                     dollars = card.ability.extra.money,
@@ -960,6 +960,88 @@ SMODS.Joker{
                     colour = G.C.MONEY
                 }
             end
+        end
+    end,
+}
+SMODS.Joker{
+    key = 'eventhorizon', --joker key
+    loc_txt = { -- local text
+        name = 'Event Horizon',
+        text = {
+          'Generates a {C:spectral}black hole{}',
+          '{C:spectral}spectral card{} if at least {C:attention}#2#{} unique',
+          'hand types were played this round',
+          '{C:inactive}({C:attention}#1#/#2#{C:inactive})'
+        },
+        --[[unlock = {
+            'Be {C:legendary}cool{}',
+        }]]
+    },
+    atlas = 'Jokers', --atlas' key
+    rarity = 3, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
+    --soul_pos = { x = 0, y = 0 },
+    cost = 8, --cost
+    unlocked = true, --where it is unlocked or not: if true, 
+    discovered = true, --whether or not it starts discovered
+    blueprint_compat = true, --can it be blueprinted/brainstormed/other
+    eternal_compat = true, --can it be eternal
+    perishable_compat = true, --can it be perishable
+    pos = {x = 1, y = 1}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    config = { 
+      extra = {
+        unique_hands = 0,
+        required = 3
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.unique_hands, center.ability.extra.required}} --#1# is replaced with card.ability.extra.Xmult
+    end,
+    calculate = function(self,card,context)
+
+        if context.cardarea == G.jokers and G.GAME.hands[context.scoring_name] and G.GAME.hands[context.scoring_name].played_this_round == 1 and not context.blueprint and context.before then 
+            if card.ability.extra.unique_hands < card.ability.extra.required then
+                card.ability.extra.unique_hands = card.ability.extra.unique_hands + 1
+                if card.ability.extra.unique_hands < card.ability.extra.required then
+                    return{
+                        message = 'Drifting closer...',
+                        card = card,
+                        colour = G.C.BLACK
+                    }
+                elseif card.ability.extra.unique_hands == card.ability.extra.required then
+                    return{
+                        message = 'Active!',
+                        card = card,
+                        colour = G.C.BLACK
+                    }
+                end
+            end             
+        end
+        
+        if context.end_of_round and not context.individual and not context.repetition then
+            if card.ability.extra.unique_hands >= card.ability.extra.required then
+                if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                    G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                    G.E_MANAGER:add_event(Event({
+                        func = (function()
+                            G.E_MANAGER:add_event(Event({
+                                func = function() 
+                                    local card = create_card('Spectral',G.consumeables, nil, nil, nil, nil, 'c_black_hole', 'eventhorizon')
+                                    card:add_to_deck()
+                                    G.consumeables:emplace(card)
+                                    G.GAME.consumeable_buffer = 0
+                                    return true
+                                end}))   
+                                card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_plus_spectral'), colour = G.C.PURPLE})                       
+                            return true
+                        end)}))
+                end
+            end
+            card.ability.extra.unique_hands = 0
+            return{
+                message = 'Reset',
+                card = card,
+                colour = G.C.BLACK
+            }
         end
     end,
 }
