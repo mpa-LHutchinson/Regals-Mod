@@ -1254,6 +1254,99 @@ SMODS.Joker{
         return false
     end,
 }
+SMODS.Joker{
+    key = 'dynamite', --joker key
+    loc_txt = { -- local text
+        name = 'Dynamite',
+        text = {
+          'At the end of each round,',
+          '{C:attention}destroy{} a random card held',
+          'in hand and gain {C:mult}+#2#{} Mult',
+          '{C:inactive}(Currently {C:red}+#1#{C:inactive} Mult)'
+        },
+        --[[unlock = {
+            'Be {C:legendary}cool{}',
+        }]]
+    },
+    atlas = 'Jokers', --atlas' key
+    rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
+    --soul_pos = { x = 0, y = 0 },
+    cost = 5, --cost
+    unlocked = false, --where it is unlocked or not: if true, 
+    discovered = false, --whether or not it starts discovered
+    blueprint_compat = true, --can it be blueprinted/brainstormed/other
+    eternal_compat = true, --can it be eternal
+    perishable_compat = true, --can it be perishable
+    pos = {x = 1, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    config = { 
+      extra = {
+        mult = 0,
+        mult_mod = 4
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.mult, center.ability.extra.mult_mod}} --#1# is replaced with card.ability.extra.Xmult
+    end,
+    calculate = function(self, card, context)
+        if context.end_of_round and not context.individual and not context.blueprint and not context.repetition then
+            local destroyed_cards = {}
+            destroyed_cards[#destroyed_cards+1] = pseudorandom_element(G.hand.cards, pseudoseed('random_destroy'))
+
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.4,
+                func = function()
+                    play_sound('tarot1')
+                    return true
+                end
+            }))
+
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.2,
+                func = function()
+                    for i = #destroyed_cards, 1, -1 do
+                        local card = destroyed_cards[i]
+                        if card and card.ability then
+                            if card.ability.name == 'Glass Card' then 
+                                card:shatter()
+                            else
+                                card:start_dissolve()
+                            end
+                        end
+                    end
+                    return true
+                end
+            }))
+
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.7,
+                func = function()
+                    return true
+                end
+            }))
+            card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+            return{
+                message = 'Kaboom!',
+                colour = G.C.MULT,
+            }
+        end
+        if context.joker_main then
+            return{
+                card = card,
+                mult_mod = card.ability.extra.mult,
+                message = '+' .. card.ability.extra.mult,
+                colour = G.C.MULT
+            }
+        end
+    end,
+
+    in_pool = function(self,wawa,wawa2)
+        --whether or not this card is in the pool, return true if it is, return false if its not
+        return false
+    end,
+}
 ----------------------------------------------
 ------------MOD CODE END----------------------
     
