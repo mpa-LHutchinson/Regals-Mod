@@ -21,7 +21,7 @@ SMODS.Joker{
         text = {
           '{X:mult,C:white}X#1#{} Mult if',
           'hand is played',
-          'while in debt'
+          'while in debt or at {C:money}$0{}'
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -46,7 +46,7 @@ SMODS.Joker{
         return {vars = {center.ability.extra.Xmult}} --#1# is replaced with card.ability.extra.Xmult
     end,
     calculate = function(self,card,context)
-        if context.joker_main and G.GAME.dollars < 0 then
+        if context.joker_main and G.GAME.dollars <= 0 then
             return {
                 card = card,
                 Xmult_mod = card.ability.extra.Xmult,
@@ -883,8 +883,8 @@ SMODS.Joker{
     rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
     --soul_pos = { x = 0, y = 0 },
     cost = 7, --cost
-    unlocked = false, --where it is unlocked or not: if true, 
-    discovered = false, --whether or not it starts discovered
+    unlocked = true, --where it is unlocked or not: if true, 
+    discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
@@ -913,7 +913,7 @@ SMODS.Joker{
     end,
     in_pool = function(self,wawa,wawa2)
         --whether or not this card is in the pool, return true if it is, return false if its not
-        return false
+        return true
     end,
 }
 SMODS.Joker{
