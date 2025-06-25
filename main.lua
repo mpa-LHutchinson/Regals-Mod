@@ -1512,6 +1512,74 @@ SMODS.Joker{
         return false
     end,
 }
+SMODS.Joker{
+    key = 'corporatejoker', --joker key
+    loc_txt = { -- local text
+        name = 'Corporate Joker',
+        text = {
+          'This Joker gains {C:chips}+#4#{} Chips and {C:mult}+#2#{} Mult',
+          'after {C:attention}Boss Blind{} is defeated,',
+          'resets if any {C:attention}Blind{} is skipped',
+          '{C:inactive}(Currently {C:chips}+#3#{C:inactive} Chips and {C:mult}+#1#{C:inactive} Mult)'
+        },
+        --[[unlock = {
+            'Be {C:legendary}cool{}',
+        }]]
+    },
+    atlas = 'Jokers', --atlas' key
+    rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
+    --soul_pos = { x = 0, y = 0 },
+    cost = 4, --cost
+    unlocked = false, --where it is unlocked or not: if true, 
+    discovered = false, --whether or not it starts discovered
+    blueprint_compat = true, --can it be blueprinted/brainstormed/other
+    eternal_compat = true, --can it be eternal
+    perishable_compat = true, --can it be perishable
+    pos = {x = 6, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    config = { 
+      extra = {
+        mult = 0,
+        mult_mod = 10,
+        chips = 0,
+        chips_mod = 25,
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.mult, center.ability.extra.mult_mod, center.ability.extra.chips, center.ability.extra.chips_mod }} --#1# is replaced with card.ability.extra.Xmult
+    end,
+    calculate = function(self, card, context)
+        if  G.GAME.blind.boss and context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
+            card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+            card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chips_mod
+            return {
+                card = card,
+                message = 'Promoted!',
+                colour = G.C.MONEY
+            }
+        elseif context.joker_main and card.ability.extra.mult > 0 and card.ability.extra.chips > 0 then
+            return {
+                card = card,
+                mult_mod = card.ability.extra.mult,
+                chip_mod = card.ability.extra.chips,
+                message = 'Good work!',
+                colour = G.C.MONEY
+            }
+        elseif context.skip_blind and not context.blueprint then
+            card.ability.extra.mult = 0
+            card.ability.extra.chips = 0
+            return {
+                card = card,
+                message = 'Fired!',
+                colour = G.C.MULT
+            }
+        end
+    end,
+
+    in_pool = function(self,wawa,wawa2)
+        --whether or not this card is in the pool, return true if it is, return false if its not
+        return false
+    end,
+}
 
 ----------------------------------------------
 ------------MOD CODE END----------------------
