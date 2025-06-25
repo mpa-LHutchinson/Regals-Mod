@@ -938,6 +938,7 @@ SMODS.Joker{
     blueprint_compat = false, --can it be blueprinted/brainstormed/other
     eternal_compat = false, --can it be eternal
     perishable_compat = true, --can it be perishable
+    pixel_size = { w = 0.5 * 71, h = 0.5 * 95 },
     pos = {x = 2, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
