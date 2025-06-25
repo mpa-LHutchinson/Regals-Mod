@@ -917,9 +917,9 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'lotteryticket', --joker key
+    key = 'scratchticket', --joker key
     loc_txt = { -- local text
-        name = 'Lottery Ticket',
+        name = 'Scratch Ticket',
         text = {
           'Sell this card for',
           'a {C:green}#1# in #2#{} chance',
@@ -938,8 +938,8 @@ SMODS.Joker{
     blueprint_compat = false, --can it be blueprinted/brainstormed/other
     eternal_compat = false, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pixel_size = { w = 0.5 * 71, h = 0.5 * 95 },
-    pos = {x = 2, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pixel_size = { w = 0.81 * 71, h = 0.78 * 95 },
+    pos = {x = 6, y = 1}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
         odds = 15,
