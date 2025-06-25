@@ -1390,7 +1390,79 @@ SMODS.Joker{
     end,
     in_pool = function(self,wawa,wawa2)
         --whether or not this card is in the pool, return true if it is, return false if its not
-        return true
+        return false
+    end,
+}
+SMODS.Joker{
+    key = 'spraypaint',
+    loc_txt = {
+        name = 'Spray Paint',
+        text = {
+            'Sell this card after {C:attention}#2#{} round to add',
+            '{C:dark_edition}Foil{}, {C:dark_edition}Holographic{}, or {C:dark_edition}Polychrome{} edition',
+            'to a random {C:attention}Joker',
+            '{C:inactive}(Currently {C:attention}#1#{C:inactive}/#2#)'
+        },
+        --[[unlock = {
+            'Be {C:legendary}cool{}',
+        }]]
+    },
+    atlas = 'Jokers',
+    rarity = 2,
+    cost = 6,
+    unlocked = false,
+    discovered = false,
+    blueprint_compat = false,
+    eternal_compat = false,
+    perishable_compat = true,
+    pos = {x = 2, y = 0},
+    config = {
+        extra = {
+            rounds = 0,
+            required = 1
+        }
+    },
+    loc_vars = function(self, info_queue, center)
+        return { vars = { center.ability.extra.rounds, center.ability.extra.required} }
+    end,
+    calculate = function(self, card, context)
+
+        if context.end_of_round and not context.individual and not context.repetition then
+            if card.ability.extra.rounds < card.ability.extra.required then
+                card.ability.extra.rounds = card.ability.extra.rounds + 1
+                if card.ability.extra.rounds >= card.ability.extra.required then
+                    local eval = function(card) return (card.ability.extra.rounds >= card.ability.extra.required) end
+                    juice_card_until(card, eval, true)
+                    return {
+                        card = card,
+                        message = 'Active',
+                        colour = G.C.MONEY,
+                    }
+                end
+            end
+        end
+
+        if context.selling_self and card.ability.extra.rounds >= card.ability.extra.required then
+            local eligible_editionless_jokers = {}
+            for k, v in pairs(G.jokers.cards) do
+                if v.ability.set == 'Joker' and not v.edition and v ~= card then
+                    table.insert(eligible_editionless_jokers, v)
+                end
+            end
+            if #eligible_editionless_jokers > 0 then
+                local eligible_card = pseudorandom_element(eligible_editionless_jokers, pseudoseed('spraypaint'))
+                local edition = poll_edition('wheel_of_fortune', nil, true, true)
+                eligible_card:set_edition(edition, true)
+                return {
+                    card = card,
+                    message = 'Sprayed!',
+                    colour = G.C.MONEY,
+                }
+            end
+        end
+    end,
+    in_pool = function(self, wawa, wawa2)
+        return false
     end,
 }
 ----------------------------------------------
