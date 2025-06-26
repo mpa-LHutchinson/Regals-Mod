@@ -1669,6 +1669,64 @@ SMODS.Joker{
         return false
     end,
 }
+SMODS.Joker{
+    key = 'purplejoker', --joker key
+    loc_txt = { -- local text
+        name = 'Purple Joker',
+        text = {
+          'This Joker gains {C:chips}+#2#{} Chips',
+          'when discarding a purple seal',
+          '{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)'
+        },
+        --[[unlock = {
+            'Be {C:legendary}cool{}',
+        }]]
+    },
+    atlas = 'Jokers', --atlas' key
+    rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
+    --soul_pos = { x = 0, y = 0 },
+    cost = 5, --cost
+    unlocked = false, --where it is unlocked or not: if true, 
+    discovered = false, --whether or not it starts discovered
+    blueprint_compat = true, --can it be blueprinted/brainstormed/other
+    eternal_compat = true, --can it be eternal
+    perishable_compat = true, --can it be perishable
+    pos = {x = 6, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    config = { 
+      extra = {
+        chips = 0,
+        chips_mod = 12
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.chips, center.ability.extra.chips_mod}} --#1# is replaced with card.ability.extra.Xmult
+    end,
+    calculate = function(self, card, context)
+        if context.discard and not context.blueprint then
+            if context.other_card.seal == 'Purple' then
+                card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chips_mod
+                return {
+                    card = card,
+                    message = 'Upgrade',
+                    colour = G.C.CHIPS
+                }
+            end
+        elseif context.joker_main and card.ability.extra.chips > 0 then
+            return {
+                card = card,
+                chip_mod = card.ability.extra.chips,
+                message = '+' .. card.ability.extra.chips,
+                colour = G.C.CHIPS
+            }
+        
+        end
+    end,
+
+    in_pool = function(self,wawa,wawa2)
+        --whether or not this card is in the pool, return true if it is, return false if its not
+        return false
+    end,
+}
 
 ----------------------------------------------
 ------------MOD CODE END----------------------
