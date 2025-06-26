@@ -1792,7 +1792,78 @@ SMODS.Joker{
         return false
     end,
 }
+SMODS.Joker{
+    key = 'wildwest', --joker key
+    loc_txt = { -- local text
+        name = 'Wild West',
+        text = {
+          "Provides {C:attention}+1{} extra hand size",
+          "for every {C:attention}#2# Wild Cards{} in your", 
+          "full deck at the end of the round", 
+          "{C:inactive}(Currently {C:attention}#1#{C:inactive})"
+        },
+        --[[unlock = {
+            'Be {C:legendary}cool{}',
+        }]]
+    },
+    atlas = 'Jokers', --atlas' key
+    rarity = 3, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
+    --soul_pos = { x = 0, y = 0 },
+    cost = 7, --cost
+    unlocked = true, --where it is unlocked or not: if true, 
+    discovered = true, --whether or not it starts discovered
+    blueprint_compat = false, --can it be blueprinted/brainstormed/other
+    eternal_compat = true, --can it be eternal
+    perishable_compat = true, --can it be perishable
+    pos = {x = 8, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    config = { 
+      extra = {
+        extra_hand_size = 0,
+        per = 2,
+        last_applied_size = 0
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.extra_hand_size, center.ability.extra.per}} --#1# is replaced with card.ability.extra.Xmult
+    end,
+    calculate = function(self, card, context)
+        if context.end_of_round and not context.individual and not context.repetition then
+            local wilds = 0
+            local isdifferent = false
+            for k, v in pairs(G.playing_cards) do
+                if v.config.center.key == 'm_wild' then
+                    wilds = wilds + 1
+                end
+            end
 
+            local bonus_size = math.floor(wilds / card.ability.extra.per)
+
+            if isdifferent then
+                isdifferent = true
+            end
+
+            G.hand:change_size(-card.ability.extra.last_applied_size)
+            G.hand:change_size(bonus_size)
+            card.ability.extra.last_applied_size = bonus_size
+            card.ability.extra.extra_hand_size = bonus_size
+
+            return{
+                message = 'Reloaded!',
+                colour = G.C.MONEY
+            }
+        end
+    end,
+
+    remove_from_deck = function(self, card, from_debuff)
+		G.hand:change_size(-card.ability.extra.extra_hand_size)
+	end,
+
+
+    in_pool = function(self,wawa,wawa2)
+        --whether or not this card is in the pool, return true if it is, return false if its not
+        return false
+    end,
+}
 ----------------------------------------------
 ------------MOD CODE END----------------------
     
