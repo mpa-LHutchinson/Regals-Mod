@@ -1077,12 +1077,12 @@ SMODS.Joker{
     rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
     --soul_pos = { x = 0, y = 0 },
     cost = 5, --cost
-    unlocked = false, --where it is unlocked or not: if true, 
-    discovered = false, --whether or not it starts discovered
+    unlocked = true, --where it is unlocked or not: if true, 
+    discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 1, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 8, y = 1}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
         money = 2 --configurable value
@@ -1101,7 +1101,7 @@ SMODS.Joker{
     end,
     in_pool = function(self,wawa,wawa2)
         --whether or not this card is in the pool, return true if it is, return false if its not
-        return false
+        return true
     end,
 }
 SMODS.Joker{
@@ -1122,12 +1122,12 @@ SMODS.Joker{
     rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
     --soul_pos = { x = 0, y = 0 },
     cost = 5, --cost
-    unlocked = false, --where it is unlocked or not: if true, 
-    discovered = false, --whether or not it starts discovered
+    unlocked = true, --where it is unlocked or not: if true, 
+    discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 1, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 9, y = 1}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
         money = 20,
@@ -1169,7 +1169,7 @@ SMODS.Joker{
     end,
     in_pool = function(self,wawa,wawa2)
         --whether or not this card is in the pool, return true if it is, return false if its not
-        return false
+        return true
     end,
 }
 SMODS.Joker{
@@ -1746,7 +1746,7 @@ SMODS.Joker{
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = false, --can it be blueprinted/brainstormed/other
-    eternal_compat = false, --can it be eternal
+    eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
     pos = {x = 8, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
@@ -1758,25 +1758,26 @@ SMODS.Joker{
         return {vars = {center.ability.extra.shots}} --#1# is replaced with card.ability.extra.Xmult
     end,
     calculate = function(self, card, context)
-        if context.before and context.cardarea == G.jokers then
+        if context.before then
             G.E_MANAGER:add_event(Event({ func = function()
-                local any_selected = nil
-                local _cards = {}
-                for k, v in ipairs(G.hand.cards) do
-                    _cards[#_cards+1] = v
-                end
-                for i = 1, 2 do
-                    if G.hand.cards[i] then 
-                        local selected_card, card_key = pseudorandom_element(_cards, pseudoseed('hook'))
+                local any_selected = false
+                local _cards = G.hand.cards
+
+                for i = #_cards, math.max(#_cards - 1, 1), -1 do
+                    local selected_card = _cards[i]
+                    if selected_card then
                         G.hand:add_to_highlighted(selected_card, true)
-                        table.remove(_cards, card_key)
                         any_selected = true
                         play_sound('card1', 1)
                     end
                 end
-                if any_selected then G.FUNCS.discard_cards_from_highlighted(nil, true) end
-            return true end })) 
-            self.triggered = true
+
+                if any_selected then
+                    G.FUNCS.discard_cards_from_highlighted(nil, true)
+                end
+
+                return true
+            end }))
             delay(0.7)
             return true
         end
