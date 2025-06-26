@@ -1732,8 +1732,9 @@ SMODS.Joker{
     loc_txt = { -- local text
         name = 'Shotgun',
         text = {
-          "Converts the next {C:attention}#1#{}",
-          "scored cards into {C:spades}Spades{}"
+          "When hand is played,",
+          "discard the {C:attention}2 rightmost{}", 
+          "cards held in hand"
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -1758,7 +1759,7 @@ SMODS.Joker{
         return {vars = {center.ability.extra.shots}} --#1# is replaced with card.ability.extra.Xmult
     end,
     calculate = function(self, card, context)
-        if context.before then
+        if context.press_play then
             G.E_MANAGER:add_event(Event({ func = function()
                 local any_selected = false
                 local _cards = G.hand.cards
@@ -1778,8 +1779,11 @@ SMODS.Joker{
 
                 return true
             end }))
-            delay(0.7)
-            return true
+            delay(1.4)
+            return{
+                message = 'Bang!',
+                colour = G.C.MONEY
+            }
         end
     end,
 
