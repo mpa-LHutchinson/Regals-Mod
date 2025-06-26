@@ -1800,7 +1800,7 @@ SMODS.Joker{
           "Provides {C:attention}+1{} extra hand size",
           "for every {C:attention}#2# Wild Cards{} in your", 
           "full deck at the end of the round", 
-          "{C:inactive}(Currently {C:attention}#1#{C:inactive})"
+          "{C:inactive}(Currently {C:attention}+#1#{C:inactive})"
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -1838,7 +1838,7 @@ SMODS.Joker{
 
             local bonus_size = math.floor(wilds / card.ability.extra.per)
 
-            if isdifferent then
+            if bonus_size ~= card.ability.extra.last_applied_size then
                 isdifferent = true
             end
 
@@ -1847,10 +1847,12 @@ SMODS.Joker{
             card.ability.extra.last_applied_size = bonus_size
             card.ability.extra.extra_hand_size = bonus_size
 
-            return{
-                message = 'Reloaded!',
-                colour = G.C.MONEY
-            }
+            if isdifferent then
+                return{
+                    message = 'Reloaded!',
+                    colour = G.C.MONEY
+                }
+            end
         end
     end,
 
