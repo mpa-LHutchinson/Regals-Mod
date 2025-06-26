@@ -1483,8 +1483,8 @@ SMODS.Joker{
     rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
     --soul_pos = { x = 0, y = 0 },
     cost = 6, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
+    unlocked = false, --where it is unlocked or not: if true, 
+    discovered = false, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
@@ -1575,6 +1575,95 @@ SMODS.Joker{
         end
     end,
 
+    in_pool = function(self,wawa,wawa2)
+        --whether or not this card is in the pool, return true if it is, return false if its not
+        return false
+    end,
+}
+SMODS.Joker{
+    key = 'boxofdonuts', --joker key
+    loc_txt = { -- local text
+        name = 'Box of Donuts',
+        text = {
+          'For the next {C:attention}#1#{} rounds,',
+          'when {C:attention}Blind{} is selected',
+          'create {C:attention}1 {C:green}Common{C:attention} Joker',
+          '{C:inactive}(Must have room)',
+        },
+        --[[unlock = {
+            'Be {C:legendary}cool{}',
+        }]]
+    },
+    atlas = 'Jokers', --atlas' key
+    rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
+    --soul_pos = { x = 0, y = 0 },
+    cost = 6, --cost
+    unlocked = true, --where it is unlocked or not: if true, 
+    discovered = true, --whether or not it starts discovered
+    blueprint_compat = true, --can it be blueprinted/brainstormed/other
+    eternal_compat = true, --can it be eternal
+    perishable_compat = true, --can it be perishable
+    pos = {x = 1, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    config = { 
+      extra = {
+        remaining = 3,
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.remaining}} --#1# is replaced with card.ability.extra.Xmult
+    end,
+    calculate = function(self,card,context)
+        if context.setting_blind then 
+            if #G.jokers.cards + G.GAME.joker_buffer < G.jokers.config.card_limit then
+                local jokers_to_create = math.min(1, G.jokers.config.card_limit - (#G.jokers.cards + G.GAME.joker_buffer))
+                G.GAME.joker_buffer = G.GAME.joker_buffer + jokers_to_create
+                G.E_MANAGER:add_event(Event({
+                    func = function() 
+                            local card = create_card('Joker', G.jokers, nil, 0.9, nil, nil, nil, 'don')
+                            card:add_to_deck()
+                            G.jokers:emplace(card)
+                            card:start_materialize()
+                            G.GAME.joker_buffer = 0
+                        return true
+                    end}))
+            end
+            if not context.blueprint then
+                card.ability.extra.remaining = card.ability.extra.remaining - 1
+            end
+            if card.ability.extra.remaining > 0 and not context.blueprint then
+                return{
+                    card = card,
+                    message = '-1',
+                    colour = G.C.MONEY
+                } 
+            elseif not context.blueprint then
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        play_sound('tarot1')
+                        card.T.r = -0.2
+                        card:juice_up(0.3, 0.4)
+                        card.states.drag.is = true
+                        card.children.center.pinch.x = true
+                        G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+                            func = function()
+                                G.jokers:remove_card(self)
+                                card:remove()
+                                card = nil
+                                return true
+                            end
+                        }))
+                        return true
+                    end
+                }))
+                return{
+                    card = card,
+                    message = 'eaten!',
+                    colour = G.C.MONEY
+                } 
+            end
+        end
+        
+    end,
     in_pool = function(self,wawa,wawa2)
         --whether or not this card is in the pool, return true if it is, return false if its not
         return false
