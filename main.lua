@@ -896,6 +896,9 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
+        if G.GAME.consumeable_usage_total then
+            center.ability.extra.Xmult = 1 + (G.GAME.consumeable_usage_total.spectral * center.ability.extra.Xmult_mod) 
+        end
         return {vars = {center.ability.extra.Xmult, center.ability.extra.Xmult_mod}} --#1# is replaced with card.ability.extra.Xmult
     end,
     calculate = function(self,card,context)
