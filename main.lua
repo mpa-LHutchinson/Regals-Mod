@@ -1888,7 +1888,7 @@ SMODS.Joker{
     cost = 6, --cost
     unlocked = false, --where it is unlocked or not: if true, 
     discovered = false, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
+    blueprint_compat = false, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
     pos = {x = 8, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
@@ -1903,7 +1903,7 @@ SMODS.Joker{
         return {vars = {center.ability.extra.money, center.ability.extra.money_mod, center.ability.extra.flawless}} --#1# is replaced with card.ability.extra.Xmult
     end,
     calculate = function(self, card, context)
-        if context.end_of_round and not context.individual and not context.repetition and G.GAME.current_round.hands_played <= 1 then
+        if context.end_of_round and not context.individual and not context.repetition and G.GAME.current_round.hands_played <= 1 and not context.blueprint then
             card.ability.extra.flawless = true
             card.ability.extra.money = G.GAME.current_round.hands_left * card.ability.extra.money_mod
         end
@@ -1914,6 +1914,59 @@ SMODS.Joker{
             card.ability.extra.flawless = false
             return card.ability.extra.money
         end
+    end,
+
+    in_pool = function(self,wawa,wawa2)
+        --whether or not this card is in the pool, return true if it is, return false if its not
+        return false
+    end,
+}
+SMODS.Joker{
+    key = 'frozenjoker', --joker key
+    loc_txt = { -- local text
+        name = 'Frozen Joker',
+        text = {
+          "Adds a {C:blue}Blue Seal{}",
+          "to scored {C:attention}Steel Cards"
+        },
+        --[[unlock = {
+            'Be {C:legendary}cool{}',
+        }]]
+    },
+    atlas = 'Jokers', --atlas' key
+    rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
+    --soul_pos = { x = 0, y = 0 },
+    cost = 5, --cost
+    unlocked = true, --where it is unlocked or not: if true, 
+    discovered = true, --whether or not it starts discovered
+    blueprint_compat = false, --can it be blueprinted/brainstormed/other
+    eternal_compat = true, --can it be eternal
+    perishable_compat = true, --can it be perishable
+    pos = {x = 8, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    config = { 
+      extra = {
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {}} --#1# is replaced with card.ability.extra.Xmult
+    end,
+    calculate = function(self, card, context)
+        if context.before and context.cardarea == G.jokers then
+            local frozen = false
+            for k, v in ipairs(context.scoring_hand) do
+                if v.config.center.key == 'm_steel' then
+                    frozen = true
+                    v:set_seal('Blue', nil, true)
+                end 
+            end
+            if frozen then
+                return{
+                    message = 'Frozen!',
+                    colour = G.C.CHIPS
+                }
+            end
+        end
+
     end,
 
     in_pool = function(self,wawa,wawa2)
