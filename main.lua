@@ -85,7 +85,7 @@ SMODS.Joker{
     pos = {x = 1, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
-        mult = 5 --configurable value
+        mult = 6 --configurable value
       }
     },
     loc_vars = function(self,info_queue,center)
@@ -424,8 +424,8 @@ SMODS.Joker{
     pos = {x = 7, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
-        chips_mod = 30,
-        mult_mod = 4
+        chips_mod = 60,
+        mult_mod = 8
       }
     },
     loc_vars = function(self,info_queue,center)
@@ -471,7 +471,7 @@ SMODS.Joker{
     pos = {x = 8, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
-        remaining = 15
+        remaining = 16
       }
     },
     loc_vars = function(self,info_queue,center)
@@ -622,7 +622,7 @@ SMODS.Joker{
     pos = {x = 0, y = 1}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
-        money_cap = 10,
+        money_cap = 15,
         money = 5
       }
     },
@@ -1376,7 +1376,7 @@ SMODS.Joker{
     pos = {x = 3, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
-        chip_mod = 40
+        chip_mod = 45
       }
     },
     loc_vars = function(self,info_queue,center)
