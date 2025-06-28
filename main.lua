@@ -1927,7 +1927,7 @@ SMODS.Joker{
         name = 'Frozen Joker',
         text = {
           "Adds a {C:blue}Blue Seal{}",
-          "to scored {C:attention}Steel Cards"
+          "to scored {C:attention}face{} Cards"
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -1954,7 +1954,7 @@ SMODS.Joker{
         if context.before and context.cardarea == G.jokers then
             local frozen = false
             for k, v in ipairs(context.scoring_hand) do
-                if v.config.center.key == 'm_steel' then
+                if v:is_face() then
                     frozen = true
                     v:set_seal('Blue', nil, true)
                 end 
