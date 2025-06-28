@@ -1974,6 +1974,62 @@ SMODS.Joker{
         return false
     end,
 }
+SMODS.Joker{
+    key = 'cruiseship', --joker key
+    loc_txt = { -- local text
+        name = 'Cruise Ship',
+        text = {
+          '{X:mult,C:white}X#2#{} mult for every',
+          '{C:voucher}voucher{} owned',
+          '{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive})'
+
+        },
+        --[[unlock = {
+            'Be {C:legendary}cool{}',
+        }]]
+    },
+    atlas = 'Jokers', --atlas' key
+    rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
+    --soul_pos = { x = 0, y = 0 },
+    cost = 7, --cost
+    unlocked = true, --where it is unlocked or not: if true, 
+    discovered = true, --whether or not it starts discovered
+    blueprint_compat = true, --can it be blueprinted/brainstormed/other
+    eternal_compat = true, --can it be eternal
+    perishable_compat = true, --can it be perishable
+    pos = {x = 5, y = 1}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    config = { 
+      extra = {
+        Xmult = 1,
+        Xmult_mod = 0.4
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        local vouchers_redeemed = 0
+        for k, v in pairs(G.GAME.used_vouchers) do
+            vouchers_redeemed = vouchers_redeemed + 1
+        end
+        center.ability.extra.Xmult = 1 + (vouchers_redeemed * center.ability.extra.Xmult_mod)
+
+        return {vars = {center.ability.extra.Xmult, center.ability.extra.Xmult_mod}} --#1# is replaced with card.ability.extra.Xmult
+    end,
+    calculate = function(self,card,context)
+        
+
+        if context.joker_main then
+            return {
+                card = card,
+                Xmult_mod = card.ability.extra.Xmult,
+                message = 'X' .. card.ability.extra.Xmult,
+                colour = G.C.MULT
+            }
+        end
+    end,
+    in_pool = function(self,wawa,wawa2)
+        --whether or not this card is in the pool, return true if it is, return false if its not
+        return true
+    end,
+}
 ----------------------------------------------
 ------------MOD CODE END----------------------
     
