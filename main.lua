@@ -753,7 +753,7 @@ SMODS.Joker{
           '1. {C:chips}+#1#{} chips',
           '2. {C:mult}+#2#{} mult',
           '3. {X:mult,C:white}X#3#{} mult',
-          'each round (Currently rep {C:attention}#4#{}))'
+          'each round {C:inactive}(Currently rep {C:attention}#4#{}{C:inactive}))'
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -2027,7 +2027,7 @@ SMODS.Joker{
     end,
     in_pool = function(self,wawa,wawa2)
         --whether or not this card is in the pool, return true if it is, return false if its not
-        return true
+        return false
     end,
 }
 ----------------------------------------------
