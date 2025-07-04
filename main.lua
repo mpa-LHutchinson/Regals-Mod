@@ -1429,9 +1429,9 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'spraypaint',
+    key = 'graffiti',
     loc_txt = {
-        name = 'Spray Paint',
+        name = 'Graffiti',
         text = {
             'Sell this card after {C:attention}#2#{} round to add',
             '{C:dark_edition}Foil{}, {C:dark_edition}Holographic{}, or {C:dark_edition}Polychrome{} edition',
@@ -1445,8 +1445,8 @@ SMODS.Joker{
     atlas = 'Jokers',
     rarity = 2,
     cost = 6,
-    unlocked = false,
-    discovered = false,
+    unlocked = true,
+    discovered = true,
     blueprint_compat = false,
     eternal_compat = false,
     perishable_compat = true,
