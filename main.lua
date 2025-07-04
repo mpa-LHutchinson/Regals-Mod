@@ -2097,7 +2097,9 @@ SMODS.Joker{
 
             local leftmost = {}
             for i = 1, math.min(card.ability.extra.num_of_cards, #G.hand.cards) do
-                leftmost[G.hand.cards[i]] = true
+                if G.hand.cards[i].ability.effect ~= 'Stone Card' then
+                    leftmost[G.hand.cards[i]] = true
+                end
             end
 
             if leftmost[context.other_card] then
