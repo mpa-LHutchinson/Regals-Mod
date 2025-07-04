@@ -1399,8 +1399,8 @@ SMODS.Joker{
     rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
     --soul_pos = { x = 0, y = 0 },
     cost = 4, --cost
-    unlocked = false, --where it is unlocked or not: if true, 
-    discovered = false, --whether or not it starts discovered
+    unlocked = true, --where it is unlocked or not: if true, 
+    discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
@@ -1425,7 +1425,7 @@ SMODS.Joker{
     end,
     in_pool = function(self,wawa,wawa2)
         --whether or not this card is in the pool, return true if it is, return false if its not
-        return false
+        return true
     end,
 }
 SMODS.Joker{
@@ -2110,6 +2110,64 @@ SMODS.Joker{
                     colour = G.C.CHIPS
                 }
             end
+        end
+    end,
+    in_pool = function(self,wawa,wawa2)
+        --whether or not this card is in the pool, return true if it is, return false if its not
+        return true
+    end,
+}
+SMODS.Joker{
+    key = 'landlord', --joker key
+    loc_txt = { -- local text
+        name = 'Landlord',
+        text = {
+          'If hand conatins a',
+          '{C:attention}Full House{} then',
+          '{X:mult,C:white}X#1#{} Mult, lose {C:money}$#2#{}',
+          'and add {C:money}$#2#{} to sell value'
+        },
+        --[[unlock = {
+            'Be {C:legendary}cool{}',
+        }]]
+    },
+    atlas = 'Jokers', --atlas' key
+    rarity = 3, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
+    --soul_pos = { x = 0, y = 0 },
+    cost = 6, --cost
+    unlocked = true, --where it is unlocked or not: if true, 
+    discovered = true, --whether or not it starts discovered
+    blueprint_compat = true, --can it be blueprinted/brainstormed/other
+    eternal_compat = true, --can it be eternal
+    perishable_compat = true, --can it be perishable
+    pos = {x = 1, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    config = { 
+      extra = {
+        Xmult = 3.5,
+        money = 1
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.Xmult, center.ability.extra.money}} --#1# is replaced with card.ability.extra.Xmult
+    end,
+    calculate = function(self,card,context)
+        if context.before and context.poker_hands and next(context.poker_hands["Full House"]) and not context.blueprint then
+            card.ability.extra_value = card.ability.extra_value + card.ability.extra.money
+            card:set_cost()
+            return {
+                card = card,
+                dollars = card.ability.extra.money * -1,
+                message = 'Rent Due!',
+                colour = G.C.MONEY
+            }
+        end
+        if context.joker_main and context.poker_hands and next(context.poker_hands["Full House"]) then
+            return {
+                card = card,
+                Xmult_mod = card.ability.extra.Xmult,
+                message = 'X' .. card.ability.extra.Xmult,
+                colour = G.C.MULT
+            }
         end
     end,
     in_pool = function(self,wawa,wawa2)
