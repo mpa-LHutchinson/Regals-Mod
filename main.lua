@@ -682,6 +682,7 @@ SMODS.Joker{
                 create_playing_card({front = G.P_CARDS[_suit..'_'..'A'], center = pseudorandom_element(cen_pool, pseudoseed('spe_card'))}, G.hand, nil, i ~= 1, {G.C.SECONDARY_SET.Spectral})
             end
             card.ability.extra.destructions = 0
+            G.hand:sort()
             return {
                 message = 'Aces!',
                 colour = G.C.MULT
