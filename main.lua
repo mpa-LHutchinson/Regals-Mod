@@ -2061,6 +2061,60 @@ SMODS.Joker{
         return false
     end,
 }
+SMODS.Joker{
+    key = 'protest', --joker key
+    loc_txt = { -- local text
+        name = 'Protest',
+        text = {
+          "Adds {C:attention}triple{} the rank",
+          "of the {C:attention}#1# leftmost{} cards",
+          "held in hand to Chips",
+        },
+        --[[unlock = {
+            'Be {C:legendary}cool{}',
+        }]]
+    },
+    atlas = 'Jokers', --atlas' key
+    rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
+    --soul_pos = { x = 0, y = 0 },
+    cost = 5, --cost
+    unlocked = true, --where it is unlocked or not: if true, 
+    discovered = true, --whether or not it starts discovered
+    blueprint_compat = true, --can it be blueprinted/brainstormed/other
+    eternal_compat = true, --can it be eternal
+    perishable_compat = true, --can it be perishable
+    pos = {x = 1, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    config = { 
+      extra = {
+        num_of_cards = 3 --configurable value
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.num_of_cards}} --#1# is replaced with card.ability.extra.Xmult
+    end,
+    calculate = function(self,card,context)
+        if context.cardarea == G.hand and context.individual and not context.end_of_round then
+
+            local leftmost = {}
+            for i = 1, math.min(card.ability.extra.num_of_cards, #G.hand.cards) do
+                leftmost[G.hand.cards[i]] = true
+            end
+
+            if leftmost[context.other_card] then
+                return {
+                    card = card,
+                    chip_mod = context.other_card.base.nominal * 3,
+                    message = '+' .. (context.other_card.base.nominal * 3),
+                    colour = G.C.CHIPS
+                }
+            end
+        end
+    end,
+    in_pool = function(self,wawa,wawa2)
+        --whether or not this card is in the pool, return true if it is, return false if its not
+        return true
+    end,
+}
 ----------------------------------------------
 ------------MOD CODE END----------------------
     
