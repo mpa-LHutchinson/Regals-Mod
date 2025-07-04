@@ -39,7 +39,7 @@ SMODS.Joker{
     pos = {x = 0, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
-        Xmult = 3 --configurable value
+        Xmult = 4 --configurable value
       }
     },
     loc_vars = function(self,info_queue,center)
@@ -191,10 +191,15 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
+        if G.hand and G.hand.config and G.hand.config.card_limit then
+            center.ability.extra.mult = G.hand.config.card_limit * center.ability.extra.mult_mod  
+        end
         return {vars = {center.ability.extra.mult, center.ability.extra.mult_mod}} --#1# is replaced with card.ability.extra.Xmult
     end,
     calculate = function(self,card,context)
-        card.ability.extra.mult = G.hand.config.card_limit * card.ability.extra.mult_mod
+        if G.hand and G.hand.config and G.hand.config.card_limit then
+            card.ability.extra.mult = G.hand.config.card_limit * card.ability.extra.mult_mod  
+        end
         if context.joker_main then
             return {
                 card = card,
