@@ -19,9 +19,9 @@ SMODS.Joker{
     loc_txt = { -- local text
         name = 'College Joker',
         text = {
-          '{X:mult,C:white}X#1#{} Mult if',
-          'hand is played',
-          'while in debt or at {C:money}$0{}'
+          '{X:mult,C:white}X#1#{} Mult if hand',
+          'is played while',
+          'in debt or at {C:money}$0{}'
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -112,7 +112,7 @@ SMODS.Joker{
         name = 'Cotton Candy',
         text = {
           'Sell this card to',
-          'create 2 free',
+          'create {C:attention}2{} free',
           '{C:attention}Voucher Tags',
         },
         --[[unlock = {
@@ -167,8 +167,9 @@ SMODS.Joker{
     loc_txt = { -- local text
         name = 'Artistic Joker',
         text = {
-          '{C:mult}+#2#{} mult per hand',
-          'size (currently {C:mult}+#1#{})'
+          '{C:mult}+#2#{} mult per',
+          'hand size',
+          '{C:inactive}(Currently {C:mult}+#1#{C:inactive} Mult)'
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -276,7 +277,7 @@ SMODS.Joker{
         name = 'Mushroom',
         text = {
           'Levels up the next',
-          '{C:tarot}#1#{} hands played'
+          '{C:attention}#1#{} hands played'
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -457,8 +458,9 @@ SMODS.Joker{
     loc_txt = { -- local text
         name = 'Ink Bottle',
         text = {
-          "Converts the next {C:attention}#1#{}",
-          "scored cards into {C:spades}Spades{}"
+          "Converts the next",
+          "{C:attention}#1#{} scored cards",
+          "into {C:spades}Spades{}"
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -535,9 +537,9 @@ SMODS.Joker{
         name = 'Phoenix',
         text = {
           'When {C:attention}Blind{} is selected,',
-          'generate a {C:tarot}Tarot{} card or {C:planet}Planet{}', 
-          'card. {C:green}#1# in #2#{} chance to also',
-          'create a {C:spectral}spectral{} card {C:inactive}(Must have room)'
+          'generate a {C:tarot}Tarot{} or {C:planet}Planet{} card.', 
+          '{C:green}#1# in #2#{} chance to also generate',
+          'a {C:spectral}Spectral{} card {C:inactive}(Must have room)'
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -608,8 +610,9 @@ SMODS.Joker{
     loc_txt = { -- local text
         name = 'Welfare',
         text = {
-          'If money is under {C:money}$#1#{}',
-          'when round ends, earn {C:money}$#2#{}'
+          'If money is under',
+          '{C:money}$#1#{} when round',
+          'ends, earn {C:money}$#2#{}'
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -721,8 +724,8 @@ SMODS.Joker{
         name = 'Medusa',
         text = {
           'Converts all scored cards',
-          'from {C:attention}first hand{}',
-          'each round into {C:attention}Stone cards{}'
+          'from {C:attention}first hand{} each',
+          'round into {C:attention}Stone cards{}'
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -774,7 +777,7 @@ SMODS.Joker{
           '1. {C:chips}+#1#{} chips',
           '2. {C:mult}+#2#{} mult',
           '3. {X:mult,C:white}X#3#{} mult',
-          'each round {C:inactive}(Currently rep {C:attention}#4#{}{C:inactive}))'
+          'each round {C:inactive}(Currently rep {C:attention}#4#{}{C:inactive})'
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -893,8 +896,9 @@ SMODS.Joker{
     loc_txt = { -- local text
         name = 'Vengeful Spirit',
         text = {
-          '{X:mult,C:white}X#2#{} mult per {C:spectral}spectral{} card',
-          'used this run {C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive})'
+          '{X:mult,C:white}X#2#{} mult per {C:spectral}spectral{}',
+          'card used this run',
+          '{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive})'
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -1001,10 +1005,10 @@ SMODS.Joker{
     loc_txt = { -- local text
         name = 'Event Horizon',
         text = {
-          'Generates a {C:spectral}black hole{}',
-          '{C:spectral}spectral card{} if at least {C:attention}#2#{} unique',
+          'Generates a {C:spectral}Black Hole{}',
+          '{C:spectral}Spectral card{} if at least {C:attention}#2#{} unique',
           'hand types were played this round',
-          '{C:inactive}({C:attention}#1#/#2#{C:inactive})'
+          '{C:inactive}Currently ({C:attention}#1#/#2#{C:inactive})'
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -1134,9 +1138,9 @@ SMODS.Joker{
         name = 'Jackpot',
         text = {
           'If played hand contains 3',
-          'scoring {C:attention}7s{}, score',
-          '{C:mult}+#2# mult{} and earn {C:money}$#1#',
-          'at the end of the round'
+          'scoring {C:attention}7s{}, score {C:mult}+#2# mult{}',
+          'and earn {C:money}$#1#{} at',
+          'the end of the round'
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -1201,8 +1205,9 @@ SMODS.Joker{
     loc_txt = { -- local text
         name = 'Dragon Egg',
         text = {
-          'Will transform into a random',
-          '{C:red}Rare{C:attention} Joker{} after {C:attention}#2# rounds',
+          'Will transform into a',
+          'random {C:red}Rare{C:attention} Joker{}',
+          'after {C:attention}#2# rounds',
           '{C:inactive}(Currently {C:attention}#1#{C:inactive}/#2#)'
         },
         --[[unlock = {
