@@ -641,9 +641,10 @@ SMODS.Joker{
     loc_txt = { -- local text
         name = 'Pocket Aces',
         text = {
-          'When 1 hand remains,',
-          'add {C:attention}2{} random {C:attention}Enhanced',
-          '{C:attention}Aces{} to your hand'
+          'Destroy {C:attention}#2#{} cards to add',
+          '{C:attention}2 Enhanced Aces{} to your',
+          'hand when {C:attention}blind{} is selected',
+          '{C:inactive}(Currently {C:attention}#1#{C:inactive}/#2#)'
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -652,7 +653,7 @@ SMODS.Joker{
     atlas = 'Jokers', --atlas' key
     rarity = 3, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
     --soul_pos = { x = 0, y = 0 },
-    cost = 8, --cost
+    cost = 7, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = false, --can it be blueprinted/brainstormed/other
@@ -661,14 +662,15 @@ SMODS.Joker{
     pos = {x = 1, y = 1}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
-        stop = false
+        destructions = 0,
+        required = 2
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.stop}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.destructions, center.ability.extra.required}} --#1# is replaced with card.ability.extra.Xmult
     end,
     calculate = function(self,card,context)
-        if G.GAME.current_round.hands_left == 1 and not card.ability.extra.stop then
+        if context.first_hand_drawn and card.ability.extra.destructions >= card.ability.extra.required then
             local cen_pool = {}
             for i=1, 2 do
                 _suit = pseudorandom_element({'S','H','D','C'}, pseudoseed('grim_create'))
@@ -679,14 +681,27 @@ SMODS.Joker{
                 end
                 create_playing_card({front = G.P_CARDS[_suit..'_'..'A'], center = pseudorandom_element(cen_pool, pseudoseed('spe_card'))}, G.hand, nil, i ~= 1, {G.C.SECONDARY_SET.Spectral})
             end
-            card.ability.extra.stop = true
+            card.ability.extra.destructions = 0
             return {
                 message = 'Aces!',
                 colour = G.C.MULT
             }
         end
-        if context.end_of_round and not context.individual and not context.repetition then
-            card.ability.extra.stop = false
+        if context.remove_playing_cards then
+            for k, val in ipairs(context.removed) do
+                if card.ability.extra.destructions < card.ability.extra.required then
+                    card.ability.extra.destructions = card.ability.extra.destructions + 1
+                    if card.ability.extra.destructions == card.ability.extra.required then
+                        local eval = function(card) return (card.ability.extra.destructions ~= 0) end
+                        juice_card_until(card, eval, true)
+                        return{
+                            message = 'Active!',
+                            card = card,
+                            colour = G.C.MONEY
+                        }
+                    end
+                end
+            end
         end
     end,
     in_pool = function(self,wawa,wawa2)
@@ -1292,7 +1307,7 @@ SMODS.Joker{
         return {vars = {center.ability.extra.mult, center.ability.extra.mult_mod}} --#1# is replaced with card.ability.extra.Xmult
     end,
     calculate = function(self, card, context)
-        if context.end_of_round and not context.individual and not context.blueprint and not context.repetition then
+        if context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
             local destroyed_cards = {}
             destroyed_cards[#destroyed_cards+1] = pseudorandom_element(G.hand.cards, pseudoseed('random_destroy'))
 
@@ -1316,6 +1331,11 @@ SMODS.Joker{
                                 card:shatter()
                             else
                                 card:start_dissolve()
+                            end
+                            if card.config.center.key == "m_glass" then
+                                SMODS.calculate_context({cards_destroyed = true, glass_shattered = { card }})
+                            else
+                                SMODS.calculate_context({remove_playing_cards = true, removed = { card }})
                             end
                         end
                     end
