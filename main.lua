@@ -2333,6 +2333,55 @@ SMODS.Joker{
         return true
     end,
 }
+SMODS.Joker{
+    key = 'diamondarmor',
+    loc_txt = {
+        name = 'Diamond Armor',
+        text = {
+          'Skipping any {C:attention}Blind{}',
+          'generates {C:attention}#1#{} other',
+          'random {C:attention}tags'
+        },
+    },
+    atlas = 'Jokers',
+    rarity = 3, 
+    cost = 8,
+    unlocked = false, 
+    discovered = false, 
+    blueprint_compat = false, 
+    eternal_compat = true, 
+    perishable_compat = true, 
+    pos = {x = 1, y = 0}, 
+    config = { 
+      extra = {
+        tags = 2,
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.tags}} 
+    end,
+    calculate = function(self,card,context)
+        if context.game_over then
+            G.E_MANAGER:add_event(Event({
+                func = function()
+                    G.hand_text_area.blind_chips:juice_up()
+                    G.hand_text_area.game_chips:juice_up()
+                    play_sound('tarot1')
+                    card:start_dissolve()
+                    return true
+                end
+            })) 
+            return {
+                message = 'Comin in hot!',
+                saved = 'diamond_armor_saved',
+                colour = G.C.RED
+            }  
+        end
+    end,
+    in_pool = function(self,wawa,wawa2)
+        return false
+    end,
+}
 ----------------------------------------------
 ------------MOD CODE END----------------------
     
