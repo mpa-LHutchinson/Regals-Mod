@@ -2200,7 +2200,7 @@ SMODS.Joker{
     pos = {x = 1, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
-        tags = 2
+        tags = 2,
       }
     },
     loc_vars = function(self,info_queue,center)
@@ -2243,6 +2243,11 @@ SMODS.Joker{
                     return true
                 end)
             }))
+            return {
+                card = card,
+                message = 'Lock picked!',
+                colour = G.C.GREEN
+            }
         end
     end,
     in_pool = function(self,wawa,wawa2)
