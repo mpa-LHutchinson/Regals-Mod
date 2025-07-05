@@ -1387,8 +1387,8 @@ SMODS.Joker{
     loc_txt = { -- local text
         name = 'Bubble Wrap',
         text = {
-          '{C:chips}+#1#{} Chips for',
-          'each {C:attention}consumable{} in your',
+          '{C:chips}+#1#{} Chips for each',
+          '{C:attention}consumable{} in your',
           '{C:attention}consumable{} area',
         },
         --[[unlock = {
@@ -2168,6 +2168,81 @@ SMODS.Joker{
                 message = 'X' .. card.ability.extra.Xmult,
                 colour = G.C.MULT
             }
+        end
+    end,
+    in_pool = function(self,wawa,wawa2)
+        --whether or not this card is in the pool, return true if it is, return false if its not
+        return false
+    end,
+}
+SMODS.Joker{
+    key = 'lockpick', --joker key
+    loc_txt = { -- local text
+        name = 'Lock Pick',
+        text = {
+          'Skipping any {C:attention}Blind{}',
+          'generates {C:attention}#1#{} other',
+          'random {C:attention}tags'
+        },
+        --[[unlock = {
+            'Be {C:legendary}cool{}',
+        }]]
+    },
+    atlas = 'Jokers', --atlas' key
+    rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
+    --soul_pos = { x = 0, y = 0 },
+    cost = 6, --cost
+    unlocked = false, --where it is unlocked or not: if true, 
+    discovered = false, --whether or not it starts discovered
+    blueprint_compat = true, --can it be blueprinted/brainstormed/other
+    eternal_compat = true, --can it be eternal
+    perishable_compat = true, --can it be perishable
+    pos = {x = 1, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    config = { 
+      extra = {
+        tags = 2
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.tags}} --#1# is replaced with card.ability.extra.Xmult
+    end,
+    calculate = function(self,card,context)
+        if context.skip_blind then
+            local tag_pool = get_current_pool('Tag')
+            local list_of_tags = {}
+            for i = 1, card.ability.extra.tags do
+                local tag = pseudorandom_element(tag_pool, pseudoseed('lock'))
+
+                while tag == 'UNAVAILABLE' do
+                    tag = pseudorandom_element(tag_pool, pseudoseed('lock'))
+                end
+
+                list_of_tags[i] = tag
+            end
+
+            G.E_MANAGER:add_event(Event({
+                func = (function()
+                    for _, tag_key in pairs(list_of_tags) do
+                        local tag = Tag(tag_key)
+                        if tag_key == "tag_orbital" then
+                            local available_hands = {}
+
+                            for k, hand in pairs(G.GAME.hands) do
+                                if hand.visible then
+                                    available_hands[#available_hands + 1] = k
+                                end
+                            end
+
+                            tag.ability.orbital_hand = pseudorandom_element(available_hands, pseudoseed('lock'))
+                        end
+
+                        add_tag(tag)
+                        play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
+                        play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)
+                    end
+                    return true
+                end)
+            }))
         end
     end,
     in_pool = function(self,wawa,wawa2)
