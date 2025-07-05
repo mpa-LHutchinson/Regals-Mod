@@ -2176,35 +2176,31 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'lockpick', --joker key
-    loc_txt = { -- local text
+    key = 'lockpick',
+    loc_txt = {
         name = 'Lock Pick',
         text = {
           'Skipping any {C:attention}Blind{}',
           'generates {C:attention}#1#{} other',
           'random {C:attention}tags'
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
     },
-    atlas = 'Jokers', --atlas' key
-    rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
-    cost = 6, --cost
-    unlocked = false, --where it is unlocked or not: if true, 
-    discovered = false, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
-    pos = {x = 1, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    atlas = 'Jokers',
+    rarity = 2, 
+    cost = 6,
+    unlocked = false, 
+    discovered = false, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
+    pos = {x = 1, y = 0}, 
     config = { 
       extra = {
         tags = 2,
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.tags}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.tags}} 
     end,
     calculate = function(self,card,context)
         if context.skip_blind then
@@ -2225,15 +2221,15 @@ SMODS.Joker{
                     for _, tag_key in pairs(list_of_tags) do
                         local tag = Tag(tag_key)
                         if tag_key == "tag_orbital" then
-                            local available_hands = {}
+                            local available_handtypes = {}
 
                             for k, hand in pairs(G.GAME.hands) do
                                 if hand.visible then
-                                    available_hands[#available_hands + 1] = k
+                                    available_handtypes[#available_hands + 1] = k
                                 end
                             end
 
-                            tag.ability.orbital_hand = pseudorandom_element(available_hands, pseudoseed('lock'))
+                            tag.ability.orbital_hand = pseudorandom_element(available_handtypes, pseudoseed('lock'))
                         end
 
                         add_tag(tag)
@@ -2251,7 +2247,6 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
         return false
     end,
 }
