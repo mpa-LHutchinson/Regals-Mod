@@ -2338,9 +2338,9 @@ SMODS.Joker{
     loc_txt = {
         name = 'Diamond Armor',
         text = {
-          'Skipping any {C:attention}Blind{}',
-          'generates {C:attention}#1#{} other',
-          'random {C:attention}tags'
+          'Score {C:diamonds}#2# Diamond{} cards {C:inactive}[#1#]{} to',
+          'activate this joker and',
+          'prevent death {C:attention}#3#{} times',
         },
     },
     atlas = 'Jokers',
@@ -2349,32 +2349,54 @@ SMODS.Joker{
     unlocked = false, 
     discovered = false, 
     blueprint_compat = false, 
-    eternal_compat = true, 
+    eternal_compat = false, 
     perishable_compat = true, 
     pos = {x = 1, y = 0}, 
     config = { 
       extra = {
-        tags = 2,
+        diamonds = 0,
+        required = 20,
+        lives = 2,
+        active = false
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.tags}} 
+        return {vars = {center.ability.extra.diamonds, center.ability.extra.required, center.ability.extra.lives, center.ability.extra.active}} 
     end,
     calculate = function(self,card,context)
-        if context.game_over then
-            G.E_MANAGER:add_event(Event({
-                func = function()
-                    G.hand_text_area.blind_chips:juice_up()
-                    G.hand_text_area.game_chips:juice_up()
-                    play_sound('tarot1')
-                    card:start_dissolve()
-                    return true
-                end
-            })) 
+        if context.individual and context.cardarea == G.play and context.other_card:is_suit("Diamonds") and card.ability.extra.diamonds < card.ability.extra.required and not context.blueprint then
+            card.ability.extra.diamonds = card.ability.extra.diamonds + 1 
+            
+        end
+
+        if context.joker_main and card.ability.extra.diamonds >= card.ability.extra.required and card.ability.extra.active == false and not context.blueprint then
+            card.ability.extra.active = true
+            local eval = function(card) return (card.ability.extra.lives ~= 0) end
+            juice_card_until(card, eval, true)
+            return {
+                message = 'Release!',
+                colour = G.C.BLUE
+            } 
+        end 
+
+        if context.end_of_round and not context.blueprint and context.game_over and card.ability.extra.diamonds >= card.ability.extra.required then
+            card.ability.extra.lives = card.ability.extra.lives - 1
+            if card.ability.extra.lives <= 0 then
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        G.hand_text_area.blind_chips:juice_up()
+                        G.hand_text_area.game_chips:juice_up()
+                        play_sound('tarot1')
+                        card:start_dissolve()
+                        return true
+                    end
+                })) 
+            end
+            
             return {
                 message = 'Comin in hot!',
                 saved = 'diamond_armor_saved',
-                colour = G.C.RED
+                colour = G.C.BLUE
             }  
         end
     end,
