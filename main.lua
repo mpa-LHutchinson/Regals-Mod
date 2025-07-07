@@ -2420,6 +2420,86 @@ SMODS.Joker{
         return false
     end,
 }
+SMODS.Joker{
+    key = 'climbthemountain',
+    loc_txt = {
+        name = 'Climb the Mountain',
+        text = {
+          'Each scored {C:attention}#4#{} gains {C:mult}+#2#{} Mult,',
+          'rank increases every round',
+          '{C:inactive}(Currently {C:red}+#1#{C:inactive} Mult)',
+        },
+    },
+    atlas = 'Jokers',
+    rarity = 1, 
+    cost = 6,
+    unlocked = false, 
+    discovered = false, 
+    blueprint_compat = false, 
+    eternal_compat = true, 
+    perishable_compat = true, 
+    pos = {x = 1, y = 0}, 
+    config = { 
+      extra = {
+        mult = 0,
+        mult_mod = 2,
+        current_rank_id = 2,
+        current_rank_value = '2'
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.mult, center.ability.extra.mult_mod, center.ability.extra.current_rank_id, center.ability.extra.current_rank_value}} 
+    end,
+    calculate = function(self,card,context)
+        if context.individual and context.cardarea == G.play and context.other_card:get_id() ==  card.ability.extra.current_rank_id and not context.blueprint then
+            card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+            return {
+                card = card,
+                extra = {focus = card, message = localize('k_upgrade_ex')},
+                colour = G.C.MULT
+            }
+        end
+
+        if context.joker_main  then
+            return {
+                card = card,
+                mult_mod = card.ability.extra.mult,
+                message = '+' .. card.ability.extra.mult,
+                colour = G.C.MULT
+            }
+        end 
+
+        if context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
+            if card.ability.extra.current_rank_id >= 14 then
+                card.ability.extra.current_rank_id = 2
+            else
+                card.ability.extra.current_rank_id = card.ability.extra.current_rank_id + 1
+            end
+
+            if card.ability.extra.current_rank_id == 14 then
+                card.ability.extra.current_rank_value = 'Ace'
+            elseif card.ability.extra.current_rank_id == 13 then
+                card.ability.extra.current_rank_value = 'King'
+            elseif card.ability.extra.current_rank_id == 12 then
+                card.ability.extra.current_rank_value = 'Queen'
+            elseif card.ability.extra.current_rank_id == 11 then
+                card.ability.extra.current_rank_value = 'Jack'
+            else
+                card.ability.extra.current_rank_value = card.ability.extra.current_rank_id
+            end
+
+            return {
+                card = card,
+                message = 'Climb!',
+                colour = G.C.MONEY
+            }
+            
+        end
+    end,
+    in_pool = function(self,wawa,wawa2)
+        return false
+    end,
+}
 ----------------------------------------------
 ------------MOD CODE END----------------------
     
