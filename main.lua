@@ -1741,8 +1741,8 @@ SMODS.Joker{
                 card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chips_mod
                 return {
                     card = card,
-                    message = 'Upgrade',
-                    colour = G.C.CHIPS
+                    message = 'Abracadabra!',
+                    colour = G.C.PURPLE 
                 }
             end
         elseif context.joker_main and card.ability.extra.chips > 0 then
