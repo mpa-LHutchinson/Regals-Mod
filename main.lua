@@ -681,13 +681,15 @@ SMODS.Joker{
         if context.first_hand_drawn and card.ability.extra.destructions >= card.ability.extra.required then
             local cen_pool = {}
             for i=1, 2 do
-                _suit = pseudorandom_element({'S','H','D','C'}, pseudoseed('grim_create'))
+                _suit = pseudorandom_element({'S','H','D','C'}, pseudoseed('pocket_aces_create'))
                 for k, v in pairs(G.P_CENTER_POOLS["Enhanced"]) do
                     if v.key ~= 'm_stone' then 
                         cen_pool[#cen_pool+1] = v
                     end
                 end
-                create_playing_card({front = G.P_CARDS[_suit..'_'..'A'], center = pseudorandom_element(cen_pool, pseudoseed('spe_card'))}, G.hand, nil, i ~= 1, {G.C.SECONDARY_SET.Spectral})
+                local new_card = create_playing_card({front = G.P_CARDS[_suit..'_'..'A'], center = pseudorandom_element(cen_pool, pseudoseed('spe_card'))}, G.hand, nil, i ~= 1, {G.C.SECONDARY_SET.Spectral})
+                playing_card_joker_effects({new_card})
+                
             end
             card.ability.extra.destructions = 0
             G.hand:sort()
