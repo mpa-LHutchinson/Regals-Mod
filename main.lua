@@ -1704,9 +1704,9 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'purplejoker', --joker key
+    key = 'amethyststaff', --joker key
     loc_txt = { -- local text
-        name = 'Purple Joker',
+        name = 'Amethyst Staff',
         text = {
           'This Joker gains {C:chips}+#2#{} Chips',
           'when discarding a purple seal',
