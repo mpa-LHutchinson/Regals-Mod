@@ -1575,7 +1575,7 @@ SMODS.Joker{
     config = { 
       extra = {
         mult = 0,
-        mult_mod = 10,
+        mult_mod = 5,
         chips = 0,
         chips_mod = 25,
       }
@@ -1731,7 +1731,7 @@ SMODS.Joker{
     config = { 
       extra = {
         chips = 0,
-        chips_mod = 12
+        chips_mod = 14
       }
     },
     loc_vars = function(self,info_queue,center)
