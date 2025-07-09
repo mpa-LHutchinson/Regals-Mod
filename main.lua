@@ -1772,7 +1772,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = 'hunter', --joker key
     loc_txt = { -- local text
-        name = 'hunter',
+        name = 'Hunter',
         text = {
           "When hand is played,",
           "discard the {C:attention}2 rightmost{}", 
