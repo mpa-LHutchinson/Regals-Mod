@@ -1710,18 +1710,18 @@ SMODS.Joker{
     loc_txt = { -- local text
         name = 'Amethyst Staff',
         text = {
-          'This Joker gains {C:chips}+#2#{} Chips',
-          'when discarding a purple seal',
-          '{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)'
+          'When a {C:purple}Purple Seal{}',
+          'is discarded, generate',
+          'an extra {C:tarot}Tarot{} card'
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
         }]]
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
+    rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
     --soul_pos = { x = 0, y = 0 },
-    cost = 5, --cost
+    cost = 6, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
@@ -1730,30 +1730,36 @@ SMODS.Joker{
     pos = {x = 7, y = 2}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
-        chips = 0,
-        chips_mod = 14
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.chips, center.ability.extra.chips_mod}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {}} --#1# is replaced with card.ability.extra.Xmult
     end,
     calculate = function(self, card, context)
         if context.discard and not context.blueprint then
             if context.other_card.seal == 'Purple' then
-                card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chips_mod
-                return {
-                    card = card,
-                    message = 'Abracadabra!',
-                    colour = G.C.PURPLE 
-                }
+                if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                    G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                    G.E_MANAGER:add_event(Event({
+                        func = (function()
+                            G.E_MANAGER:add_event(Event({
+                                func = function() 
+                                    local card = create_card('Tarot_Planet',G.consumeables, nil, nil, nil, nil, nil, 'amethyst')
+                                    card:add_to_deck()
+                                    G.consumeables:emplace(card)
+                                    G.GAME.consumeable_buffer = 0
+                                    return true
+                                end}))                      
+                            return true
+                        end)}))
+                    return {
+                        card = card,
+                        message = 'Abracadabra!',
+                        colour = G.C.PURPLE 
+                    }
+                end
+                
             end
-        elseif context.joker_main and card.ability.extra.chips > 0 then
-            return {
-                card = card,
-                chip_mod = card.ability.extra.chips,
-                message = '+' .. card.ability.extra.chips,
-                colour = G.C.CHIPS
-            }
         
         end
     end,
