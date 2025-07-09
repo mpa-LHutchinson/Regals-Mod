@@ -1965,9 +1965,9 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'crayon', --joker key
+    key = 'kidsdrawing', --joker key
     loc_txt = { -- local text
-        name = 'Crayon',
+        name = 'Kids Drawing',
         text = {
           '{C:green}#1# in #2#{} chance to add',
           'a random {C:attention}enhancement{} to',
@@ -1981,8 +1981,8 @@ SMODS.Joker{
     rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
     --soul_pos = { x = 0, y = 0 },
     cost = 5, --cost
-    unlocked = false, --where it is unlocked or not: if true, 
-    discovered = false, --whether or not it starts discovered
+    unlocked = true, --where it is unlocked or not: if true, 
+    discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
@@ -2030,7 +2030,7 @@ SMODS.Joker{
 
     in_pool = function(self,wawa,wawa2)
         --whether or not this card is in the pool, return true if it is, return false if its not
-        return false
+        return true
     end,
 }
 SMODS.Joker{
