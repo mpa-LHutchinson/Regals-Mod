@@ -2686,6 +2686,87 @@ SMODS.Joker{
         return false
     end,
 }
+SMODS.Joker{
+    key = 'bruce', --joker key
+    loc_txt = { -- local text
+        name = 'Bruce',
+        text = {
+          "When {C:attention}Blind{} is selected,",
+          "gain {X:mult,C:white} X#2# {} Mult and {C:attention}destroy{} a random",
+          "{C:attention}consumable{}. If there are no consumables,",
+          "{C:attention}destroy{} a random Joker instead",
+          "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive})"
+        },
+    },
+    atlas = 'Jokers', --atlas' key
+    rarity = 3, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
+    --soul_pos = { x = 0, y = 0 },
+    cost = 7, --cost
+    unlocked = false, --where it is unlocked or not: if true, 
+    discovered = false, --whether or not it starts discovered
+    blueprint_compat = true, --can it be blueprinted/brainstormed/other
+    eternal_compat = true, --can it be eternal
+    perishable_compat = true, --can it be perishable
+    pos = {x = 4, y = 2}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    config = { 
+      extra = {
+        Xmult = 1,
+        Xmult_mod = 0.25
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.Xmult, center.ability.extra.Xmult_mod}} --#1# is replaced with card.ability.extra.Xmult
+    end,
+    calculate = function(self,card,context)
+        if not context.blueprint and context.setting_blind then
+            card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.Xmult_mod
+
+            local consumable_to_destroy = pseudorandom_element(G.consumeables.cards, pseudoseed('bruce'))
+            
+            local destructable_jokers = {}
+            for i = 1, #G.jokers.cards do
+                if G.jokers.cards[i] ~= card and not G.jokers.cards[i].ability.eternal and not G.jokers.cards[i].getting_sliced then destructable_jokers[#destructable_jokers+1] = G.jokers.cards[i] end
+            end
+            local joker_to_destroy = #destructable_jokers > 0 and pseudorandom_element(destructable_jokers, pseudoseed('bruce')) or nil
+
+            if consumable_to_destroy ~= nil then
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        play_sound('tarot1')
+                        consumable_to_destroy:juice_up(0.3, 0.4)
+                        consumable_to_destroy:start_dissolve()
+                        delay(0.3)
+                        return true
+                    end
+                }))
+            end
+
+            if joker_to_destroy and not consumable_to_destroy then 
+                joker_to_destroy.getting_sliced = true
+                G.E_MANAGER:add_event(Event({func = function()
+                    card:juice_up(0.8, 0.8)
+                    joker_to_destroy:start_dissolve({G.C.RED}, nil, 1.6)
+                return true end }))
+            end
+            if not context.blueprint then
+                card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize{type = 'variable', key = 'a_xmult', vars = {card.ability.extra.Xmult}}})
+            end
+        end
+
+        if context.joker_main then
+            return {
+                card = card,
+                Xmult_mod = card.ability.extra.Xmult,
+                message = 'X' .. card.ability.extra.Xmult,
+                colour = G.C.MULT
+            }
+        end
+    end,
+    in_pool = function(self,wawa,wawa2)
+        --whether or not this card is in the pool, return true if it is, return false if its not
+        return false
+    end,
+}
 ----------------------------------------------
 ------------MOD CODE END----------------------
     
