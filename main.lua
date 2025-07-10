@@ -2843,7 +2843,7 @@ SMODS.Joker{
         return {vars = {}} --#1# is replaced with card.ability.extra.Xmult
     end,
     calculate = function(self, card, context)
-        if context.reroll_shop or context.starting_shop then
+        if context.reroll_shop or context.starting_shop or context.buying_card then
             G.E_MANAGER:add_event(Event({func = function()
                 for k, v in pairs(G.I.CARD) do
                     if v.set_cost then v.cost = 0 end
