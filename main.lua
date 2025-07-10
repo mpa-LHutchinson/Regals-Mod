@@ -2736,7 +2736,6 @@ SMODS.Joker{
                         card:juice_up(0.8, 0.8)
                         consumable_to_destroy:juice_up(0.3, 0.4)
                         consumable_to_destroy:start_dissolve()
-                        delay(0.3)
                         return true
                     end
                 }))
