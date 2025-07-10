@@ -2701,7 +2701,7 @@ SMODS.Joker{
     atlas = 'Jokers', --atlas' key
     rarity = 3, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
     --soul_pos = { x = 0, y = 0 },
-    cost = 7, --cost
+    cost = 8, --cost
     unlocked = false, --where it is unlocked or not: if true, 
     discovered = false, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
@@ -2733,6 +2733,7 @@ SMODS.Joker{
                 G.E_MANAGER:add_event(Event({
                     func = function()
                         play_sound('tarot1')
+                        card:juice_up(0.8, 0.8)
                         consumable_to_destroy:juice_up(0.3, 0.4)
                         consumable_to_destroy:start_dissolve()
                         delay(0.3)
@@ -2742,15 +2743,13 @@ SMODS.Joker{
             end
 
             if joker_to_destroy and not consumable_to_destroy then 
-                joker_to_destroy.getting_sliced = true
                 G.E_MANAGER:add_event(Event({func = function()
                     card:juice_up(0.8, 0.8)
+                    joker_to_destroy:juice_up(0.3, 0.4)
                     joker_to_destroy:start_dissolve({G.C.RED}, nil, 1.6)
                 return true end }))
             end
-            if not context.blueprint then
-                card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize{type = 'variable', key = 'a_xmult', vars = {card.ability.extra.Xmult}}})
-            end
+            card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize{type = 'variable', key = 'a_xmult', vars = {card.ability.extra.Xmult}}})
         end
 
         if context.joker_main then
