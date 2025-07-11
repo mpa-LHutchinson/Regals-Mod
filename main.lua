@@ -9,41 +9,45 @@
 
 
 SMODS.Atlas{
-    key = 'Jokers', --atlas key
-    path = 'Jokers.png', --atlas' path in (yourMod)/assets/1x or (yourMod)/assets/2x
-    px = 71, --width of one card
-    py = 95 -- height of one card
+    key = 'Jokers',
+    path = 'Jokers.png',
+    px = 71,
+    py = 95
 }
+
+SMODS.Atlas{
+    key = 'Decks',
+    path = 'Jokers.png',
+    px = 71,
+    py = 95
+}
+
 SMODS.Joker{
-    key = 'collegejoker', --joker key
-    loc_txt = { -- local text
+    key = 'j_regalsmod_collegejoker',
+    loc_txt = { 
         name = 'College Joker',
         text = {
           '{X:mult,C:white}X#1#{} Mult if hand',
           'is played while',
           'in debt or at {C:money}$0{}'
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
     },
-    atlas = 'Jokers', --atlas' key
-    rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
-    cost = 7, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
-    pos = {x = 0, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    atlas = 'Jokers',
+    rarity = 2,
+    cost = 6,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    pos = {x = 0, y = 0}, 
     config = { 
       extra = {
-        Xmult = 4 --configurable value
+        Xmult = 4
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.Xmult}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.Xmult}}
     end,
     calculate = function(self,card,context)
         if context.joker_main and G.GAME.dollars <= 0 then
@@ -56,7 +60,6 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
         return true
     end,
 }
@@ -2871,6 +2874,41 @@ SMODS.Joker{
         --whether or not this card is in the pool, return true if it is, return false if its not
         return false
     end,
+}
+
+
+
+
+
+
+SMODS.Back{
+	key = "pinkdeck",  
+    loc_txt = {      
+        name = 'Pink Deck',      
+        text = {
+        "{C:attention}Regals Mod{}",
+        "Jokers appear",
+        "{C:attention}4x{} more often",
+        } 
+    }, 
+    atlas = "Decks",
+    order = 16,
+    unlocked = true,
+    discovered = true,
+    pos = { x = 2, y = 0 },
+	config = {},
+    loc_vars = function(self, info_queue, center)
+        return {vars = {}}
+    end,
+	
+	
+    apply = function(self, back)
+       
+    end,
+
+    calculate = function(self, back, context)
+    
+    end
 }
 ----------------------------------------------
 ------------MOD CODE END----------------------
