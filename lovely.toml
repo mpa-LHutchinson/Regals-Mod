@@ -10,10 +10,16 @@ pattern = "if add and not G.GAME.banned_keys[v.key] then "
 position = "after"
 match_indent = true
 payload = '''
-    if (G.GAME.selected_back_key or {}).key == 'pinkdeck' and v.key:find('j_regalsmod_') then
-      for i = 1, 2000 do
-        _pool[#_pool + 1] = v.key
-        _pool_size = _pool_size + 1
-      end
+
+
+if (G.GAME.selected_back_key or {}).key == "b_rgl_pinkdeck" then
+    -- print("pink deck online")
+    if v.key:find('j_rgl_') then
+        -- print("Boosting joker:", v.key)
+        for i = 1, 4 do
+            _pool[#_pool + 1] = v.key
+            _pool_size = _pool_size + 1
+        end
     end
+end
 '''

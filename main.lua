@@ -2888,7 +2888,7 @@ SMODS.Back{
         text = {
         "{C:attention}Regals Mod{}",
         "Jokers appear",
-        "{C:attention}4x{} more often",
+        "{C:attention}5x{} more often",
         } 
     }, 
     atlas = "Decks",
