@@ -2886,9 +2886,9 @@ SMODS.Back{
     loc_txt = {      
         name = 'Pink Deck',      
         text = {
-        "{C:attention}Regals Mod{}",
-        "Jokers appear",
-        "{C:attention}5x{} more often",
+          "{C:attention}Regals Mod{}",
+          "Jokers appear",
+          "{C:attention}5x{} more often",
         } 
     }, 
     atlas = "Decks",
@@ -2904,6 +2904,138 @@ SMODS.Back{
 	
     apply = function(self, back)
        
+    end,
+
+    calculate = function(self, back, context)
+    
+    end
+}
+SMODS.Back{
+	key = "luckydeck",  
+    loc_txt = {      
+        name = 'Lucky Deck',      
+        text = {
+          "Triples all {C:attention}listed",
+          "{C:green,E:1,S:1.1}probabilities{}, start",
+          "run with {C:tarot}Magician{}",
+        } 
+    }, 
+    atlas = "Decks",
+    order = 17,
+    unlocked = true,
+    discovered = true,
+    pos = { x = 9, y = 1 },
+	config = {consumables = {'c_magician'}},
+    loc_vars = function(self, info_queue, center)
+        return {vars = {}}
+    end,
+	
+	
+    apply = function(self, back)
+        for k, v in pairs(G.GAME.probabilities) do 
+            G.GAME.probabilities[k] = v*3
+        end
+    end,
+
+    calculate = function(self, back, context)
+    
+    end
+}
+SMODS.Back{
+	key = "collectorsdeck",  
+    loc_txt = {      
+        name = 'Collector Deck',      
+        text = {
+          "Start run with",
+          "{C:attention}Hone{} and {C:attention}Glow up{},",
+          "{C:attention}+1{} booster pack per shop",
+        } 
+    }, 
+    atlas = "Decks",
+    order = 18,
+    unlocked = true,
+    discovered = true,
+    pos = { x = 3, y = 2 },
+	config = {vouchers = {'v_hone', 'v_glow_up'}},
+    loc_vars = function(self, info_queue, center)
+        return {vars = {}}
+    end,
+	
+	
+    apply = function(self, back)
+        SMODS.change_booster_limit(1)
+    end,
+
+    calculate = function(self, back, context)
+    
+    end
+}
+SMODS.Back{
+	key = "communitydeck",  
+    loc_txt = {      
+        name = 'Community Deck',      
+        text = {
+          "Start run with",
+          "{C:attention}13{} cards of the",
+          "same {C:attention}Suit{}, {C:red}-1{}",
+          "hand size"
+        } 
+    }, 
+    atlas = "Decks",
+    order = 19,
+    unlocked = true,
+    discovered = true,
+    pos = { x = 4, y = 2 },
+	config = {},
+    loc_vars = function(self, info_queue, center)
+        return {vars = {}}
+    end,
+	
+	
+    apply = function(self, back)
+        local suits = {'Spades', 'Hearts', 'Clubs', 'Diamonds'}
+        local chosen_suit = pseudorandom_element(suits, pseudoseed('community'))
+        G.E_MANAGER:add_event(Event({
+            func = function()
+                for k, v in pairs(G.playing_cards) do
+                    if v.base.suit ~= chosen_suit then
+                        v:start_dissolve(nil, true)
+                    end
+                end
+                G.hand:change_size(-1)
+                return true
+            end
+        }))
+    end,
+
+
+    calculate = function(self, back, context)
+    
+    end
+}
+SMODS.Back{
+	key = "companiondeck",  
+    loc_txt = {      
+        name = 'Companion Deck',      
+        text = {
+          "Start run with",
+          "{C:tarot}Soul{}, {C:red}X1.2{}",
+          "base Blind size",
+        } 
+    }, 
+    atlas = "Decks",
+    order = 20,
+    unlocked = true,
+    discovered = true,
+    pos = { x = 5, y = 1 },
+	config = {consumables = {'c_soul'}},
+    loc_vars = function(self, info_queue, center)
+        return {vars = {}}
+    end,
+	
+	
+    apply = function(self, back)
+        G.GAME.starting_params.ante_scaling = 1.2
     end,
 
     calculate = function(self, back, context)
