@@ -64,35 +64,31 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'valentinesdaygift', --joker key
-    loc_txt = { -- local text
+    key = 'valentinesdaygift',
+    loc_txt = {
         name = 'Valentines Day Gift',
         text = {
-          'Each {C:hearts}Heart{} card',
-          'held in hand',
-          'scores {C:mult}+#1#{} mult'
+          'Each card held',
+          'in hand with {C:hearts}Heart{}',
+          'suit gives {C:mult}+#1#{} mult'
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
     },
-    atlas = 'Jokers', --atlas' key
-    rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
-    cost = 5, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
-    pos = {x = 1, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    atlas = 'Jokers',
+    rarity = 1,
+    cost = 5,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
+    pos = {x = 1, y = 0}, 
     config = { 
       extra = {
-        mult = 6 --configurable value
+        mult = 6
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.mult}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.mult}}
     end,
     calculate = function(self,card,context)
         if context.cardarea == G.hand and context.individual and not context.end_of_round and context.other_card:is_suit("Hearts") then
@@ -105,63 +101,53 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return true
     end,
 }
 SMODS.Joker{
-    key = 'cottoncandy', --joker key
-    loc_txt = { -- local text
+    key = 'cottoncandy',
+    loc_txt = {
         name = 'Cotton Candy',
         text = {
           'Sell this card to',
-          'create {C:attention}2{} free',
+          'create {C:attention}#1#{} free',
           '{C:attention}Voucher Tags',
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
     },
-    atlas = 'Jokers', --atlas' key
-    rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
-    cost = 6, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = false, --can it be blueprinted/brainstormed/other
-    eternal_compat = false, --can it be eternal
-    perishable_compat = true, --can it be perishable
-    pos = {x = 2, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    atlas = 'Jokers',
+    rarity = 2,
+    cost = 7,
+    unlocked = true,
+    discovered = true, 
+    blueprint_compat = true,
+    eternal_compat = false, 
+    perishable_compat = true, 
+    pos = {x = 2, y = 0},
     config = { 
       extra = {
-        mult = 5 --configurable value
+        new_tags = 2
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.mult}} --#1# is replaced with card.ability.extra.Xmult
+        info_queue[#info_queue+1] = {key = 'tag_voucher', set = 'Tag'}
+        return {vars = {center.ability.extra.new_tags}}
     end,
     calculate = function(self,card,context)
         if context.selling_self then
-            G.E_MANAGER:add_event(Event({
-                func = (function()
-                    add_tag(Tag('tag_voucher'))
-                    play_sound('generic1', 0.9 + math.random()*0.1, 0.8)
-                    play_sound('holo1', 1.2 + math.random()*0.1, 0.4)
-                    return true
-                end)
-            }))
-            G.E_MANAGER:add_event(Event({
-                func = (function()
-                    add_tag(Tag('tag_voucher'))
-                    play_sound('generic1', 0.9 + math.random()*0.1, 0.8)
-                    play_sound('holo1', 1.2 + math.random()*0.1, 0.4)
-                    return true
-                end)
-            }))
+            for i=1, card.ability.extra.new_tags do
+                G.E_MANAGER:add_event(Event({
+                    func = (function()
+                        add_tag(Tag('tag_voucher'))
+                        play_sound('generic1', 0.9 + math.random()*0.1, 0.8)
+                        play_sound('holo1', 1.2 + math.random()*0.1, 0.4)
+                        return true
+                    end)
+                }))
+            end
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
         return true
     end,
 }
@@ -3004,7 +2990,7 @@ SMODS.Back{
 	
     apply = function(self, back)
         local suits = {'Spades', 'Hearts', 'Clubs', 'Diamonds'}
-        local chosen_suit = pseudorandom_element(suits, pseudoseed('community'))
+        local chosen_suit = pseudorandom_element(suits)
         G.E_MANAGER:add_event(Event({
             func = function()
                 for k, v in pairs(G.playing_cards) do
