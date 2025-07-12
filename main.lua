@@ -467,7 +467,7 @@ SMODS.Joker{
     pos = {x = 8, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
-        remaining = 16
+        remaining = 17
       }
     },
     loc_vars = function(self,info_queue,center)
