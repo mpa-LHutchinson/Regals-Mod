@@ -1206,7 +1206,7 @@ SMODS.Joker{
         }]]
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
+    rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
     --soul_pos = { x = 0, y = 0 },
     cost = 5, --cost
     unlocked = true, --where it is unlocked or not: if true, 
@@ -1226,6 +1226,7 @@ SMODS.Joker{
     end,
     calculate = function(self,card,context)
         if context.end_of_round and not context.individual and not context.repetition then
+            local current_edition = card.edition
             if card.ability.extra.rounds < card.ability.extra.required then
                 card.ability.extra.rounds = card.ability.extra.rounds + 1
                     if card.ability.extra.rounds >= card.ability.extra.required then
@@ -1253,6 +1254,7 @@ SMODS.Joker{
                                     card:add_to_deck()
                                     G.jokers:emplace(card)
                                     card:start_materialize()
+                                    card:set_edition(current_edition, true)
                                 return true
                             end}))  
                         return {
