@@ -258,8 +258,10 @@ SMODS.Joker{
     loc_txt = { -- local text
         name = 'Mushroom',
         text = {
-          'Levels up the next',
-          '{C:attention}#1#{} hands played'
+          'Upgrades the first',
+          'played {C:attention}poker hand{}',
+          'for the next',
+          '{C:attention}#1#{} rounds'
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -277,50 +279,55 @@ SMODS.Joker{
     pos = {x = 5, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
-        remaining = 4
+        remaining = 4,
       }
     },
     loc_vars = function(self,info_queue,center)
         return {vars = {center.ability.extra.remaining}} --#1# is replaced with card.ability.extra.Xmult
     end,
     calculate = function(self, card, context)
-        if context.before then
+        if context.before and context.cardarea == G.jokers and G.GAME.current_round.hands_played == 0 then
             level_up_hand(context.blueprint_card or card, context.scoring_name, nil, 1)
-            if not context.blueprint then
-                card.ability.extra.remaining = card.ability.extra.remaining - 1
-                if card.ability.extra.remaining <= 0 then
-                    G.E_MANAGER:add_event(Event({
-                        func = function()
-                            play_sound('tarot1')
-                            card.T.r = -0.2
-                            card:juice_up(0.3, 0.4)
-                            card.states.drag.is = true
-                            card.children.center.pinch.x = true
-                            G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
-                                func = function()
-                                    G.jokers:remove_card(self)
-                                    card:remove()
-                                    card = nil
-                                    return true
-                                end
-                            }))
-                            return true
-                        end
-                    }))
-                    return {
-                        message = localize('k_eaten_ex'),
-                        colour = G.C.MONEY
-                    }
-                end
-            end
 
-            if not context.blueprint then
+            return {
+                card = card,
+                message = 'Level Up!',
+                colour = G.C.PURPLE
+            }
+            
+        end
+        if context.after and G.GAME.current_round.hands_played == 0 and not context.blueprint then
+            card.ability.extra.remaining = card.ability.extra.remaining - 1
+            if card.ability.extra.remaining <= 0 then
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        play_sound('tarot1')
+                        card.T.r = -0.2
+                        card:juice_up(0.3, 0.4)
+                        card.states.drag.is = true
+                        card.children.center.pinch.x = true
+                        G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+                            func = function()
+                                G.jokers:remove_card(self)
+                                card:remove()
+                                card = nil
+                                return true
+                            end
+                        }))
+                        return true
+                    end
+                }))
                 return {
-                    card = card,
+                    message = 'Eaten!',
+                    colour = G.C.PURPLE
+                }
+            else
+                return {
                     message = '-1',
-                    colour = G.C.MULT
+                    colour = G.C.PURPLE
                 }
             end
+            
         end
     end,
 
