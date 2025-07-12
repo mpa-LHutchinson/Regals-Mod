@@ -2061,7 +2061,7 @@ SMODS.Joker{
     config = { 
       extra = {
         Xmult = 1,
-        Xmult_mod = 0.4
+        Xmult_mod = 0.35
       }
     },
     loc_vars = function(self,info_queue,center)
