@@ -1844,7 +1844,7 @@ SMODS.Joker{
         text = {
           "Provides {C:attention}+1{} extra hand size",
           "for every {C:attention}#2# Wild Cards{} in your", 
-          "full deck at the end of the round", 
+          "full deck at the start of the round", 
           "{C:inactive}(Currently {C:attention}+#1#{C:inactive})"
         },
         --[[unlock = {
@@ -1872,7 +1872,7 @@ SMODS.Joker{
         return {vars = {center.ability.extra.extra_hand_size, center.ability.extra.per}} --#1# is replaced with card.ability.extra.Xmult
     end,
     calculate = function(self, card, context)
-        if context.end_of_round and not context.individual and not context.repetition then
+        if context.setting_blind and not context.individual and not context.repetition then
             local wilds = 0
             local isdifferent = false
             for k, v in pairs(G.playing_cards) do
