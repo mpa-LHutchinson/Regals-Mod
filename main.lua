@@ -1838,38 +1838,48 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'wildwest', --joker key
-    loc_txt = { -- local text
+    key = 'wildwest',
+    loc_txt = {
         name = 'Wild West',
         text = {
           "Provides {C:attention}+1{} extra hand size",
           "for every {C:attention}#2# Wild Cards{} in your", 
           "full deck at the start of the round", 
-          "{C:inactive}(Currently {C:attention}+#1#{C:inactive})"
+          "{C:inactive}(Currently {C:attention}+#3#{C:inactive})"
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
     },
-    atlas = 'Jokers', --atlas' key
-    rarity = 3, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
-    cost = 7, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = false, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
-    pos = {x = 9, y = 2}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    atlas = 'Jokers',
+    rarity = 3,
+    cost = 7, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = false, 
+    eternal_compat = true, 
+    perishable_compat = true,
+    pos = {x = 9, y = 2},
     config = { 
       extra = {
         extra_hand_size = 0,
         per = 2,
-        last_applied_size = 0
+        last_applied_size = 0,
+        num_wilds_display = 0
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.extra_hand_size, center.ability.extra.per}} --#1# is replaced with card.ability.extra.Xmult
+
+        if G.playing_cards then
+            local wilds = 0
+            for k, v in pairs(G.playing_cards) do
+                if v.config.center.key == 'm_wild' then
+                    wilds = wilds + 1
+                end
+            end
+
+            center.ability.extra.num_wilds_display = math.floor(wilds / center.ability.extra.per)
+        end
+        
+
+        return {vars = {center.ability.extra.extra_hand_size, center.ability.extra.per, center.ability.extra.num_wilds_display}} --#1# is replaced with card.ability.extra.Xmult
     end,
     calculate = function(self, card, context)
         if context.setting_blind and not context.individual and not context.repetition then
