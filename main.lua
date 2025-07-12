@@ -374,7 +374,7 @@ SMODS.Joker{
             card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
             return {
                 card = card,
-                message = 'Upgrade',
+                message = 'Weight gained!',
                 colour = G.C.MULT
             }
         elseif context.joker_main then
