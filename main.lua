@@ -23,7 +23,7 @@ SMODS.Atlas{
 }
 
 SMODS.Joker{
-    key = 'j_regalsmod_collegejoker',
+    key = 'collegejoker',
     loc_txt = { 
         name = 'College Joker',
         text = {
