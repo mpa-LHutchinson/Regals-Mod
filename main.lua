@@ -1,11 +1,4 @@
---- STEAMODDED HEADER
---- MOD_NAME: Regals Mod
---- MOD_ID: REGALSMOD
---- MOD_AUTHOR: [Liam Hutchinson]
---- MOD_DESCRIPTION: this is my attempt at creating a joker mod for balatro.
---- PREFIX: rgl
-----------------------------------------------
-------------MOD CODE -------------------------
+
 
 
 SMODS.Atlas{
@@ -3038,6 +3031,5 @@ SMODS.Back{
     
     end
 }
-----------------------------------------------
-------------MOD CODE END----------------------
+
     
