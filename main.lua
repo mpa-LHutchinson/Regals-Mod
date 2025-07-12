@@ -1829,7 +1829,7 @@ SMODS.Joker{
         name = 'Wild West',
         text = {
           "Provides {C:attention}+1{} extra hand size",
-          "for every {C:attention}#2# Wild Cards{} in your", 
+          "for every {C:attention}Wild Card{} in your", 
           "full deck at the start of the round", 
           "{C:inactive}(Currently {C:attention}+#3#{C:inactive})"
         },
@@ -1846,7 +1846,7 @@ SMODS.Joker{
     config = { 
       extra = {
         extra_hand_size = 0,
-        per = 2,
+        per = 1,
         last_applied_size = 0,
         num_wilds_display = 0
       }
