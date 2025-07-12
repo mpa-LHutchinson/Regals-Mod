@@ -2089,9 +2089,9 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'protest', --joker key
+    key = 'protestsign', --joker key
     loc_txt = { -- local text
-        name = 'Protest',
+        name = 'Protest Sign',
         text = {
           "Adds {C:attention}triple{} the rank",
           "of the {C:attention}#1# leftmost{} cards",
