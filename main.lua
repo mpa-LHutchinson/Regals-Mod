@@ -638,10 +638,9 @@ SMODS.Joker{
     loc_txt = { -- local text
         name = 'Pocket Aces',
         text = {
-          'Destroy {C:attention}#2#{} cards to add',
-          '{C:attention}2 Enhanced Aces{} to your',
-          'hand when {C:attention}blind{} is selected',
-          '{C:inactive}(Currently {C:attention}#1#{C:inactive}/#2#)'
+          'When entering a {C:attention}boss{}',
+          '{C:attention}blind{}, add {C:attention}2 Enhanced{}',
+          '{C:attention}Aces{} to your hand ',
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -653,57 +652,47 @@ SMODS.Joker{
     cost = 7, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
-    blueprint_compat = false, --can it be blueprinted/brainstormed/other
+    blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
     pos = {x = 1, y = 1}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
-        destructions = 0,
-        required = 2
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.destructions, center.ability.extra.required}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {}}
     end,
-    calculate = function(self,card,context)
-        if context.first_hand_drawn and card.ability.extra.destructions >= card.ability.extra.required then
-            local cen_pool = {}
-            for i=1, 2 do
-                _suit = pseudorandom_element({'S','H','D','C'}, pseudoseed('pocket_aces_create'))
-                for k, v in pairs(G.P_CENTER_POOLS["Enhanced"]) do
-                    if v.key ~= 'm_stone' then 
-                        cen_pool[#cen_pool+1] = v
+
+    calculate = function(self, card, context)
+        if context.first_hand_drawn and G.GAME.blind.boss then
+            G.E_MANAGER:add_event(Event({
+                func = function()
+                    local cen_pool = {}
+                    for k, v in pairs(G.P_CENTER_POOLS["Enhanced"]) do
+                        if v.key ~= 'm_stone' then
+                            cen_pool[#cen_pool+1] = v
+                        end
                     end
+                    for i = 1, 2 do
+                        local _suit = pseudorandom_element({'S','H','D','C'}, pseudoseed('pocket'))
+                        local new_card = create_playing_card({front = G.P_CARDS[_suit..'_A'], center = pseudorandom_element(cen_pool, pseudoseed('pocket'))}, G.hand, nil, i ~= 1, {G.C.SECONDARY_SET.Enhanced})
+                        G.GAME.blind:debuff_card(new_card)
+                        playing_card_joker_effects({true})
+                    end
+                    G.hand:sort()
+                    return true
                 end
-                local new_card = create_playing_card({front = G.P_CARDS[_suit..'_'..'A'], center = pseudorandom_element(cen_pool, pseudoseed('spe_card'))}, G.hand, nil, i ~= 1, {G.C.SECONDARY_SET.Spectral})
-                playing_card_joker_effects({new_card})
-                
-            end
-            card.ability.extra.destructions = 0
-            G.hand:sort()
+            }))
+            
+
             return {
                 message = 'Aces!',
                 colour = G.C.MULT
             }
         end
-        if context.remove_playing_cards then
-            for k, val in ipairs(context.removed) do
-                if card.ability.extra.destructions < card.ability.extra.required then
-                    card.ability.extra.destructions = card.ability.extra.destructions + 1
-                    if card.ability.extra.destructions == card.ability.extra.required then
-                        local eval = function(card) return (card.ability.extra.destructions ~= 0) end
-                        juice_card_until(card, eval, true)
-                        return{
-                            message = 'Active!',
-                            card = card,
-                            colour = G.C.MONEY
-                        }
-                    end
-                end
-            end
-        end
     end,
+
     in_pool = function(self,wawa,wawa2)
         --whether or not this card is in the pool, return true if it is, return false if its not
         return true
