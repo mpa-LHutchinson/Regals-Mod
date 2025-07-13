@@ -2211,7 +2211,7 @@ SMODS.Joker{
     blueprint_compat = true, 
     eternal_compat = true, 
     perishable_compat = true, 
-    pos = {x = 1, y = 0}, 
+    pos = {x = 5, y = 3}, 
     config = { 
       extra = {
         tags = 2,
@@ -2243,7 +2243,7 @@ SMODS.Joker{
 
                             for k, hand in pairs(G.GAME.hands) do
                                 if hand.visible then
-                                    available_handtypes[#available_hands + 1] = k
+                                    available_handtypes[#available_handtypes + 1] = k
                                 end
                             end
 
