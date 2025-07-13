@@ -10,7 +10,7 @@ SMODS.Atlas{
 
 SMODS.Atlas{
     key = 'Decks',
-    path = 'Jokers.png',
+    path = 'Decks.png',
     px = 71,
     py = 95
 }
@@ -2893,7 +2893,7 @@ SMODS.Back{
     order = 16,
     unlocked = true,
     discovered = true,
-    pos = { x = 2, y = 0 },
+    pos = { x = 0, y = 0 },
 	config = {},
     loc_vars = function(self, info_queue, center)
         return {vars = {}}
