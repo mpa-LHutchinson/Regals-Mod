@@ -2206,8 +2206,8 @@ SMODS.Joker{
     atlas = 'Jokers',
     rarity = 2, 
     cost = 6,
-    unlocked = false, 
-    discovered = false, 
+    unlocked = true, 
+    discovered = true, 
     blueprint_compat = true, 
     eternal_compat = true, 
     perishable_compat = true, 
@@ -2265,7 +2265,7 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        return false
+        return true
     end,
 }
 SMODS.Joker{
