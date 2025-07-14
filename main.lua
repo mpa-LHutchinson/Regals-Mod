@@ -2192,7 +2192,7 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'squirel', --joker key
+    key = 'squirrel', --joker key
     loc_txt = { -- local text
         name = 'Squirrel',
         text = {
