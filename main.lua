@@ -2206,12 +2206,12 @@ SMODS.Joker{
     atlas = 'Jokers', --atlas' key
     rarity = 1, 
     cost = 3, --cost
-    unlocked = false, --where it is unlocked or not: if true, 
-    discovered = false, --whether or not it starts discovered
+    unlocked = true, --where it is unlocked or not: if true, 
+    discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = false, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 0, y = 2}, 
+    pos = {x = 6, y = 3}, 
     config = { 
       extra = {
         chips = 10,
@@ -2267,8 +2267,7 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        
-        return false
+        return true
     end,
 }
 SMODS.Joker{
