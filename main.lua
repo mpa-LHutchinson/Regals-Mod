@@ -1550,7 +1550,7 @@ SMODS.Joker{
     discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    perishable_compat = false, --can it be perishable
     pos = {x = 5, y = 2}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
@@ -2826,8 +2826,8 @@ SMODS.Joker{
     loc_txt = { -- local text
         name = 'John Free',
         text = {
-          'All shop purchases except',
-          '{C:attention}rerolls{} are free',
+          'All {C:attention}initial shop{}',
+          '{C:attention}purchases{} are free',
         },
         --[[unlock = {
             'Be {C:legendary}cool{}',
@@ -2851,12 +2851,14 @@ SMODS.Joker{
         return {vars = {}} --#1# is replaced with card.ability.extra.Xmult
     end,
     calculate = function(self, card, context)
-        if context.reroll_shop or context.starting_shop or context.buying_card then
+        if context.starting_shop then
             G.E_MANAGER:add_event(Event({func = function()
                 for k, v in pairs(G.I.CARD) do
                     if v.set_cost then v.cost = 0 end
                 end
             return true end }))
+            G.GAME.current_round.free_rerolls = G.GAME.current_round.free_rerolls + 1
+            calculate_reroll_cost(true)
         end
     end,
 
@@ -2866,6 +2868,8 @@ SMODS.Joker{
                 if v.set_cost then v.cost = 0 end
             end
         return true end }))
+        G.GAME.current_round.free_rerolls = G.GAME.current_round.free_rerolls + 1
+        calculate_reroll_cost(true)
     end,
     remove_from_deck = function(self, card, from_debuff)
         G.E_MANAGER:add_event(Event({func = function()
@@ -2873,6 +2877,8 @@ SMODS.Joker{
                 if v.set_cost then v:set_cost() end
             end
         return true end }))
+        G.GAME.current_round.free_rerolls = G.GAME.current_round.free_rerolls - 1
+        calculate_reroll_cost(true)
     end,
 
     in_pool = function(self,wawa,wawa2)
