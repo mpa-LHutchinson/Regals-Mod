@@ -145,31 +145,27 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'artisticjoker', --joker key
-    loc_txt = { -- local text
+    key = 'artisticjoker',
+    loc_txt = {
         name = 'Artistic Joker',
         text = {
-          '{C:mult}+#2#{} mult per',
-          'hand size',
+          '{C:mult}+#2#{} mult',
+          'per hand size',
           '{C:inactive}(Currently {C:mult}+#1#{C:inactive} Mult)'
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
     },
-    atlas = 'Jokers', --atlas' key
-    rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
-    cost = 5, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
-    pos = {x = 3, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    atlas = 'Jokers',
+    rarity = 1, 
+    cost = 5,
+    unlocked = true, 
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
+    pos = {x = 3, y = 0},
     config = { 
       extra = {
-        mult = 16, --configurable value
+        mult = 16, 
         mult_mod = 2
       }
     },
@@ -177,7 +173,7 @@ SMODS.Joker{
         if G.hand and G.hand.config and G.hand.config.card_limit then
             center.ability.extra.mult = G.hand.config.card_limit * center.ability.extra.mult_mod  
         end
-        return {vars = {center.ability.extra.mult, center.ability.extra.mult_mod}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.mult, center.ability.extra.mult_mod}}
     end,
     calculate = function(self,card,context)
         if G.hand and G.hand.config and G.hand.config.card_limit then
@@ -193,69 +189,65 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
         return true
     end,
 }
 SMODS.Joker{
-    key = 'spinningtop', --joker key
-    loc_txt = { -- local text
+    key = 'spinningtop',
+    loc_txt = {
         name = 'Spinning Top',
         text = {
-          'Create a {C:attention}The Wheel of Fortune{}',
-          '{C:tarot}Tarot{} card at the end of the', 
-          '{C:attention}Shop{} {C:inactive}(Must have room)',
+          'Creates a {C:attention}The Wheel{}',
+          '{C:attention}of Fortune{} {C:tarot}Tarot{} card', 
+          'at the end of the {C:attention}Shop{}',
+          '{C:inactive}(Must have room)'
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
-    atlas = 'Jokers', --atlas' key
-    rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
-    cost = 5, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
-    pos = {x = 4, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    atlas = 'Jokers',
+    rarity = 1, 
+    cost = 5,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    pos = {x = 4, y = 0}, 
     config = { 
       extra = {
-        
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {}} --#1# is replaced with card.ability.extra.Xmult
+        info_queue[#info_queue+1] = G.P_CENTERS.c_wheel_of_fortune
+        return {vars = {}}
     end,
     calculate = function(self,card,context)
         if context.ending_shop then
             if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-                    G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
-                    G.E_MANAGER:add_event(Event({
-                        func = (function()
-                            G.E_MANAGER:add_event(Event({
-                                func = function() 
-                                    local card = create_card('Tarot',G.consumeables, nil, nil, nil, nil, 'c_wheel_of_fortune', 'wheel')
-                                    card:add_to_deck()
-                                    G.consumeables:emplace(card)
-                                    G.GAME.consumeable_buffer = 0
-                                    return true
-                                end}))   
-                                card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_plus_tarot'), colour = G.C.PURPLE})                       
-                            return true
-                        end)}))
-                end
+                G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                G.E_MANAGER:add_event(Event({
+                    func = (function()
+                        G.E_MANAGER:add_event(Event({
+                            func = function() 
+                                local card = create_card('Tarot',G.consumeables, nil, nil, nil, nil, 'c_wheel_of_fortune', 'wheel')
+                                card:add_to_deck()
+                                G.consumeables:emplace(card)
+                                G.GAME.consumeable_buffer = 0
+                                return true
+                            end}))   
+                            card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = 'Spin!', colour = G.C.PURPLE})                       
+                        return true
+                    end)}))
+            end
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
         return true
     end,
 }
 SMODS.Joker{
-    key = 'mushroom', --joker key
-    loc_txt = { -- local text
+    key = 'mushroom',
+    loc_txt = {
         name = 'Mushroom',
         text = {
           'Upgrades the first',
@@ -263,27 +255,24 @@ SMODS.Joker{
           'for the next',
           '{C:attention}#1#{} rounds'
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
-    atlas = 'Jokers', --atlas' key
-    rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
-    cost = 5, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = false, --can it be eternal
-    perishable_compat = true, --can it be perishable
-    pos = {x = 5, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    atlas = 'Jokers',
+    rarity = 1, 
+    cost = 5,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = true,
+    eternal_compat = false,
+    perishable_compat = true,
+    pos = {x = 5, y = 0}, 
     config = { 
       extra = {
         remaining = 4,
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.remaining}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.remaining}}
     end,
     calculate = function(self, card, context)
         if context.before and context.cardarea == G.jokers and G.GAME.current_round.hands_played == 0 then
@@ -332,7 +321,6 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
         return true
     end,
 }
@@ -346,20 +334,17 @@ SMODS.Joker{
           '{C:attention}5 scoring cards',
           '{C:inactive}(Currently {C:red}+#1#{C:inactive} Mult)'
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 1, 
     cost = 5, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 6, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 6, y = 0}, 
     config = { 
       extra = {
         mult = 0,
@@ -389,7 +374,7 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return true
     end,
 }
@@ -403,20 +388,17 @@ SMODS.Joker{
           "{C:attention}Mult Cards{} also",
           "score {C:chips}+#1# chips{}"
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 2, 
     cost = 4, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 7, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 7, y = 0}, 
     config = { 
       extra = {
         chips_mod = 60,
@@ -438,7 +420,7 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return true
     end,
 }
@@ -451,20 +433,17 @@ SMODS.Joker{
           "{C:attention}#1#{} scored cards",
           "into {C:spades}Spades{}"
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 1, 
     cost = 5, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = false, --can it be blueprinted/brainstormed/other
     eternal_compat = false, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 8, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 8, y = 0}, 
     config = { 
       extra = {
         remaining = 17
@@ -516,7 +495,7 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return true
     end,
 }
@@ -530,20 +509,17 @@ SMODS.Joker{
           '{C:green}#1# in #2#{} chance to also generate',
           'a {C:spectral}Spectral{} card {C:inactive}(Must have room)'
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 3, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 3, 
     cost = 8, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 9, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 9, y = 0}, 
     config = { 
       extra = {
         odds = 3
@@ -590,7 +566,7 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return true
     end,
 }
@@ -603,20 +579,17 @@ SMODS.Joker{
           '{C:money}$#1#{} when round',
           'ends, earn {C:money}$#2#{}'
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 1, 
     cost = 5, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = false, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 0, y = 1}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 0, y = 1}, 
     config = { 
       extra = {
         money_cap = 15,
@@ -642,20 +615,17 @@ SMODS.Joker{
           '{C:attention}blind{}, add {C:attention}2 Enhanced{}',
           '{C:attention}Aces{} to your hand ',
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 3, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 3, 
     cost = 7, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 1, y = 1}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 1, y = 1}, 
     config = { 
       extra = {
       }
@@ -694,7 +664,7 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return true
     end,
 }
@@ -707,20 +677,17 @@ SMODS.Joker{
           'from {C:attention}first hand{} each',
           'round into {C:attention}Stone cards{}'
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 2, 
     cost = 7, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = false, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 2, y = 1}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 2, y = 1}, 
     config = { 
       extra = {
       }
@@ -744,7 +711,7 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return true
     end,
 }
@@ -759,20 +726,17 @@ SMODS.Joker{
           '3. {X:mult,C:white}X#3#{} mult',
           'each round {C:inactive}(Currently rep {C:attention}#4#{}{C:inactive})'
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 2, 
     cost = 5, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 3, y = 1}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 3, y = 1}, 
     config = { 
       extra = {
         chips = 100,
@@ -838,20 +802,17 @@ SMODS.Joker{
           '{X:mult,C:white}X#1#{} Mult during',
           '{C:attention}boss blinds{}'
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 3, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 3, 
     cost = 8, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 4, y = 1}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 4, y = 1}, 
     config = { 
       extra = {
         Xmult = 3 --configurable value
@@ -880,20 +841,17 @@ SMODS.Joker{
           'card used this run',
           '{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive})'
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 2, 
     cost = 7, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 5, y = 1}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 5, y = 1}, 
     config = { 
       extra = {
         Xmult = 1,
@@ -920,7 +878,7 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return true
     end,
 }
@@ -933,13 +891,10 @@ SMODS.Joker{
           'a {C:green}#1# in #2#{} chance',
           'to win {C:money}$#3#{}',
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 1, 
     cost = 2, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
@@ -947,7 +902,7 @@ SMODS.Joker{
     eternal_compat = false, --can it be eternal
     perishable_compat = true, --can it be perishable
     pixel_size = { w = 0.81 * 71, h = 0.78 * 95 },
-    pos = {x = 6, y = 1}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 6, y = 1}, 
     config = { 
       extra = {
         odds = 15,
@@ -976,7 +931,7 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return true
     end,
 }
@@ -990,20 +945,17 @@ SMODS.Joker{
           'hand types were played this round',
           '{C:inactive}Currently ({C:attention}#1#/#2#{C:inactive})'
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 3, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 3, 
     cost = 8, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = false, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 7, y = 1}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 7, y = 1}, 
     config = { 
       extra = {
         unique_hands = 0,
@@ -1064,7 +1016,7 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return true
     end,
 }
@@ -1077,20 +1029,17 @@ SMODS.Joker{
           'hand at the end of',
           'the round earns {C:money}$#1#{}'
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 1, 
     cost = 5, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 8, y = 1}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 8, y = 1}, 
     config = { 
       extra = {
         money = 2 --configurable value
@@ -1108,7 +1057,7 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return true
     end,
 }
@@ -1122,20 +1071,17 @@ SMODS.Joker{
           'and earn {C:money}$#1#{} at',
           'the end of the round'
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 2, 
     cost = 5, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 9, y = 1}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 9, y = 1}, 
     config = { 
       extra = {
         money = 15,
@@ -1176,7 +1122,7 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return true
     end,
 }
@@ -1190,20 +1136,17 @@ SMODS.Joker{
           'after {C:attention}#2# rounds',
           '{C:inactive}(Currently {C:attention}#1#{C:inactive}/#2#)'
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 2, 
     cost = 5, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = false, --can it be blueprinted/brainstormed/other
     eternal_compat = false, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 0, y = 2}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 0, y = 2}, 
     config = { 
       extra = {
         rounds = 0,
@@ -1262,7 +1205,7 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return true
     end,
 }
@@ -1276,20 +1219,17 @@ SMODS.Joker{
           'in hand and gain {C:mult}+#2#{} Mult',
           '{C:inactive}(Currently {C:red}+#1#{C:inactive} Mult)'
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 2, 
     cost = 6, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 1, y = 2}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 1, y = 2}, 
     config = { 
       extra = {
         mult = 0,
@@ -1360,7 +1300,7 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return true
     end,
 }
@@ -1373,20 +1313,17 @@ SMODS.Joker{
           '{C:attention}consumable{} in your',
           '{C:attention}consumable{} area',
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 1, 
     cost = 4, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 2, y = 2}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 2, y = 2}, 
     config = { 
       extra = {
         chip_mod = 60
@@ -1406,7 +1343,7 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return true
     end,
 }
@@ -1420,9 +1357,7 @@ SMODS.Joker{
             'to a random {C:attention}Joker',
             '{C:inactive}(Currently {C:attention}#1#{C:inactive}/#2#)'
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers',
     rarity = 2,
@@ -1491,20 +1426,17 @@ SMODS.Joker{
           'Each scored {C:attention}3{} will',
           'earn between {C:money}$#1#{} and {C:money}$#2#{}'
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 1, 
     cost = 6, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 4, y = 2}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 4, y = 2}, 
     config = { 
       extra = {
         min_money = 1,
@@ -1524,7 +1456,7 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return true
     end,
 }
@@ -1538,20 +1470,17 @@ SMODS.Joker{
           'resets if any {C:attention}Blind{} is skipped',
           '{C:inactive}(Currently {C:chips}+#3#{C:inactive} Chips and {C:mult}+#1#{C:inactive} Mult)'
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 1, 
     cost = 4, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = false, --can it be perishable
-    pos = {x = 5, y = 2}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 5, y = 2}, 
     config = { 
       extra = {
         mult = 0,
@@ -1592,7 +1521,7 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return true
     end,
 }
@@ -1606,20 +1535,17 @@ SMODS.Joker{
           'create {C:attention}1 {C:green}Common{C:attention} Joker',
           '{C:inactive}(Must have room)',
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 2, 
     cost = 6, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = false, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 6, y = 2}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 6, y = 2}, 
     config = { 
       extra = {
         remaining = 6,
@@ -1681,7 +1607,7 @@ SMODS.Joker{
         
     end,
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return true
     end,
 }
@@ -1694,20 +1620,17 @@ SMODS.Joker{
           'is discarded, generate',
           'an extra {C:tarot}Tarot{} card'
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 2, 
     cost = 6, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 7, y = 2}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 7, y = 2}, 
     config = { 
       extra = {
       }
@@ -1745,7 +1668,7 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return true
     end,
 }
@@ -1758,20 +1681,17 @@ SMODS.Joker{
           "discard the {C:attention}2 rightmost{}", 
           "cards held in hand"
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 2, 
     cost = 6, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = false, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 8, y = 2}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 8, y = 2}, 
     config = { 
       extra = {
         shots = 2
@@ -1810,7 +1730,7 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return true
     end,
 }
@@ -1898,7 +1818,7 @@ SMODS.Joker{
 
 
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return true
     end,
 }
@@ -1911,20 +1831,17 @@ SMODS.Joker{
           "hand if blind is", 
           "defeated in {C:attention}1{} hand"
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 1, 
     cost = 6, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = false, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 0, y = 3}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 0, y = 3}, 
     config = { 
       extra = {
         money = 0,
@@ -1950,7 +1867,7 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return true
     end,
 }
@@ -1963,20 +1880,17 @@ SMODS.Joker{
           'a random {C:attention}enhancement{} to',
           'any scored cards'
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 2, 
     cost = 5, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 1, y = 3}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 1, y = 3}, 
     config = { 
       extra = {
         odds = 7
@@ -2019,7 +1933,7 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return true
     end,
 }
@@ -2033,20 +1947,17 @@ SMODS.Joker{
           '{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive})'
 
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 2, 
     cost = 7, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 2, y = 3}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 2, y = 3}, 
     config = { 
       extra = {
         Xmult = 1,
@@ -2075,7 +1986,7 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return true
     end,
 }
@@ -2088,20 +1999,17 @@ SMODS.Joker{
           "of the {C:attention}#1# leftmost{} cards",
           "held in hand to Chips",
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 1, 
     cost = 5, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 3, y = 3}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 3, y = 3}, 
     config = { 
       extra = {
         num_of_cards = 3 --configurable value
@@ -2131,7 +2039,7 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return true
     end,
 }
@@ -2145,20 +2053,17 @@ SMODS.Joker{
           '{X:mult,C:white}X#1#{} Mult, lose {C:money}$#2#{}',
           'and add {C:money}$#2#{} to sell value'
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 3, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 3, 
     cost = 6, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 4, y = 3}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 4, y = 3}, 
     config = { 
       extra = {
         Xmult = 3.5,
@@ -2189,7 +2094,7 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return true
     end,
 }
@@ -2296,20 +2201,17 @@ SMODS.Joker{
           'to replace it with a',
           '{C:blue}Common{} Joker'
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 1, 
     cost = 3, --cost
     unlocked = false, --where it is unlocked or not: if true, 
     discovered = false, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = false, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 0, y = 2}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 0, y = 2}, 
     config = { 
       extra = {
         chips = 10,
@@ -2365,7 +2267,7 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return false
     end,
 }
@@ -2528,20 +2430,17 @@ SMODS.Joker{
           "Retrigger all",
           "played {C:spades}Spade{} cards",
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 2, 
     cost = 6, --cost
     unlocked = false, --where it is unlocked or not: if true, 
     discovered = false, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 4, y = 2}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 4, y = 2}, 
     config = { 
       extra = {
       }
@@ -2560,7 +2459,7 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return false
     end,
 }
@@ -2573,20 +2472,17 @@ SMODS.Joker{
           "gain {C:blue}+#1#{} Hand or",
           "gain {C:red}+#2#{} Discard",
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 2, 
     cost = 6, --cost
     unlocked = false, --where it is unlocked or not: if true, 
     discovered = false, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 4, y = 2}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 4, y = 2}, 
     config = { 
       extra = {
         extra_hands = 1,
@@ -2621,7 +2517,7 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return false
     end,
 }
@@ -2636,20 +2532,17 @@ SMODS.Joker{
           "chips when hand is played",
           "{C:inactive}(Currently {C:chips}+#3#{C:inactive} Chips)"
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 1, 
     cost = 3, --cost
     unlocked = false, --where it is unlocked or not: if true, 
     discovered = false, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 4, y = 2}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 4, y = 2}, 
     config = { 
       extra = {
         odds = 9,
@@ -2690,7 +2583,7 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return false
     end,
 }
@@ -2707,15 +2600,14 @@ SMODS.Joker{
         },
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 3, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 3, 
     cost = 8, --cost
     unlocked = false, --where it is unlocked or not: if true, 
     discovered = false, --whether or not it starts discovered
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 4, y = 2}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 4, y = 2}, 
     config = { 
       extra = {
         Xmult = 1,
@@ -2769,7 +2661,7 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return false
     end,
 }
@@ -2781,20 +2673,17 @@ SMODS.Joker{
           'Adds {C:dark_edition}Polychrome{} edition',
           'to all scored cards'
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 4, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 4, 
     cost = 20, --cost
     unlocked = false, --where it is unlocked or not: if true, 
     discovered = false, --whether or not it starts discovered
     blueprint_compat = false, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 2, y = 1}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 2, y = 1}, 
     config = { 
       extra = {
       }
@@ -2817,7 +2706,7 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return false
     end,
 }
@@ -2829,20 +2718,17 @@ SMODS.Joker{
           'All {C:attention}initial shop{}',
           '{C:attention}purchases{} are free',
         },
-        --[[unlock = {
-            'Be {C:legendary}cool{}',
-        }]]
+        
     },
     atlas = 'Jokers', --atlas' key
-    rarity = 4, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    --soul_pos = { x = 0, y = 0 },
+    rarity = 4, 
     cost = 20, --cost
     unlocked = false, --where it is unlocked or not: if true, 
     discovered = false, --whether or not it starts discovered
     blueprint_compat = false, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 2, y = 1}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 2, y = 1}, 
     config = { 
       extra = {
       }
@@ -2882,7 +2768,7 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        --whether or not this card is in the pool, return true if it is, return false if its not
+        
         return false
     end,
 }
