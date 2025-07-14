@@ -2200,7 +2200,9 @@ SMODS.Joker{
         text = {
           'Skipping any {C:attention}Blind{}',
           'generates {C:attention}#1#{} other',
-          'random {C:attention}tags'
+          'random {C:attention}tag(s){}. Number of',
+          '{C:attention}tags{} increases with each level',
+          '{C:inactive}Next level in ({C:attention}#3#/#2#{C:inactive})'
         },
     },
     atlas = 'Jokers',
@@ -2214,11 +2216,13 @@ SMODS.Joker{
     pos = {x = 5, y = 3}, 
     config = { 
       extra = {
-        tags = 2,
+        tags = 1,
+        required = 1,
+        picked = 0
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.tags}} 
+        return {vars = {center.ability.extra.tags, center.ability.extra.required, center.ability.extra.picked}} 
     end,
     calculate = function(self,card,context)
         if context.skip_blind then
@@ -2251,17 +2255,31 @@ SMODS.Joker{
                         end
 
                         add_tag(tag)
+                        if context.blueprint then 
+                            context.blueprint_card:juice_up(0.3, 0.4) 
+                        else 
+                            card:juice_up(0.3, 0.4) 
+                        end
                         play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
                         play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)
                     end
                     return true
                 end)
             }))
-            return {
-                card = card,
-                message = 'Lock picked!',
-                colour = G.C.GREEN
-            }
+            if not context.blueprint then
+                card.ability.extra.picked = card.ability.extra.picked + 1
+            end
+            
+            if card.ability.extra.picked >= card.ability.extra.required and not context.blueprint then
+                card.ability.extra.tags = card.ability.extra.tags + 1
+                card.ability.extra.required = card.ability.extra.tags
+                card.ability.extra.picked = 0
+                return {
+                    card = card,
+                    message = 'Lockpicking increased!',
+                    colour = G.C.GREEN
+                }
+            end
         end
     end,
     in_pool = function(self,wawa,wawa2)
