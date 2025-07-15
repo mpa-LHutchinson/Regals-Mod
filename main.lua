@@ -1618,7 +1618,8 @@ SMODS.Joker{
         text = {
           'When a {C:purple}Purple Seal{}',
           'is discarded, generate',
-          'an extra {C:tarot}Tarot{} card'
+          'an extra {C:dark_edition}Negative{}',
+          '{C:tarot}Tarot{} card'
         },
         
     },
@@ -1641,34 +1642,24 @@ SMODS.Joker{
     calculate = function(self, card, context)
         if context.discard and not context.blueprint then
             if context.other_card.seal == 'Purple' then
-                if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-                    G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
                     G.E_MANAGER:add_event(Event({
-                        func = (function()
-                            G.E_MANAGER:add_event(Event({
-                                func = function() 
-                                    local card = create_card('Tarot_Planet',G.consumeables, nil, nil, nil, nil, nil, 'amethyst')
-                                    card:add_to_deck()
-                                    G.consumeables:emplace(card)
-                                    G.GAME.consumeable_buffer = 0
-                                    return true
-                                end}))                      
+                        func = function() 
+                            local card = create_card('Tarot',G.consumeables, nil, nil, nil, nil, nil, 'amethyst')
+                            card:set_edition({negative = true}, true)
+                            card:add_to_deck()
+                            G.consumeables:emplace(card) 
                             return true
-                        end)}))
+                        end}))
                     return {
                         card = card,
                         message = 'Abracadabra!',
                         colour = G.C.PURPLE 
                     }
-                end
-                
             end
-        
         end
     end,
 
     in_pool = function(self,wawa,wawa2)
-        
         return true
     end,
 }
