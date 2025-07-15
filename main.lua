@@ -463,7 +463,8 @@ SMODS.Joker{
                             v:juice_up()
                             return true
                         end
-                    })) 
+                    }))
+                    G.GAME.blind:debuff_card(v)
                 end
             end
             if card.ability.extra.remaining <= 0 then
@@ -2262,9 +2263,9 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'diamondarmor',
+    key = 'diamondarmour',
     loc_txt = {
-        name = 'Diamond Armor',
+        name = 'Diamond Armour',
         text = {
           'Score {C:diamonds}#2# Diamond{} cards {C:inactive}[#1#]{} to',
           'activate this joker and',
@@ -2907,8 +2908,8 @@ SMODS.Back{
         name = 'Companion Deck',      
         text = {
           "Start run with",
-          "{C:tarot}Soul{}, {C:red}X1.2{}",
-          "base Blind size",
+          "{C:tarot}Soul{}, {C:red}-1{} card",
+          "slots in the shop",
         } 
     }, 
     atlas = "Decks",
@@ -2923,7 +2924,7 @@ SMODS.Back{
 	
 	
     apply = function(self, back)
-        G.GAME.starting_params.ante_scaling = 1.2
+        change_shop_size(-1)
     end,
 
     calculate = function(self, back, context)
