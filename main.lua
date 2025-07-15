@@ -2811,9 +2811,10 @@ SMODS.Back{
     loc_txt = {      
         name = 'Lucky Deck',      
         text = {
-          "Triples all {C:attention}listed",
+          "Doubles all {C:attention}listed",
           "{C:green,E:1,S:1.1}probabilities{}, start",
-          "run with {C:tarot}Magician{}",
+          "run with {C:attention}2{} copies",
+          "of {C:tarot}Magician{}"
         } 
     }, 
     atlas = "Decks",
@@ -2821,7 +2822,7 @@ SMODS.Back{
     unlocked = true,
     discovered = true,
     pos = { x = 1, y = 0 },
-	config = {consumables = {'c_magician'}},
+	config = {consumables = {'c_magician', 'c_magician'}},
     loc_vars = function(self, info_queue, center)
         return {vars = {}}
     end,
@@ -2829,7 +2830,7 @@ SMODS.Back{
 	
     apply = function(self, back)
         for k, v in pairs(G.GAME.probabilities) do 
-            G.GAME.probabilities[k] = v*3
+            G.GAME.probabilities[k] = v*2
         end
     end,
 
