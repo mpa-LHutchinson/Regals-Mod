@@ -2820,7 +2820,7 @@ SMODS.Back{
     order = 17,
     unlocked = true,
     discovered = true,
-    pos = { x = 9, y = 1 },
+    pos = { x = 1, y = 0 },
 	config = {consumables = {'c_magician'}},
     loc_vars = function(self, info_queue, center)
         return {vars = {}}
