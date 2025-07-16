@@ -716,7 +716,8 @@ SMODS.Joker{
                         v:juice_up()
                         return true
                     end
-                })) 
+                }))
+                G.GAME.blind:debuff_card(v) 
             end
             return {message = 'Stone', colour = G.C.PURPLE}
         end
@@ -1926,7 +1927,8 @@ SMODS.Joker{
                             v:juice_up()
                             return true
                         end
-                    })) 
+                    }))
+                    G.GAME.blind:debuff_card(v) 
                 end 
             end
 
@@ -2707,7 +2709,8 @@ SMODS.Joker{
                         v:juice_up()
                         return true
                     end
-                })) 
+                }))
+                G.GAME.blind:debuff_card(v) 
             end
         end
     end,
