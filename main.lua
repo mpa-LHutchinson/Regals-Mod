@@ -333,14 +333,14 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 1, 
-    cost = 5, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 5, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = false, 
     pos = {x = 6, y = 0}, 
     config = { 
       extra = {
@@ -349,7 +349,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.mult, center.ability.extra.mult_mod}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.mult, center.ability.extra.mult_mod}} 
     end,
     calculate = function(self, card, context)
         if context.before and context.cardarea == G.jokers and #context.scoring_hand == 5 and not context.blueprint then
@@ -380,21 +380,21 @@ SMODS.Joker{
     loc_txt = { 
         name = '3D Joker',
         text = {
-          "{C:attention}Bonus Cards{} also",
-          "score {C:mult}+#2# mult{}.",
-          "{C:attention}Mult Cards{} also",
+          "{C:attention}Bonus Cards{}",
+          "score {C:mult}+#2# mult{},",
+          "{C:attention}Mult Cards{}",
           "score {C:chips}+#1# chips{}"
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 2, 
-    cost = 4, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 5, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
     pos = {x = 7, y = 0}, 
     config = { 
       extra = {
@@ -403,7 +403,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.chips_mod, center.ability.extra.mult_mod}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.chips_mod, center.ability.extra.mult_mod}} 
     end,
     calculate = function(self, card, context)
         if context.cardarea == G.play and context.individual then
@@ -417,8 +417,12 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        
-        return true
+        for _, playing_card in pairs(G.playing_cards) do
+            if SMODS.has_enhancement(playing_card, 'm_bonus') or SMODS.has_enhancement(playing_card, 'm_mult')  then
+                return true
+            end
+        end
+        return false
     end,
 }
 SMODS.Joker{
@@ -432,14 +436,14 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 1, 
-    cost = 5, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = false, --can it be blueprinted/brainstormed/other
-    eternal_compat = false, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 5, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = false, 
+    eternal_compat = false, 
+    perishable_compat = true, 
     pos = {x = 8, y = 0}, 
     config = { 
       extra = {
@@ -447,7 +451,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.remaining}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.remaining}} 
     end,
     calculate = function(self, card, context)
         if context.before and context.cardarea == G.jokers then
@@ -509,14 +513,14 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 3, 
-    cost = 8, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 8, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
     pos = {x = 9, y = 0}, 
     config = { 
       extra = {
@@ -524,7 +528,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {G.GAME.probabilities.normal, center.ability.extra.odds}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {G.GAME.probabilities.normal, center.ability.extra.odds}} 
     end,
     calculate = function(self,card,context)
         if context.setting_blind then
@@ -579,14 +583,14 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 1, 
-    cost = 5, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = false, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 5, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = false, 
+    eternal_compat = true, 
+    perishable_compat = true, 
     pos = {x = 0, y = 1}, 
     config = { 
       extra = {
@@ -595,7 +599,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.money_cap, center.ability.extra.money}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.money_cap, center.ability.extra.money}} 
     end,
     
     calc_dollar_bonus = function(self,card)
@@ -615,14 +619,14 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 3, 
-    cost = 7, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 7, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
     pos = {x = 1, y = 1}, 
     config = { 
       extra = {
@@ -677,21 +681,21 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 2, 
-    cost = 7, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = false, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 7, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = false, 
+    eternal_compat = true, 
+    perishable_compat = true, 
     pos = {x = 2, y = 1}, 
     config = { 
       extra = {
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {}} 
     end,
     calculate = function(self, card, context)
         if context.before and context.cardarea == G.jokers and G.GAME.current_round.hands_played == 0 then
@@ -726,14 +730,14 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 2, 
-    cost = 5, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 5, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
     pos = {x = 3, y = 1}, 
     config = { 
       extra = {
@@ -802,14 +806,14 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 3, 
-    cost = 8, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 8, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
     pos = {x = 4, y = 1}, 
     config = { 
       extra = {
@@ -817,7 +821,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.Xmult}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.Xmult}} 
     end,
     calculate = function(self,card,context)
         if context.joker_main and G.GAME.blind.boss then
@@ -841,14 +845,14 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 2, 
-    cost = 7, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 7, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
     pos = {x = 5, y = 1}, 
     config = { 
       extra = {
@@ -860,7 +864,7 @@ SMODS.Joker{
         if G.GAME.consumeable_usage_total then
             center.ability.extra.Xmult = 1 + (G.GAME.consumeable_usage_total.spectral * center.ability.extra.Xmult_mod) 
         end
-        return {vars = {center.ability.extra.Xmult, center.ability.extra.Xmult_mod}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.Xmult, center.ability.extra.Xmult_mod}} 
     end,
     calculate = function(self,card,context)
         if G.GAME.consumeable_usage_total and not context.blueprint then
@@ -891,14 +895,14 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 1, 
-    cost = 2, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = false, --can it be blueprinted/brainstormed/other
-    eternal_compat = false, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 2, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = false, 
+    eternal_compat = false, 
+    perishable_compat = true, 
     pixel_size = { w = 0.81 * 71, h = 0.78 * 95 },
     pos = {x = 6, y = 1}, 
     config = { 
@@ -908,7 +912,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {G.GAME.probabilities.normal, center.ability.extra.odds, center.ability.extra.money}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {G.GAME.probabilities.normal, center.ability.extra.odds, center.ability.extra.money}} 
     end,
     calculate = function(self,card,context)
         if context.selling_self then 
@@ -945,14 +949,14 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 3, 
-    cost = 8, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = false, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 8, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = false, 
+    eternal_compat = true, 
+    perishable_compat = true, 
     pos = {x = 7, y = 1}, 
     config = { 
       extra = {
@@ -961,7 +965,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.unique_hands, center.ability.extra.required}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.unique_hands, center.ability.extra.required}} 
     end,
     calculate = function(self,card,context)
 
@@ -1029,14 +1033,14 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 1, 
-    cost = 5, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 5, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
     pos = {x = 8, y = 1}, 
     config = { 
       extra = {
@@ -1044,7 +1048,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.money}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.money}} 
     end,
     calculate = function(self,card,context)
         if context.cardarea == G.hand and context.individual and context.end_of_round and context.other_card:get_id() == 11 then
@@ -1071,14 +1075,14 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 2, 
-    cost = 5, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 5, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
     pos = {x = 9, y = 1}, 
     config = { 
       extra = {
@@ -1088,7 +1092,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.money, center.ability.extra.mult, center.ability.extra.jackpot}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.money, center.ability.extra.mult, center.ability.extra.jackpot}} 
     end,
     calculate = function(self,card,context)
         if context.cardarea == G.jokers and context.joker_main then
@@ -1136,14 +1140,14 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 2, 
-    cost = 5, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = false, --can it be blueprinted/brainstormed/other
-    eternal_compat = false, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 5, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = false, 
+    eternal_compat = false, 
+    perishable_compat = true, 
     pos = {x = 0, y = 2}, 
     config = { 
       extra = {
@@ -1152,7 +1156,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.rounds, center.ability.extra.required}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.rounds, center.ability.extra.required}} 
     end,
     calculate = function(self,card,context)
         if context.end_of_round and not context.individual and not context.repetition then
@@ -1219,14 +1223,14 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 2, 
-    cost = 6, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 6, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
     pos = {x = 1, y = 2}, 
     config = { 
       extra = {
@@ -1235,7 +1239,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.mult, center.ability.extra.mult_mod}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.mult, center.ability.extra.mult_mod}} 
     end,
     calculate = function(self, card, context)
         if context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
@@ -1313,14 +1317,14 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 1, 
-    cost = 4, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 4, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
     pos = {x = 2, y = 2}, 
     config = { 
       extra = {
@@ -1328,7 +1332,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.chip_mod}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.chip_mod}} 
     end,
     calculate = function(self,card,context)
         if context.joker_main and G.consumeables.cards[1] then
@@ -1426,14 +1430,14 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 1, 
-    cost = 6, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 6, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
     pos = {x = 4, y = 2}, 
     config = { 
       extra = {
@@ -1442,7 +1446,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.min_money, center.ability.extra.max_money}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.min_money, center.ability.extra.max_money}} 
     end,
     calculate = function(self,card,context)
         if context.individual and context.cardarea == G.play and context.other_card:get_id() == 3 then
@@ -1470,14 +1474,14 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 1, 
-    cost = 4, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = false, --can it be perishable
+    cost = 4, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = false, 
     pos = {x = 5, y = 2}, 
     config = { 
       extra = {
@@ -1488,7 +1492,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.mult, center.ability.extra.mult_mod, center.ability.extra.chips, center.ability.extra.chips_mod }} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.mult, center.ability.extra.mult_mod, center.ability.extra.chips, center.ability.extra.chips_mod }} 
     end,
     calculate = function(self, card, context)
         if  G.GAME.blind.boss and context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
@@ -1535,14 +1539,14 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 2, 
-    cost = 6, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = false, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 6, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = false, 
+    perishable_compat = true, 
     pos = {x = 6, y = 2}, 
     config = { 
       extra = {
@@ -1550,7 +1554,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.remaining}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.remaining}} 
     end,
     calculate = function(self,card,context)
         if context.setting_blind then 
@@ -1621,21 +1625,21 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 2, 
-    cost = 6, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 6, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
     pos = {x = 7, y = 2}, 
     config = { 
       extra = {
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {}} 
     end,
     calculate = function(self, card, context)
         if context.discard and not context.blueprint then
@@ -1672,14 +1676,14 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 2, 
-    cost = 6, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = false, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 6, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = false, 
+    eternal_compat = true, 
+    perishable_compat = true, 
     pos = {x = 8, y = 2}, 
     config = { 
       extra = {
@@ -1687,7 +1691,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.shots}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.shots}} 
     end,
     calculate = function(self, card, context)
         if context.press_play then
@@ -1765,7 +1769,7 @@ SMODS.Joker{
         end
         
 
-        return {vars = {center.ability.extra.extra_hand_size, center.ability.extra.per, center.ability.extra.num_wilds_display}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.extra_hand_size, center.ability.extra.per, center.ability.extra.num_wilds_display}} 
     end,
     calculate = function(self, card, context)
         if context.setting_blind and not context.individual and not context.repetition then
@@ -1822,14 +1826,14 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 1, 
-    cost = 6, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = false, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 6, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = false, 
+    eternal_compat = true, 
+    perishable_compat = true, 
     pos = {x = 0, y = 3}, 
     config = { 
       extra = {
@@ -1839,7 +1843,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.money, center.ability.extra.money_mod, center.ability.extra.flawless}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.money, center.ability.extra.money_mod, center.ability.extra.flawless}} 
     end,
     calculate = function(self, card, context)
         if context.end_of_round and not context.individual and not context.repetition and G.GAME.current_round.hands_played <= 1 and not context.blueprint then
@@ -1871,14 +1875,14 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 2, 
-    cost = 5, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 5, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
     pos = {x = 1, y = 3}, 
     config = { 
       extra = {
@@ -1886,7 +1890,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {G.GAME.probabilities.normal, center.ability.extra.odds}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {G.GAME.probabilities.normal, center.ability.extra.odds}} 
     end,
     calculate = function(self, card, context)
         if context.before and context.cardarea == G.jokers then
@@ -1938,14 +1942,14 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 2, 
-    cost = 7, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 7, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
     pos = {x = 2, y = 3}, 
     config = { 
       extra = {
@@ -1960,7 +1964,7 @@ SMODS.Joker{
         end
         center.ability.extra.Xmult = 1 + (vouchers_redeemed * center.ability.extra.Xmult_mod)
 
-        return {vars = {center.ability.extra.Xmult, center.ability.extra.Xmult_mod}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.Xmult, center.ability.extra.Xmult_mod}} 
     end,
     calculate = function(self,card,context)
         
@@ -1990,14 +1994,14 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 1, 
-    cost = 5, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 5, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
     pos = {x = 3, y = 3}, 
     config = { 
       extra = {
@@ -2005,7 +2009,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.num_of_cards}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.num_of_cards}} 
     end,
     calculate = function(self,card,context)
         if context.cardarea == G.hand and context.individual and not context.end_of_round then
@@ -2044,14 +2048,14 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 3, 
-    cost = 6, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 6, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
     pos = {x = 4, y = 3}, 
     config = { 
       extra = {
@@ -2060,7 +2064,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.Xmult, center.ability.extra.money}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.Xmult, center.ability.extra.money}} 
     end,
     calculate = function(self,card,context)
         if context.before and context.poker_hands and next(context.poker_hands["Full House"]) and not context.blueprint then
@@ -2192,14 +2196,14 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 1, 
-    cost = 3, --cost
-    unlocked = true, --where it is unlocked or not: if true, 
-    discovered = true, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = false, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 3, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = false, 
+    perishable_compat = true, 
     pos = {x = 6, y = 3}, 
     config = { 
       extra = {
@@ -2208,7 +2212,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.chips}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.chips}} 
     end,
     calculate = function(self,card,context)
         if context.setting_blind and not context.blueprint then
@@ -2420,21 +2424,21 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 2, 
-    cost = 6, --cost
-    unlocked = false, --where it is unlocked or not: if true, 
-    discovered = false, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 6, 
+    unlocked = false,  
+    discovered = false, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
     pos = {x = 4, y = 2}, 
     config = { 
       extra = {
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {}} 
     end,
     calculate = function(self,card,context)
         if context.cardarea == G.play and context.repetition and context.other_card:is_suit("Spades") then
@@ -2462,14 +2466,14 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 2, 
-    cost = 6, --cost
-    unlocked = false, --where it is unlocked or not: if true, 
-    discovered = false, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 6, 
+    unlocked = false,  
+    discovered = false, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
     pos = {x = 4, y = 2}, 
     config = { 
       extra = {
@@ -2478,7 +2482,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.extra_hands, center.ability.extra.extra_discards}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.extra_hands, center.ability.extra.extra_discards}} 
     end,
     calculate = function(self,card,context)
         if context.setting_blind then
@@ -2522,14 +2526,14 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 1, 
-    cost = 3, --cost
-    unlocked = false, --where it is unlocked or not: if true, 
-    discovered = false, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 3, 
+    unlocked = false,  
+    discovered = false, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
     pos = {x = 4, y = 2}, 
     config = { 
       extra = {
@@ -2539,7 +2543,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {G.GAME.probabilities.normal, center.ability.extra.odds, center.ability.extra.chips, center.ability.extra.chips_mod }} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {G.GAME.probabilities.normal, center.ability.extra.odds, center.ability.extra.chips, center.ability.extra.chips_mod }} 
     end,
     calculate = function(self,card,context)
         if context.cardarea == G.jokers and context.before and not context.blueprint and pseudorandom('snak') < G.GAME.probabilities.normal / card.ability.extra.odds then 
@@ -2587,14 +2591,14 @@ SMODS.Joker{
           "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive})"
         },
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 3, 
-    cost = 8, --cost
-    unlocked = false, --where it is unlocked or not: if true, 
-    discovered = false, --whether or not it starts discovered
-    blueprint_compat = true, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 8, 
+    unlocked = false,  
+    discovered = false, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
     pos = {x = 4, y = 2}, 
     config = { 
       extra = {
@@ -2603,7 +2607,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.Xmult, center.ability.extra.Xmult_mod}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.Xmult, center.ability.extra.Xmult_mod}} 
     end,
     calculate = function(self,card,context)
         if not context.blueprint and context.setting_blind then
@@ -2663,21 +2667,21 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 4, 
-    cost = 20, --cost
-    unlocked = false, --where it is unlocked or not: if true, 
-    discovered = false, --whether or not it starts discovered
-    blueprint_compat = false, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 20, 
+    unlocked = false,  
+    discovered = false, 
+    blueprint_compat = false, 
+    eternal_compat = true, 
+    perishable_compat = true, 
     pos = {x = 2, y = 1}, 
     config = { 
       extra = {
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {}} 
     end,
     calculate = function(self, card, context)
         if context.before and context.cardarea == G.jokers then
@@ -2708,21 +2712,21 @@ SMODS.Joker{
         },
         
     },
-    atlas = 'Jokers', --atlas' key
+    atlas = 'Jokers', 
     rarity = 4, 
-    cost = 20, --cost
-    unlocked = false, --where it is unlocked or not: if true, 
-    discovered = false, --whether or not it starts discovered
-    blueprint_compat = false, --can it be blueprinted/brainstormed/other
-    eternal_compat = true, --can it be eternal
-    perishable_compat = true, --can it be perishable
+    cost = 20, 
+    unlocked = false,  
+    discovered = false, 
+    blueprint_compat = false, 
+    eternal_compat = true, 
+    perishable_compat = true, 
     pos = {x = 2, y = 1}, 
     config = { 
       extra = {
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {}} 
     end,
     calculate = function(self, card, context)
         if context.starting_shop then
