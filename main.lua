@@ -463,12 +463,7 @@ SMODS.Joker{
             for k, v in ipairs(context.scoring_hand) do
                 if card.ability.extra.remaining > 0 then
                     card.ability.extra.remaining = card.ability.extra.remaining - 1 
-                    G.E_MANAGER:add_event(Event({
-                        func = function() 
-                            v:change_suit('Spades');
-                            return true 
-                        end
-                     }))
+                    v:change_suit('Spades');
                     G.E_MANAGER:add_event(Event({
                         func = function()
                             v:juice_up()
