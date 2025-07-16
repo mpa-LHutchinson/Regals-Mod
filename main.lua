@@ -516,10 +516,11 @@ SMODS.Joker{
     loc_txt = { 
         name = 'Phoenix',
         text = {
-          'When {C:attention}Blind{} is selected,',
-          'generate a {C:tarot}Tarot{} or {C:planet}Planet{} card.', 
-          '{C:green}#1# in #2#{} chance to also generate',
-          'a {C:spectral}Spectral{} card {C:inactive}(Must have room)'
+          'When {C:attention}Blind{} is selected, create',
+          'a {C:tarot}Tarot{} or {C:planet}Planet{} card.', 
+          '{C:green}#1# in #2#{} chance to also',
+          'create a {C:spectral}Spectral{} card',
+          '{C:inactive}(Must have room)'
         },
         
     },
@@ -543,42 +544,40 @@ SMODS.Joker{
     calculate = function(self,card,context)
         if context.setting_blind then
             if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-                    G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
-                    G.E_MANAGER:add_event(Event({
-                        func = (function()
-                            G.E_MANAGER:add_event(Event({
-                                func = function() 
-                                    local card = create_card('Tarot_Planet',G.consumeables, nil, nil, nil, nil, nil, 'phoenix')
-                                    card:add_to_deck()
-                                    G.consumeables:emplace(card)
-                                    G.GAME.consumeable_buffer = 0
-                                    return true
-                                end}))   
-                                card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_plus_tarot'), colour = G.C.PURPLE})                       
-                            return true
-                        end)}))
-                end
+                G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                G.E_MANAGER:add_event(Event({
+                    func = (function()
+                        G.E_MANAGER:add_event(Event({
+                            func = function() 
+                                local card = create_card('Tarot_Planet',G.consumeables, nil, nil, nil, nil, nil, 'phoenix')
+                                card:add_to_deck()
+                                G.consumeables:emplace(card)
+                                G.GAME.consumeable_buffer = 0
+                                return true
+                            end}))   
+                            card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = 'Flames!', colour = G.C.RED})                       
+                        return true
+                    end)}))
+            end
             if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit and pseudorandom('phoe') < G.GAME.probabilities.normal / card.ability.extra.odds then
-                    G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
-                    G.E_MANAGER:add_event(Event({
-                        func = (function()
-                            G.E_MANAGER:add_event(Event({
-                                func = function() 
-                                    local card = create_card('Spectral',G.consumeables, nil, nil, nil, nil, nil, 'phoenix')
-                                    card:add_to_deck()
-                                    G.consumeables:emplace(card)
-                                    G.GAME.consumeable_buffer = 0
-                                    return true
-                                end}))   
-                                card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_plus_spectral'), colour = G.C.PURPLE})                       
-                            return true
-                        end)}))
-                end
-            
+                G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                G.E_MANAGER:add_event(Event({
+                    func = (function()
+                        G.E_MANAGER:add_event(Event({
+                            func = function() 
+                                local card = create_card('Spectral',G.consumeables, nil, nil, nil, nil, nil, 'phoenix')
+                                card:add_to_deck()
+                                G.consumeables:emplace(card)
+                                G.GAME.consumeable_buffer = 0
+                                return true
+                            end}))   
+                            card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = 'Blue flames!', colour = G.C.BLUE})                       
+                        return true
+                    end)}))
+            end
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        
         return true
     end,
 }
