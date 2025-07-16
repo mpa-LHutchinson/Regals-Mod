@@ -1677,7 +1677,12 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        return true
+        for _, playing_card in pairs(G.playing_cards) do
+            if playing_card.seal == 'Purple' then
+                return true
+            end
+        end
+        return false
     end,
 }
 SMODS.Joker{
