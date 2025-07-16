@@ -452,7 +452,7 @@ SMODS.Joker{
     pos = {x = 8, y = 0}, 
     config = { 
       extra = {
-        remaining = 17
+        remaining = 12
       }
     },
     loc_vars = function(self,info_queue,center)
