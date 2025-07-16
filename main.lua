@@ -2902,15 +2902,21 @@ SMODS.Back{
         local chosen_suit = pseudorandom_element(suits)
         G.E_MANAGER:add_event(Event({
             func = function()
+                local cards_to_remove = {}
                 for k, v in pairs(G.playing_cards) do
                     if v.base.suit ~= chosen_suit then
-                        v:start_dissolve(nil, true)
+                        table.insert(cards_to_remove, v)
                     end
                 end
+                for i = 1, #cards_to_remove do
+                    cards_to_remove[i]:remove()
+                end
                 G.hand:change_size(-1)
+                G.GAME.starting_deck_size = #G.playing_cards
                 return true
             end
         }))
+        
     end,
 
 
