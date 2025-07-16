@@ -291,7 +291,10 @@ SMODS.Joker{
                 G.E_MANAGER:add_event(Event({
                     func = function()
                         play_sound('tarot1')
+                        card.T.r = -0.2
                         card:juice_up(0.3, 0.4)
+                        card.states.drag.is = true
+                        card.children.center.pinch.x = true
                         G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
                             func = function()
                                 G.jokers:remove_card(self)
@@ -380,9 +383,9 @@ SMODS.Joker{
     loc_txt = { 
         name = '3D Joker',
         text = {
-          "{C:attention}Bonus Cards{}",
+          "{C:attention}Bonus Cards{} also",
           "score {C:mult}+#2# mult{},",
-          "{C:attention}Mult Cards{}",
+          "{C:attention}Mult Cards{} also",
           "score {C:chips}+#1# chips{}"
         },
         
@@ -403,6 +406,8 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
+        info_queue[#info_queue+1] = G.P_CENTERS.m_bonus
+        info_queue[#info_queue+1] = G.P_CENTERS.m_mult
         return {vars = {center.ability.extra.chips_mod, center.ability.extra.mult_mod}} 
     end,
     calculate = function(self, card, context)
@@ -438,7 +443,7 @@ SMODS.Joker{
     },
     atlas = 'Jokers', 
     rarity = 1, 
-    cost = 5, 
+    cost = 6, 
     unlocked = true,  
     discovered = true, 
     blueprint_compat = false, 
@@ -454,11 +459,16 @@ SMODS.Joker{
         return {vars = {center.ability.extra.remaining}} 
     end,
     calculate = function(self, card, context)
-        if context.before and context.cardarea == G.jokers then
+        if context.before and context.cardarea == G.jokers and not context.blueprint then
             for k, v in ipairs(context.scoring_hand) do
                 if card.ability.extra.remaining > 0 then
                     card.ability.extra.remaining = card.ability.extra.remaining - 1 
-                    v.change_suit(v, 'Spades')
+                    G.E_MANAGER:add_event(Event({
+                        func = function() 
+                            v:change_suit('Spades');
+                            return true 
+                        end
+                     }))
                     G.E_MANAGER:add_event(Event({
                         func = function()
                             v:juice_up()
@@ -468,6 +478,13 @@ SMODS.Joker{
                     G.GAME.blind:debuff_card(v)
                 end
             end
+            return {
+                message = 'Spades', 
+                colour = G.C.SUITS['Spades']
+            }
+        end
+
+        if context.after and not context.blueprint then
             if card.ability.extra.remaining <= 0 then
                 G.E_MANAGER:add_event(Event({
                     func = function()
@@ -489,15 +506,13 @@ SMODS.Joker{
                 }))
                 return {
                     message = 'Used up!',
-                    colour = G.C.MONEY
+                    colour = G.C.SUITS['Spades']
                 }
             end
-            return {message = 'Spades', colour = G.C.SUITS['Spades']}
         end
     end,
 
     in_pool = function(self,wawa,wawa2)
-        
         return true
     end,
 }
