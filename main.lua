@@ -1868,6 +1868,10 @@ SMODS.Joker{
         if context.end_of_round and not context.individual and not context.repetition and G.GAME.current_round.hands_played <= 1 and not context.blueprint then
             card.ability.extra.flawless = true
             card.ability.extra.money = G.GAME.current_round.hands_left * card.ability.extra.money_mod
+            return{
+                    message = 'Too easy!',
+                    colour = G.C.MONEY
+            }
         end
     end,
 
