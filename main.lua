@@ -268,7 +268,7 @@ SMODS.Joker{
     pos = {x = 5, y = 0}, 
     config = { 
       extra = {
-        remaining = 4,
+        remaining = 3,
       }
     },
     loc_vars = function(self,info_queue,center)
@@ -291,10 +291,7 @@ SMODS.Joker{
                 G.E_MANAGER:add_event(Event({
                     func = function()
                         play_sound('tarot1')
-                        card.T.r = -0.2
                         card:juice_up(0.3, 0.4)
-                        card.states.drag.is = true
-                        card.children.center.pinch.x = true
                         G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
                             func = function()
                                 G.jokers:remove_card(self)
@@ -325,8 +322,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'tubbyjoker', --joker key
-    loc_txt = { -- local text
+    key = 'tubbyjoker', 
+    loc_txt = { 
         name = 'Tubby Joker',
         text = {
           'This Joker gains {C:mult}+#2#{} Mult',
@@ -379,8 +376,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = '3djoker', --joker key
-    loc_txt = { -- local text
+    key = '3djoker', 
+    loc_txt = { 
         name = '3D Joker',
         text = {
           "{C:attention}Bonus Cards{} also",
@@ -425,8 +422,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'inkbottle', --joker key
-    loc_txt = { -- local text
+    key = 'inkbottle', 
+    loc_txt = { 
         name = 'Ink Bottle',
         text = {
           "Converts the next",
@@ -501,8 +498,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'phoenix', --joker key
-    loc_txt = { -- local text
+    key = 'phoenix', 
+    loc_txt = { 
         name = 'Phoenix',
         text = {
           'When {C:attention}Blind{} is selected,',
@@ -572,8 +569,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'welfare', --joker key
-    loc_txt = { -- local text
+    key = 'welfare', 
+    loc_txt = { 
         name = 'Welfare',
         text = {
           'If money is under',
@@ -608,8 +605,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'pocketaces', --joker key
-    loc_txt = { -- local text
+    key = 'pocketaces', 
+    loc_txt = { 
         name = 'Pocket Aces',
         text = {
           'When entering a {C:attention}boss{}',
@@ -670,8 +667,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'medusa', --joker key
-    loc_txt = { -- local text
+    key = 'medusa', 
+    loc_txt = { 
         name = 'Medusa',
         text = {
           'Converts all scored cards',
@@ -717,8 +714,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'workoutroutine', --joker key
-    loc_txt = { -- local text
+    key = 'workoutroutine', 
+    loc_txt = { 
         name = 'Workout Routine',
         text = {
           'cycles between reps',
@@ -796,8 +793,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'middlefinger', --joker key
-    loc_txt = { -- local text
+    key = 'middlefinger', 
+    loc_txt = { 
         name = 'Middle Finger',
         text = {
           '{X:mult,C:white}X#1#{} Mult during',
@@ -834,8 +831,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'vengefulspirit', --joker key
-    loc_txt = { -- local text
+    key = 'vengefulspirit', 
+    loc_txt = { 
         name = 'Vengeful Spirit',
         text = {
           '{X:mult,C:white}X#2#{} mult per {C:spectral}spectral{}',
@@ -884,8 +881,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'scratchticket', --joker key
-    loc_txt = { -- local text
+    key = 'scratchticket', 
+    loc_txt = { 
         name = 'Scratch Ticket',
         text = {
           'Sell this card for',
@@ -937,8 +934,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'eventhorizon', --joker key
-    loc_txt = { -- local text
+    key = 'eventhorizon', 
+    loc_txt = { 
         name = 'Event Horizon',
         text = {
           'Generates a {C:spectral}Black Hole{}',
@@ -1022,8 +1019,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'euchre', --joker key
-    loc_txt = { -- local text
+    key = 'euchre', 
+    loc_txt = { 
         name = 'Euchre',
         text = {
           'Each {C:attention}Jack{} held in',
@@ -1063,8 +1060,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'jackpot', --joker key
-    loc_txt = { -- local text
+    key = 'jackpot', 
+    loc_txt = { 
         name = 'Jackpot',
         text = {
           'If played hand contains 3',
@@ -1128,8 +1125,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'dragonegg', --joker key
-    loc_txt = { -- local text
+    key = 'dragonegg', 
+    loc_txt = { 
         name = 'Dragon Egg',
         text = {
           'Will transform into a',
@@ -1211,8 +1208,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'dynamite', --joker key
-    loc_txt = { -- local text
+    key = 'dynamite', 
+    loc_txt = { 
         name = 'Dynamite',
         text = {
           'At the end of each round,',
@@ -1306,8 +1303,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'bubblewrap', --joker key
-    loc_txt = { -- local text
+    key = 'bubblewrap', 
+    loc_txt = { 
         name = 'Bubble Wrap',
         text = {
           '{C:chips}+#1#{} Chips for each',
@@ -1420,8 +1417,8 @@ SMODS.Joker{
 }
 
 SMODS.Joker{
-    key = 'threemusketeers', --joker key
-    loc_txt = { -- local text
+    key = 'threemusketeers', 
+    loc_txt = { 
         name = 'Three Musketeers',
         text = {
           'Each scored {C:attention}3{} will',
@@ -1462,8 +1459,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'corporatejoker', --joker key
-    loc_txt = { -- local text
+    key = 'corporatejoker', 
+    loc_txt = { 
         name = 'Corporate Joker',
         text = {
           'This Joker gains {C:chips}+#4#{} Chips and {C:mult}+#2#{} Mult',
@@ -1527,8 +1524,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'boxofdonuts', --joker key
-    loc_txt = { -- local text
+    key = 'boxofdonuts', 
+    loc_txt = { 
         name = 'Box of Donuts',
         text = {
           'For the next {C:attention}#1#{} rounds,',
@@ -1613,8 +1610,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'amethyststaff', --joker key
-    loc_txt = { -- local text
+    key = 'amethyststaff', 
+    loc_txt = { 
         name = 'Amethyst Staff',
         text = {
           'When a {C:purple}Purple Seal{}',
@@ -1665,8 +1662,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'hunter', --joker key
-    loc_txt = { -- local text
+    key = 'hunter', 
+    loc_txt = { 
         name = 'Hunter',
         text = {
           "When hand is played,",
@@ -1815,8 +1812,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'flawlessvictory', --joker key
-    loc_txt = { -- local text
+    key = 'flawlessvictory', 
+    loc_txt = { 
         name = 'Flawless Victory',
         text = {
           "Earn {C:money}$#2#{} per remaining",
@@ -1864,8 +1861,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'kidsdrawing', --joker key
-    loc_txt = { -- local text
+    key = 'kidsdrawing', 
+    loc_txt = { 
         name = 'Kids Drawing',
         text = {
           '{C:green}#1# in #2#{} chance to add',
@@ -1930,8 +1927,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'cruiseship', --joker key
-    loc_txt = { -- local text
+    key = 'cruiseship', 
+    loc_txt = { 
         name = 'Cruise Ship',
         text = {
           '{X:mult,C:white}X#2#{} mult for every',
@@ -1983,8 +1980,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'protestsign', --joker key
-    loc_txt = { -- local text
+    key = 'protestsign', 
+    loc_txt = { 
         name = 'Protest Sign',
         text = {
           "Adds {C:attention}triple{} the rank",
@@ -2036,8 +2033,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'landlord', --joker key
-    loc_txt = { -- local text
+    key = 'landlord', 
+    loc_txt = { 
         name = 'Landlord',
         text = {
           'If hand conatins a',
@@ -2184,8 +2181,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'squirrel', --joker key
-    loc_txt = { -- local text
+    key = 'squirrel', 
+    loc_txt = { 
         name = 'Squirrel',
         text = {
           '{C:chips}+#1#{} Chips. Sell this',
@@ -2414,8 +2411,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'blackrose', --joker key
-    loc_txt = { -- local text
+    key = 'blackrose', 
+    loc_txt = { 
         name = 'Black Rose',
         text = {
           "Retrigger all",
@@ -2455,8 +2452,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'angelanddevil', --joker key
-    loc_txt = { -- local text
+    key = 'angelanddevil', 
+    loc_txt = { 
         name = 'Angel and Devil',
         text = {
           "When {C:attention}Blind{} is selected,",
@@ -2513,8 +2510,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'snakeeyes', --joker key
-    loc_txt = { -- local text
+    key = 'snakeeyes', 
+    loc_txt = { 
         name = 'Snake Eyes',
         text = {
           "Cuts all {C:attention}listed",
@@ -2579,8 +2576,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'bruce', --joker key
-    loc_txt = { -- local text
+    key = 'bruce', 
+    loc_txt = { 
         name = 'Bruce',
         text = {
           "When {C:attention}Blind{} is selected,",
@@ -2657,8 +2654,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'johnpolychrome', --joker key
-    loc_txt = { -- local text
+    key = 'johnpolychrome', 
+    loc_txt = { 
         name = 'John Polychrome',
         text = {
           'Adds {C:dark_edition}Polychrome{} edition',
@@ -2702,8 +2699,8 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'johnfree', --joker key
-    loc_txt = { -- local text
+    key = 'johnfree', 
+    loc_txt = { 
         name = 'John Free',
         text = {
           'All {C:attention}initial shop{}',
