@@ -1827,8 +1827,12 @@ SMODS.Joker{
 
 
     in_pool = function(self,wawa,wawa2)
-        
-        return true
+        for _, playing_card in pairs(G.playing_cards) do
+            if SMODS.has_enhancement(playing_card, 'm_wild') then
+                return true
+            end
+        end
+        return false
     end,
 }
 SMODS.Joker{
