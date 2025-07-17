@@ -880,6 +880,16 @@ SMODS.Joker{
         if G.GAME.consumeable_usage_total and not context.blueprint then
             card.ability.extra.Xmult = 1 + (G.GAME.consumeable_usage_total.spectral * card.ability.extra.Xmult_mod) 
         end
+
+        if context.using_consumeable and not context.blueprint then
+            if  context.consumeable.ability.set == "Spectral" then
+                return {
+                    message = 'Haunting!',
+                    colour = G.C.SECONDARY_SET.Spectral
+                }
+            end
+        end
+        
         if context.joker_main then
             return {
                 card = card,
