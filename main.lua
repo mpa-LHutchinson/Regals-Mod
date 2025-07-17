@@ -2871,7 +2871,7 @@ SMODS.Back{
 SMODS.Back{
 	key = "collectorsdeck",  
     loc_txt = {      
-        name = 'Collector Deck',      
+        name = 'Collectors Deck',      
         text = {
           "Start run with",
           "{C:attention}Hone{} and {C:attention}Glow up{},",
@@ -2898,9 +2898,9 @@ SMODS.Back{
     end
 }
 SMODS.Back{
-	key = "communitydeck",  
+	key = "hivedeck",  
     loc_txt = {      
-        name = 'Community Deck',      
+        name = 'Hive Deck',      
         text = {
           "Start run with",
           "{C:attention}13{} cards of the",
