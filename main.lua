@@ -1446,7 +1446,8 @@ SMODS.Joker{
         name = 'Three Musketeers',
         text = {
           'Each scored {C:attention}3{} will',
-          'earn between {C:money}$#1#{} and {C:money}$#2#{}'
+          'will earn between',
+          '{C:money}$#1#{} and {C:money}$#2#{}'
         },
         
     },
@@ -1662,7 +1663,7 @@ SMODS.Joker{
         return {vars = {}} 
     end,
     calculate = function(self, card, context)
-        if context.discard and not context.blueprint then
+        if context.discard then
             if context.other_card.seal == 'Purple' then
                     G.E_MANAGER:add_event(Event({
                         func = function() 
@@ -1674,7 +1675,7 @@ SMODS.Joker{
                         end}))
                     return {
                         card = card,
-                        message = 'Abracadabra!',
+                        message = 'Presto!',
                         colour = G.C.PURPLE 
                     }
             end
@@ -2373,8 +2374,9 @@ SMODS.Joker{
     loc_txt = {
         name = 'Climb the Mountain',
         text = {
-          'Each scored {C:attention}#4#{} gains {C:mult}+#2#{} Mult,',
-          'rank increases every round',
+          'This joker gains {C:mult}+#2#{} Mult',
+          'for each scored {C:attention}#4#{}, rank',
+          'increases every round',
           '{C:inactive}(Currently {C:red}+#1#{C:inactive} Mult)',
         },
     },
