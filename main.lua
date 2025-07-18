@@ -1555,7 +1555,7 @@ SMODS.Joker{
         text = {
           'For the next {C:attention}#1#{} rounds,',
           'when {C:attention}Blind{} is selected',
-          'create {C:attention}1 {C:green}Common{C:attention} Joker',
+          'create {C:attention}1 {C:green}Uncommon{C:attention} Joker',
           '{C:inactive}(Must have room)',
         },
         
@@ -2337,7 +2337,6 @@ SMODS.Joker{
         if context.joker_main and card.ability.extra.diamonds >= card.ability.extra.required and card.ability.extra.active == false and not context.blueprint then
             card.ability.extra.active = true
             local eval = function(card) return (card.ability.extra.lives ~= 0) end
-            juice_card_until(card, eval, true)
             return {
                 message = 'Release!',
                 colour = G.C.BLUE
