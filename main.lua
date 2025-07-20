@@ -2384,9 +2384,9 @@ SMODS.Joker{
     cost = 6,
     unlocked = true, 
     discovered = true, 
-    blueprint_compat = false, 
+    blueprint_compat = true, 
     eternal_compat = true, 
-    perishable_compat = true, 
+    perishable_compat = false, 
     pos = {x = 8, y = 3}, 
     config = { 
       extra = {
