@@ -838,7 +838,7 @@ SMODS.Joker{
             return {
                 card = card,
                 Xmult_mod = card.ability.extra.Xmult,
-                message = 'X' .. card.ability.extra.Xmult,
+                message = 'F**k you!',
                 colour = G.C.MULT
             }
         end
