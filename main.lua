@@ -827,7 +827,7 @@ SMODS.Joker{
     pos = {x = 4, y = 1}, 
     config = { 
       extra = {
-        Xmult = 3 --configurable value
+        Xmult = 3 
       }
     },
     loc_vars = function(self,info_queue,center)
@@ -1064,7 +1064,7 @@ SMODS.Joker{
     pos = {x = 8, y = 1}, 
     config = { 
       extra = {
-        money = 2 --configurable value
+        money = 2 
       }
     },
     loc_vars = function(self,info_queue,center)
@@ -2040,7 +2040,7 @@ SMODS.Joker{
     pos = {x = 3, y = 3}, 
     config = { 
       extra = {
-        num_of_cards = 3 --configurable value
+        num_of_cards = 3 
       }
     },
     loc_vars = function(self,info_queue,center)
@@ -2299,9 +2299,9 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'diamondarmour',
+    key = 'diamondarmor',
     loc_txt = {
-        name = 'Diamond Armour',
+        name = 'Diamond Armor',
         text = {
           'Score {C:diamonds}#2# Diamond{} cards {C:inactive}[#1#]{} to',
           'activate this joker and',
@@ -2320,7 +2320,7 @@ SMODS.Joker{
     config = { 
       extra = {
         diamonds = 0,
-        required = 20,
+        required = 24,
         lives = 2,
         active = false
       }
@@ -2331,12 +2331,15 @@ SMODS.Joker{
     calculate = function(self,card,context)
         if context.individual and context.cardarea == G.play and context.other_card:is_suit("Diamonds") and card.ability.extra.diamonds < card.ability.extra.required and not context.blueprint then
             card.ability.extra.diamonds = card.ability.extra.diamonds + 1 
-            
+            return {
+                card = card,
+                extra = {focus = card, message = "Crafting!"},
+                colour = G.C.BLUE
+            }
         end
 
         if context.joker_main and card.ability.extra.diamonds >= card.ability.extra.required and card.ability.extra.active == false and not context.blueprint then
             card.ability.extra.active = true
-            local eval = function(card) return (card.ability.extra.lives ~= 0) end
             return {
                 message = 'Release!',
                 colour = G.C.BLUE
@@ -2477,12 +2480,12 @@ SMODS.Joker{
     end,
     calculate = function(self,card,context)
         if context.cardarea == G.play and context.repetition and context.other_card:is_suit("Spades") then
-                return {
-                    card = card,
-                    repetitions = 1,
-                    message = 'Again!', 
-                    colour = G.C.BLACK
-                }
+            return {
+                card = card,
+                repetitions = 1,
+                message = 'Again!', 
+                colour = G.C.BLACK
+            }
         end
     end,
     in_pool = function(self,wawa,wawa2)
