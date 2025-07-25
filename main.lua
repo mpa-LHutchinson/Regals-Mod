@@ -604,7 +604,7 @@ SMODS.Joker{
     config = { 
       extra = {
         money_cap = 15,
-        money = 5
+        money = 6
       }
     },
     loc_vars = function(self,info_queue,center)
@@ -1064,7 +1064,7 @@ SMODS.Joker{
     pos = {x = 8, y = 1}, 
     config = { 
       extra = {
-        money = 2 
+        money = 3 
       }
     },
     loc_vars = function(self,info_queue,center)
@@ -1255,7 +1255,7 @@ SMODS.Joker{
     config = { 
       extra = {
         mult = 0,
-        mult_mod = 4
+        mult_mod = 3
       }
     },
     loc_vars = function(self,info_queue,center)
@@ -1497,7 +1497,7 @@ SMODS.Joker{
     },
     atlas = 'Jokers', 
     rarity = 1, 
-    cost = 4, 
+    cost = 5, 
     unlocked = true,  
     discovered = true, 
     blueprint_compat = true, 
@@ -1920,7 +1920,7 @@ SMODS.Joker{
     pos = {x = 1, y = 3}, 
     config = { 
       extra = {
-        odds = 7
+        odds = 6
       }
     },
     loc_vars = function(self,info_queue,center)
@@ -2242,7 +2242,7 @@ SMODS.Joker{
     pos = {x = 6, y = 3}, 
     config = { 
       extra = {
-        chips = 10,
+        chips = 15,
         canBeSacrificed = false
       }
     },
