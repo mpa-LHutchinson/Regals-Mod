@@ -1758,9 +1758,10 @@ SMODS.Joker{
     loc_txt = {
         name = 'Wild West',
         text = {
-          "Provides {C:attention}+1{} extra hand size",
-          "for every {C:attention}Wild Card{} in your", 
-          "full deck at the start of the round", 
+          "{C:attention}+1{} hand size for every",
+          "{C:attention}Wild Card{} in your {C:attention}full{}", 
+          "deck at the start",
+          "of the round", 
           "{C:inactive}(Currently {C:attention}+#3#{C:inactive})"
         },
     },
