@@ -63,7 +63,7 @@ SMODS.Joker{
         text = {
           'Each card held',
           'in hand with {C:hearts}Heart{}',
-          'suit gives {C:mult}+#1#{} mult'
+          'suit gives {C:mult}+#1#{} Mult'
         },
     },
     atlas = 'Jokers',
@@ -88,13 +88,12 @@ SMODS.Joker{
             return {
                 card = card,
                 mult_mod = card.ability.extra.mult,
-                message = '+' .. card.ability.extra.mult,
+                message = '<3',
                 colour = G.C.MULT
             }
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        
         return true
     end,
 }
@@ -138,6 +137,11 @@ SMODS.Joker{
                     end)
                 }))
             end
+            return {
+                card = card,
+                message = 'Sweet!',
+                colour = G.C.MONEY
+            }
         end
     end,
     in_pool = function(self,wawa,wawa2)
@@ -621,14 +625,18 @@ SMODS.Joker{
             return card.ability.extra.money
         end
     end,
+
+    in_pool = function(self,wawa,wawa2)
+        return true
+    end,
 }
 SMODS.Joker{
     key = 'pocketaces', 
     loc_txt = { 
         name = 'Pocket Aces',
         text = {
-          'When entering a {C:attention}boss{}',
-          '{C:attention}blind{}, add {C:attention}2 Enhanced{}',
+          'When entering a {C:attention}Boss{}',
+          '{C:attention}Blind{}, add {C:attention}2 Enhanced{}',
           '{C:attention}Aces{} to your hand ',
         },
         
@@ -680,7 +688,6 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        
         return true
     end,
 }
@@ -691,7 +698,7 @@ SMODS.Joker{
         text = {
           'Converts all scored cards',
           'from {C:attention}first hand{} each',
-          'round into {C:attention}Stone cards{}'
+          'round into {C:attention}Stone Cards{}'
         },
         
     },
@@ -709,10 +716,11 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
+        info_queue[#info_queue+1] = G.P_CENTERS.m_stone
         return {vars = {}} 
     end,
     calculate = function(self, card, context)
-        if context.before and context.cardarea == G.jokers and G.GAME.current_round.hands_played == 0 then
+        if context.before and context.cardarea == G.jokers and G.GAME.current_round.hands_played == 0 and not context.blueprint then
             for k, v in ipairs(context.scoring_hand) do
                 v:set_ability(G.P_CENTERS.m_stone, nil, true)
                 G.E_MANAGER:add_event(Event({
@@ -723,12 +731,11 @@ SMODS.Joker{
                 }))
                 G.GAME.blind:debuff_card(v) 
             end
-            return {message = 'Stone', colour = G.C.PURPLE}
+            return {message = 'Gaze!', colour = G.C.PURPLE}
         end
     end,
 
     in_pool = function(self,wawa,wawa2)
-        
         return true
     end,
 }
@@ -737,18 +744,18 @@ SMODS.Joker{
     loc_txt = { 
         name = 'Workout Routine',
         text = {
-          'cycles between reps',
-          '1. {C:chips}+#1#{} chips',
-          '2. {C:mult}+#2#{} mult',
-          '3. {X:mult,C:white}X#3#{} mult',
-          'each round',
-          '{C:inactive}(Currently rep {C:attention}#4#{}{C:inactive})'
+          'Cycles between reps',
+          '1. {C:chips}+#1#{} Chips',
+          '2. {C:mult}+#2#{} Mult',
+          '3. {X:mult,C:white}X#3#{} Mult',
+          'when round ends',
+          '{C:inactive}(Currently on rep {C:attention}#4#{}{C:inactive})'
         },
         
     },
     atlas = 'Jokers', 
     rarity = 2, 
-    cost = 5, 
+    cost = 6, 
     unlocked = true,  
     discovered = true, 
     blueprint_compat = true, 
@@ -757,8 +764,8 @@ SMODS.Joker{
     pos = {x = 3, y = 1}, 
     config = { 
       extra = {
-        chips = 100,
-        mult = 20,
+        chips = 75,
+        mult = 15,
         Xmult = 2,
         cycle = 1
       }
@@ -806,10 +813,14 @@ SMODS.Joker{
                 card.ability.extra.cycle = 1
             end
             return {
-                message = 'Shift',
+                message = 'Next Rep!',
                 colour = G.C.MONEY
             }
         end
+    end,
+
+    in_pool = function(self,wawa,wawa2)
+        return true
     end,
 }
 SMODS.Joker{
@@ -818,7 +829,7 @@ SMODS.Joker{
         name = 'Middle Finger',
         text = {
           '{X:mult,C:white}X#1#{} Mult during',
-          '{C:attention}boss blinds{}'
+          '{C:attention}Boss Blinds{}'
         },
         
     },
@@ -844,10 +855,14 @@ SMODS.Joker{
             return {
                 card = card,
                 Xmult_mod = card.ability.extra.Xmult,
-                message = 'F**k you!',
+                message = 'F**k You!',
                 colour = G.C.MULT
             }
         end
+    end,
+
+    in_pool = function(self,wawa,wawa2)
+        return true
     end,
 }
 SMODS.Joker{
