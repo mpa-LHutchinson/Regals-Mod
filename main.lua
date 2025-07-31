@@ -2759,9 +2759,9 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'johnfree', 
+    key = 'regal', 
     loc_txt = { 
-        name = 'John Free',
+        name = 'Regal',
         text = {
           'All {C:attention}initial shop{}',
           '{C:attention}purchases{} are free',
@@ -2771,12 +2771,13 @@ SMODS.Joker{
     atlas = 'Jokers', 
     rarity = 4, 
     cost = 20, 
-    unlocked = false,  
-    discovered = false, 
+    unlocked = true,  
+    discovered = true, 
     blueprint_compat = false, 
     eternal_compat = true, 
     perishable_compat = true, 
-    pos = {x = 2, y = 1}, 
+    pos = {x = 5, y = 4},
+    soul_pos = { x = 6, y = 4}, 
     config = { 
       extra = {
       }
@@ -2817,7 +2818,7 @@ SMODS.Joker{
 
     in_pool = function(self,wawa,wawa2)
         
-        return false
+        return true
     end,
 }
 
