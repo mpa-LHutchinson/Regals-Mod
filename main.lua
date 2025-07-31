@@ -2495,9 +2495,9 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'angelanddevil', 
+    key = 'angel&devil', 
     loc_txt = { 
-        name = 'Angel and Devil',
+        name = 'Angel & Devil',
         text = {
           "When {C:attention}Blind{} is selected,",
           "gain {C:blue}+#1#{} Hand or",
@@ -2513,7 +2513,7 @@ SMODS.Joker{
     blueprint_compat = true, 
     eternal_compat = true, 
     perishable_compat = true, 
-    pos = {x = 0, y = 3}, 
+    pos = {x = 0, y = 4}, 
     config = { 
       extra = {
         extra_hands = 1,
