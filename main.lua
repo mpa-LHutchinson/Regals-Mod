@@ -464,6 +464,11 @@ SMODS.Joker{
                 if card.ability.extra.remaining > 0 then
                     card.ability.extra.remaining = card.ability.extra.remaining - 1 
                     v:change_suit('Spades');
+
+                    if G.GAME.blind.boss then
+                        v.ability.played_this_ante = false;
+                    end
+
                     G.E_MANAGER:add_event(Event({
                         func = function()
                             v:juice_up()
@@ -2742,6 +2747,11 @@ SMODS.Joker{
         if context.before and context.cardarea == G.jokers then
             for k, v in ipairs(context.scoring_hand) do
                 v:set_edition('e_polychrome', true)
+
+                if G.GAME.blind.boss then
+                    v.ability.played_this_ante = false;
+                end
+                
                 G.E_MANAGER:add_event(Event({
                     func = function()
                         v:juice_up()
