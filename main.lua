@@ -2748,17 +2748,12 @@ SMODS.Joker{
             for k, v in ipairs(context.scoring_hand) do
                 v:set_edition('e_polychrome', true)
 
-                if G.GAME.blind.boss then
-                    v.ability.played_this_ante = false;
-                end
-                
                 G.E_MANAGER:add_event(Event({
                     func = function()
                         v:juice_up()
                         return true
                     end
                 }))
-                G.GAME.blind:debuff_card(v) 
             end
         end
     end,
@@ -2794,6 +2789,9 @@ SMODS.Joker{
     },
     loc_vars = function(self,info_queue,center)
         return {vars = {}} 
+    end,
+    add_to_deck = function(self, card, context)
+        play_sound('rgl_heyguysitsmeregal', 1, 6)
     end,
     calculate = function(self, card, context)
         if context.starting_shop then
@@ -2995,5 +2993,10 @@ SMODS.Back{
     
     end
 }
+
+SMODS.Sound({
+	key = "heyguysitsmeregal",
+	path = "hey guys its me regal.ogg",
+})
 
     
