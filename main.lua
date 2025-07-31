@@ -736,7 +736,8 @@ SMODS.Joker{
           '1. {C:chips}+#1#{} chips',
           '2. {C:mult}+#2#{} mult',
           '3. {X:mult,C:white}X#3#{} mult',
-          'each round {C:inactive}(Currently rep {C:attention}#4#{}{C:inactive})'
+          'each round',
+          '{C:inactive}(Currently rep {C:attention}#4#{}{C:inactive})'
         },
         
     },
@@ -2627,6 +2628,7 @@ SMODS.Joker{
           "gain {X:mult,C:white} X#2# {} Mult and {C:attention}destroy{} a random",
           "{C:attention}consumable{}. If there are no consumables,",
           "{C:attention}destroy{} a random Joker instead",
+          "{C:inactive}(Must consume something to scale){}",
           "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive})"
         },
     },
@@ -2650,7 +2652,6 @@ SMODS.Joker{
     end,
     calculate = function(self,card,context)
         if not context.blueprint and context.setting_blind then
-            card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.Xmult_mod
 
             local consumable_to_destroy = pseudorandom_element(G.consumeables.cards, pseudoseed('bruce'))
             
@@ -2663,13 +2664,19 @@ SMODS.Joker{
             if consumable_to_destroy ~= nil then
                 G.E_MANAGER:add_event(Event({
                     func = function()
-                        play_sound('tarot1')
                         card:juice_up(0.8, 0.8)
                         consumable_to_destroy:juice_up(0.3, 0.4)
                         consumable_to_destroy:start_dissolve()
+                        play_sound('slice1', 0.96+math.random()*0.08)
                         return true
                     end
                 }))
+                card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.Xmult_mod
+                return {
+                    card = card,
+                    message = 'X' .. card.ability.extra.Xmult,
+                    colour = G.C.MULT
+                }
             end
 
             if joker_to_destroy and not consumable_to_destroy then 
@@ -2677,9 +2684,17 @@ SMODS.Joker{
                     card:juice_up(0.8, 0.8)
                     joker_to_destroy:juice_up(0.3, 0.4)
                     joker_to_destroy:start_dissolve({G.C.RED}, nil, 1.6)
+                    play_sound('slice1', 0.96+math.random()*0.08)
                 return true end }))
+                card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.Xmult_mod
+                return {
+                    card = card,
+                    message = 'X' .. card.ability.extra.Xmult,
+                    colour = G.C.MULT
+                }
             end
-            card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize{type = 'variable', key = 'a_xmult', vars = {card.ability.extra.Xmult}}})
+            
+            
         end
 
         if context.joker_main then
