@@ -2796,16 +2796,6 @@ SMODS.Joker{
             calculate_reroll_cost(true)
         end
     end,
-
-    add_to_deck = function(self, card, from_debuff)
-        G.E_MANAGER:add_event(Event({func = function()
-            for k, v in pairs(G.I.CARD) do
-                if v.set_cost then v.cost = 0 end
-            end
-        return true end }))
-        G.GAME.current_round.free_rerolls = G.GAME.current_round.free_rerolls + 1
-        calculate_reroll_cost(true)
-    end,
     remove_from_deck = function(self, card, from_debuff)
         G.E_MANAGER:add_event(Event({func = function()
             for k, v in pairs(G.I.CARD) do
