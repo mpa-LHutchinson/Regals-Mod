@@ -870,7 +870,7 @@ SMODS.Joker{
     loc_txt = { 
         name = 'Vengeful Spirit',
         text = {
-          '{X:mult,C:white}X#2#{} mult per {C:spectral}spectral{}',
+          '{X:mult,C:white}X#2#{} Mult per {C:spectral}Spectral{}',
           'card used this run',
           '{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive})'
         },
@@ -878,7 +878,7 @@ SMODS.Joker{
     },
     atlas = 'Jokers', 
     rarity = 2, 
-    cost = 7, 
+    cost = 6, 
     unlocked = true,  
     discovered = true, 
     blueprint_compat = true, 
@@ -921,7 +921,6 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        
         return true
     end,
 }
@@ -941,7 +940,7 @@ SMODS.Joker{
     cost = 2, 
     unlocked = true,  
     discovered = true, 
-    blueprint_compat = false, 
+    blueprint_compat = true, 
     eternal_compat = false, 
     perishable_compat = true, 
     pixel_size = { w = 0.81 * 71, h = 0.78 * 95 },
@@ -983,9 +982,10 @@ SMODS.Joker{
     loc_txt = { 
         name = 'Event Horizon',
         text = {
-          'Generates a {C:spectral}Black Hole{}',
-          '{C:spectral}Spectral card{} if at least {C:attention}#2#{} unique',
-          'hand types were played this round',
+          'Creates a {C:attention}Black Hole{} {C:spectral}Spectral{}',
+          'card at the end of the round if',
+          'at least {C:attention}#2#{} unique hand types',
+          'were played this round',
           '{C:inactive}Currently ({C:attention}#1#/#2#{C:inactive})'
         },
         
@@ -1006,6 +1006,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
+        info_queue[#info_queue+1] = G.P_CENTERS.c_black_hole
         return {vars = {center.ability.extra.unique_hands, center.ability.extra.required}} 
     end,
     calculate = function(self,card,context)
@@ -1031,7 +1032,7 @@ SMODS.Joker{
             end             
         end
         
-        if context.end_of_round and not context.individual and not context.repetition then
+        if context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
             if card.ability.extra.unique_hands >= card.ability.extra.required then
                 if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
                     G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
@@ -1045,7 +1046,7 @@ SMODS.Joker{
                                     G.GAME.consumeable_buffer = 0
                                     return true
                                 end}))   
-                                card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_plus_spectral'), colour = G.C.PURPLE})                       
+                                card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = 'Black Hole!', colour = G.C.BLACK})                       
                             return true
                         end)}))
                 end
@@ -1059,7 +1060,6 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        
         return true
     end,
 }
