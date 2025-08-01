@@ -47,7 +47,7 @@ SMODS.Joker{
             return {
                 card = card,
                 Xmult_mod = card.ability.extra.Xmult,
-                message = 'X' .. card.ability.extra.Xmult,
+                message = '4 Years!',
                 colour = G.C.MULT
             }
         end
@@ -187,7 +187,7 @@ SMODS.Joker{
             return {
                 card = card,
                 mult_mod = card.ability.extra.mult,
-                message = '+' .. card.ability.extra.mult,
+                message = 'Brush Brush!',
                 colour = G.C.MULT
             }
         end
