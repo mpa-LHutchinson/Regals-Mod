@@ -2835,6 +2835,67 @@ SMODS.Joker{
     end,
 }
 
+--[[SMODS.Joker{
+    key = 'burntothegroundguy', 
+    loc_txt = { 
+        name = 'BURN TO THE GROUND',
+        text = {
+          'Sell or destroy this card to',
+          'create {C:attention}2{} free',
+          '{C:attention}BURN TO THE GROUND',
+        },
+        
+    },
+    atlas = 'Jokers', 
+    rarity = 4, 
+    cost = 20, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = false, 
+    eternal_compat = true, 
+    perishable_compat = true, 
+    pos = {x = 0, y = 5},
+    config = { 
+      extra = {
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {}} 
+    end,
+    BURN = function(self, card, context)
+        if math.random(1, 2) == 1 then
+            play_sound('rgl_burntotheground', 1, 6)
+        else
+            play_sound('rgl_burn', 1, 6)
+        end
+         
+    end,
+    add_to_deck = function(self, card, context)
+        self:BURN(card, context)
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            return{
+                self:BURN(card, context)
+            }
+        end
+    end,
+    remove_from_deck = function(self, card, context)
+        G.E_MANAGER:add_event(Event({
+            func = function() 
+                SMODS.add_card({set = 'Joker', area = G.jokers, key = 'j_rgl_burntothegroundguy'})
+                SMODS.add_card({set = 'Joker', area = G.jokers, key = 'j_rgl_burntothegroundguy'})
+            return true
+        end}))
+          
+    end,
+
+    in_pool = function(self,wawa,wawa2)
+        
+        return false
+    end,
+}]]
+
 
 
 
@@ -3013,5 +3074,14 @@ SMODS.Sound({
 	key = "heyguysitsmeregal",
 	path = "hey guys its me regal.ogg",
 })
+--[[SMODS.Sound({
+	key = "burn",
+	path = "burn-made-with-Voicemod.ogg",
+})
+SMODS.Sound({
+	key = "burntotheground",
+	path = "burn-to-the-ground-made-with-Voicemod.mp3",
+})]]
+    
 
     
