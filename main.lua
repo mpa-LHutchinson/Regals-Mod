@@ -986,7 +986,7 @@ SMODS.Joker{
           'card at the end of the round if',
           'at least {C:attention}#2#{} unique hand types',
           'were played this round',
-          '{C:inactive}Currently ({C:attention}#1#/#2#{C:inactive})'
+          '{C:inactive}(Currently {C:attention}#1#{C:inactive}/#2#)'
         },
         
     },
@@ -1176,7 +1176,8 @@ SMODS.Joker{
         text = {
           'Will transform into a',
           'random {C:red}Rare{C:attention} Joker{}',
-          'after {C:attention}#2# rounds',
+          'after {C:attention}#2#{} rounds,',
+          '{C:attention}Editions{} are kept',
           '{C:inactive}(Currently {C:attention}#1#{C:inactive}/#2#)'
         },
         
@@ -1200,7 +1201,7 @@ SMODS.Joker{
         return {vars = {center.ability.extra.rounds, center.ability.extra.required}} 
     end,
     calculate = function(self,card,context)
-        if context.end_of_round and not context.individual and not context.repetition then
+        if context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
             local current_edition = card.edition
             if card.ability.extra.rounds < card.ability.extra.required then
                 card.ability.extra.rounds = card.ability.extra.rounds + 1
@@ -1208,10 +1209,7 @@ SMODS.Joker{
                         G.E_MANAGER:add_event(Event({
                             func = function()
                                 play_sound('tarot1')
-                                card.T.r = -0.2
                                 card:juice_up(0.3, 0.4)
-                                card.states.drag.is = true
-                                card.children.center.pinch.x = true
                                 G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
                                     func = function()
                                         G.jokers:remove_card(self)
@@ -1248,7 +1246,6 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        
         return true
     end,
 }
@@ -1257,7 +1254,7 @@ SMODS.Joker{
     loc_txt = { 
         name = 'Dynamite',
         text = {
-          'At the end of each round,',
+          'At the end of the round,',
           '{C:attention}destroy{} a random card held',
           'in hand and gain {C:mult}+#2#{} Mult',
           '{C:inactive}(Currently {C:red}+#1#{C:inactive} Mult)'
@@ -1271,7 +1268,7 @@ SMODS.Joker{
     discovered = true, 
     blueprint_compat = true, 
     eternal_compat = true, 
-    perishable_compat = true, 
+    perishable_compat = false, 
     pos = {x = 1, y = 2}, 
     config = { 
       extra = {
@@ -1289,17 +1286,9 @@ SMODS.Joker{
 
             G.E_MANAGER:add_event(Event({
                 trigger = 'after',
-                delay = 0.4,
+                delay = 0.6,
                 func = function()
                     play_sound('tarot1')
-                    return true
-                end
-            }))
-
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.2,
-                func = function()
                     for i = #destroyed_cards, 1, -1 do
                         local card = destroyed_cards[i]
                         if card and card.ability then
@@ -1343,7 +1332,6 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        
         return true
     end,
 }
@@ -1380,13 +1368,12 @@ SMODS.Joker{
             return {
                 card = card,
                 chip_mod = #G.consumeables.cards * card.ability.extra.chip_mod,
-                message = '+' .. #G.consumeables.cards * card.ability.extra.chip_mod,
+                message = 'Pop!',
                 colour = G.C.CHIPS
             }
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        
         return true
     end,
 }
@@ -1395,9 +1382,10 @@ SMODS.Joker{
     loc_txt = {
         name = 'Graffiti',
         text = {
-            'Sell this card after {C:attention}#2#{} round to add',
-            '{C:dark_edition}Foil{}, {C:dark_edition}Holographic{}, or {C:dark_edition}Polychrome{} edition',
-            'to a random {C:attention}Joker',
+            'Sell this card after',
+            '{C:attention}#2#{} round to add {C:dark_edition}Foil{},',
+            '{C:dark_edition}Holographic{}, or {C:dark_edition}Polychrome{}',
+            'edition to a random {C:attention}Joker',
             '{C:inactive}(Currently {C:attention}#1#{C:inactive}/#2#)'
         },
         
@@ -1418,11 +1406,14 @@ SMODS.Joker{
         }
     },
     loc_vars = function(self, info_queue, center)
+        info_queue[#info_queue+1] = G.P_CENTERS.e_foil
+        info_queue[#info_queue+1] = G.P_CENTERS.e_holo
+        info_queue[#info_queue+1] = G.P_CENTERS.e_polychrome
         return { vars = { center.ability.extra.rounds, center.ability.extra.required} }
     end,
     calculate = function(self, card, context)
 
-        if context.end_of_round and not context.individual and not context.repetition then
+        if context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
             if card.ability.extra.rounds < card.ability.extra.required then
                 card.ability.extra.rounds = card.ability.extra.rounds + 1
                 if card.ability.extra.rounds >= card.ability.extra.required then
@@ -1437,7 +1428,7 @@ SMODS.Joker{
             end
         end
 
-        if context.selling_self and card.ability.extra.rounds >= card.ability.extra.required then
+        if context.selling_self and card.ability.extra.rounds >= card.ability.extra.required and not context.blueprint then
             local eligible_editionless_jokers = {}
             for k, v in pairs(G.jokers.cards) do
                 if v.ability.set == 'Joker' and not v.edition and v ~= card then
@@ -1466,7 +1457,7 @@ SMODS.Joker{
     loc_txt = { 
         name = 'Three Musketeers',
         text = {
-          'Each scored {C:attention}3{} will',
+          'Each scored {C:attention}3{}',
           'will earn between',
           '{C:money}$#1#{} and {C:money}$#2#{}'
         },
@@ -1485,6 +1476,7 @@ SMODS.Joker{
       extra = {
         min_money = 1,
         max_money = 3,
+        lines = {'En garde!', 'Have at thee!', 'Let\'s dance!'}
       }
     },
     loc_vars = function(self,info_queue,center)
@@ -1496,6 +1488,7 @@ SMODS.Joker{
                 return {
                     card = card,
                     dollars = earned,
+                    extra = {focus = card, message = card.ability.extra.lines[earned], colour = G.C.MONEY}
                 }
         end
     end,
