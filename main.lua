@@ -1095,6 +1095,7 @@ SMODS.Joker{
         if context.cardarea == G.hand and context.individual and context.end_of_round and context.other_card:get_id() == 11 then
             return {
                 card = card,
+                extra = {focus = card, message = 'Euchre!', colour = G.C.MONEY},
                 dollars = card.ability.extra.money
             }
         end
@@ -1109,7 +1110,7 @@ SMODS.Joker{
     loc_txt = { 
         name = 'Jackpot',
         text = {
-          'If played hand contains 3',
+          'If played hand contains {C:attention}3',
           'scoring {C:attention}7s{}, score {C:mult}+#2# mult{}',
           'and earn {C:money}$#1#{} at',
           'the end of the round'
@@ -1118,7 +1119,7 @@ SMODS.Joker{
     },
     atlas = 'Jokers', 
     rarity = 2, 
-    cost = 5, 
+    cost = 6, 
     unlocked = true,  
     discovered = true, 
     blueprint_compat = true, 
@@ -1137,14 +1138,14 @@ SMODS.Joker{
     end,
     calculate = function(self,card,context)
         if context.cardarea == G.jokers and context.joker_main then
-            local _sevens = 0
+            local sevens = 0
             for i = 1, #context.scoring_hand do
                 if context.scoring_hand[i]:get_id() == 7 then
-                    _sevens = _sevens + 1
+                    sevens = sevens + 1
                 end
             end
 
-            if _sevens >= 3 then
+            if sevens >= 3 then
                 card.ability.extra.jackpot = true
                 local eval = function(card) return (card.ability.extra.jackpot == true) end
                 juice_card_until(card, eval, true)
@@ -1165,7 +1166,6 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        
         return true
     end,
 }
