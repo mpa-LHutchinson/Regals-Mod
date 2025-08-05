@@ -2586,7 +2586,7 @@ SMODS.Joker{
     discovered = true, 
     blueprint_compat = true, 
     eternal_compat = true, 
-    perishable_compat = true, 
+    perishable_compat = false, 
     pos = {x = 1, y = 4}, 
     config = { 
       extra = {
@@ -2652,7 +2652,7 @@ SMODS.Joker{
     discovered = true, 
     blueprint_compat = true, 
     eternal_compat = true, 
-    perishable_compat = true, 
+    perishable_compat = false, 
     pos = {x = 2, y = 4}, 
     config = { 
       extra = {
