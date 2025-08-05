@@ -1741,7 +1741,7 @@ SMODS.Joker{
 
                 for i = #_cards, math.max(#_cards - 1, 1), -1 do
                     local selected_card = _cards[i]
-                    if selected_card then
+                    if selected_card and not selected_card.highlighted then
                         G.hand:add_to_highlighted(selected_card, true)
                         any_selected = true
                         play_sound('card1', 1)
