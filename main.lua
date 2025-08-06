@@ -2590,7 +2590,7 @@ SMODS.Joker{
     pos = {x = 1, y = 4}, 
     config = { 
       extra = {
-        odds = 9,
+        odds = 7,
         chips = 0,
         chips_mod = 36
       }
