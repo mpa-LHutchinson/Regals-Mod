@@ -1670,6 +1670,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
+        info_queue[#info_queue+1] = {key = 'purple_seal', set = 'Other'}
         return {vars = {}} 
     end,
     calculate = function(self, card, context)
