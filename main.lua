@@ -986,6 +986,7 @@ SMODS.Joker{
           'card at the end of the round if',
           'at least {C:attention}#2#{} unique hand types',
           'were played this round',
+          '{C:inactive}(Must have room)',
           '{C:inactive}(Currently {C:attention}#1#{C:inactive}/#2#)'
         },
         
@@ -1558,7 +1559,6 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        
         return true
     end,
 }
@@ -1609,20 +1609,17 @@ SMODS.Joker{
             if not context.blueprint then
                 card.ability.extra.remaining = card.ability.extra.remaining - 1
             end
-            if card.ability.extra.remaining > 0 and not context.blueprint then
+            if card.ability.extra.remaining > 0 then
                 return{
                     card = card,
-                    message = '-1',
+                    message = 'Mmm... donut...',
                     colour = G.C.MONEY
                 } 
             elseif not context.blueprint then
                 G.E_MANAGER:add_event(Event({
                     func = function()
                         play_sound('tarot1')
-                        card.T.r = -0.2
                         card:juice_up(0.3, 0.4)
-                        card.states.drag.is = true
-                        card.children.center.pinch.x = true
                         G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
                             func = function()
                                 G.jokers:remove_card(self)
@@ -1636,7 +1633,7 @@ SMODS.Joker{
                 }))
                 return{
                     card = card,
-                    message = 'eaten!',
+                    message = 'D\'oh!',
                     colour = G.C.MONEY
                 } 
             end
@@ -1644,7 +1641,6 @@ SMODS.Joker{
         
     end,
     in_pool = function(self,wawa,wawa2)
-        
         return true
     end,
 }
@@ -2692,7 +2688,8 @@ SMODS.Joker{
                 }
             end
 
-            if joker_to_destroy and not consumable_to_destroy then 
+            if joker_to_destroy and not consumable_to_destroy then
+                joker_to_destroy.getting_sliced = true 
                 G.E_MANAGER:add_event(Event({func = function()
                     card:juice_up(0.8, 0.8)
                     joker_to_destroy:juice_up(0.3, 0.4)
