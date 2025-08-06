@@ -435,9 +435,9 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'inkbottle', 
+    key = 'oljimwilly', 
     loc_txt = { 
-        name = 'Ink Bottle',
+        name = 'Ol\' Jim Willy',
         text = {
           "Converts the next",
           "{C:attention}#1#{} scored cards",
@@ -483,7 +483,7 @@ SMODS.Joker{
                 end
             end
             return {
-                message = 'Spades', 
+                message = 'Ink!', 
                 colour = G.C.SUITS['Spades']
             }
         end
@@ -509,7 +509,7 @@ SMODS.Joker{
                     end
                 }))
                 return {
-                    message = 'Used up!',
+                    message = 'That\'s all folks!',
                     colour = G.C.SUITS['Spades']
                 }
             end
