@@ -1809,11 +1809,11 @@ SMODS.Joker{
             center.ability.extra.num_wilds_display = math.floor(wilds / center.ability.extra.per)
         end
         
-
+        info_queue[#info_queue+1] = G.P_CENTERS.m_wild
         return {vars = {center.ability.extra.extra_hand_size, center.ability.extra.per, center.ability.extra.num_wilds_display}} 
     end,
     calculate = function(self, card, context)
-        if context.setting_blind and not context.individual and not context.repetition then
+        if context.setting_blind and not context.individual and not context.repetition and not context.blueprint then
             local wilds = 0
             local isdifferent = false
             for k, v in pairs(G.playing_cards) do
@@ -1909,7 +1909,6 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        
         return true
     end,
 }
@@ -1918,15 +1917,15 @@ SMODS.Joker{
     loc_txt = { 
         name = 'Kids Drawing',
         text = {
-          '{C:green}#1# in #2#{} chance to add',
-          'a random {C:attention}enhancement{} to',
-          'any scored cards'
+          'Each scored card has',
+          'a {C:green}#1# in #2#{} chance to gain',
+          'a random {C:attention}Enhancement{}',
         },
         
     },
     atlas = 'Jokers', 
     rarity = 2, 
-    cost = 5, 
+    cost = 6, 
     unlocked = true,  
     discovered = true, 
     blueprint_compat = true, 
@@ -1976,7 +1975,6 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        
         return true
     end,
 }
