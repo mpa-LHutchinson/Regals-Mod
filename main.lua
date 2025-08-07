@@ -1707,7 +1707,7 @@ SMODS.Joker{
     loc_txt = { 
         name = 'Hunter',
         text = {
-          "When hand is played,",
+          "After hand is played,",
           "discard the {C:attention}2 rightmost{}", 
           "cards held in hand"
         },
@@ -1731,15 +1731,19 @@ SMODS.Joker{
         return {vars = {center.ability.extra.shots}} 
     end,
     calculate = function(self, card, context)
-        if context.press_play then
+        if context.after and not context.blueprint then
             G.E_MANAGER:add_event(Event({ func = function()
                 local any_selected = false
-                local _cards = G.hand.cards
+                local _cards = {}
+                for k, v in ipairs(G.hand.cards) do
+                    _cards[#_cards+1] = v
+                end
 
                 for i = #_cards, math.max(#_cards - 1, 1), -1 do
-                    local selected_card = _cards[i]
+                    local selected_card, card_key = _cards[i]
                     if selected_card and not selected_card.highlighted then
                         G.hand:add_to_highlighted(selected_card, true)
+                        table.remove(_cards, card_key)
                         any_selected = true
                         play_sound('card1', 1)
                     end
@@ -1760,7 +1764,6 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        
         return true
     end,
 }
