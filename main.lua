@@ -2749,6 +2749,9 @@ SMODS.Joker{
     loc_vars = function(self,info_queue,center)
         return {vars = {}} 
     end,
+    add_to_deck = function(self, card, context)
+        play_sound('rgl_rainbow', 1, 6)
+    end,
     calculate = function(self, card, context)
         if context.before and context.cardarea == G.jokers then
             for k, v in ipairs(context.scoring_hand) do
@@ -3064,6 +3067,10 @@ SMODS.Back{
 SMODS.Sound({
 	key = "heyguysitsmeregal",
 	path = "hey guys its me regal.ogg",
+})
+SMODS.Sound({
+	key = "rainbow",
+	path = "RAINBOW.ogg",
 })
 --[[SMODS.Sound({
 	key = "burn",
