@@ -2015,8 +2015,6 @@ SMODS.Joker{
         return {vars = {center.ability.extra.Xmult, center.ability.extra.Xmult_mod}} 
     end,
     calculate = function(self,card,context)
-        
-
         if context.joker_main then
             return {
                 card = card,
@@ -2025,9 +2023,15 @@ SMODS.Joker{
                 colour = G.C.MULT
             }
         end
+        if context.buying_card and context.card.ability.set == 'Voucher' and not context.blueprint then
+            return {
+                card = card,
+                message = 'All aboard!',
+                colour = G.C.BLUE
+            }
+        end
     end,
     in_pool = function(self,wawa,wawa2)
-        
         return true
     end,
 }
