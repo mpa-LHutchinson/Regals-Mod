@@ -2112,7 +2112,8 @@ SMODS.Joker{
     config = { 
       extra = {
         Xmult = 3.5,
-        money = 1
+        money = 1,
+        lines = {'Rent due!', 'Pay up!', 'Final notice!'}
       }
     },
     loc_vars = function(self,info_queue,center)
@@ -2125,7 +2126,7 @@ SMODS.Joker{
             return {
                 card = card,
                 dollars = card.ability.extra.money * -1,
-                message = 'Rent Due!',
+                message = pseudorandom_element(card.ability.extra.lines, pseudoseed('land')),
                 colour = G.C.MONEY
             }
         end
@@ -2152,7 +2153,7 @@ SMODS.Joker{
           'generates {C:attention}#1#{} other',
           'random {C:attention}tag(s){}. Number of',
           '{C:attention}tags{} increases with each level',
-          '{C:inactive}Next level in ({C:attention}#3#/#2#{C:inactive})'
+          '{C:inactive}Next level in ({C:attention}#3#{}{C:inactive}/#2#) skips'
         },
     },
     atlas = 'Jokers',
@@ -2975,7 +2976,7 @@ SMODS.Back{
     order = 18,
     unlocked = true,
     discovered = true,
-    pos = { x = 0, y = 0 },
+    pos = { x = 4, y = 0 },
 	config = {vouchers = {'v_hone', 'v_glow_up'}},
     loc_vars = function(self, info_queue, center)
         return {vars = {}}
@@ -3005,7 +3006,7 @@ SMODS.Back{
     order = 19,
     unlocked = true,
     discovered = true,
-    pos = { x = 0, y = 0 },
+    pos = { x = 3, y = 0 },
 	config = {},
     loc_vars = function(self, info_queue, center)
         return {vars = {}}
