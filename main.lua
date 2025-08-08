@@ -1983,8 +1983,8 @@ SMODS.Joker{
     loc_txt = { 
         name = 'Cruise Ship',
         text = {
-          '{X:mult,C:white}X#2#{} mult for every',
-          '{C:voucher}voucher{} owned',
+          '{X:mult,C:white}X#2#{} Mult for every',
+          '{C:attention}Voucher{} owned',
           '{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive})'
 
         },
@@ -2078,13 +2078,13 @@ SMODS.Joker{
                     card = card,
                     chip_mod = context.other_card.base.nominal * 3,
                     message = '+' .. (context.other_card.base.nominal * 3),
+                    extra = {focus = card, message = 'We want score!', colour = G.C.CHIPS},
                     colour = G.C.CHIPS
                 }
             end
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        
         return true
     end,
 }
@@ -2093,16 +2093,16 @@ SMODS.Joker{
     loc_txt = { 
         name = 'Landlord',
         text = {
-          'If hand conatins a',
-          '{C:attention}Full House{} then',
-          '{X:mult,C:white}X#1#{} Mult, lose {C:money}$#2#{}',
-          'and add {C:money}$#2#{} to sell value'
+          '{X:mult,C:white}X#1#{} Mult if played hand',
+          'contains a {C:attention}Full House{}, then',
+          'lose {C:money}$#2#{} and add {C:money}$#2#{} to the',
+          '{C:attention}Sell{} {C:attention}Value{} of this card'
         },
         
     },
     atlas = 'Jokers', 
     rarity = 3, 
-    cost = 6, 
+    cost = 7, 
     unlocked = true,  
     discovered = true, 
     blueprint_compat = true, 
@@ -3053,7 +3053,7 @@ SMODS.Back{
     order = 20,
     unlocked = true,
     discovered = true,
-    pos = { x = 0, y = 0 },
+    pos = { x = 2, y = 0 },
 	config = {consumables = {'c_soul'}},
     loc_vars = function(self, info_queue, center)
         return {vars = {}}
