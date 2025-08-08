@@ -2322,9 +2322,10 @@ SMODS.Joker{
     loc_txt = {
         name = 'Diamond Armor',
         text = {
-          'Score {C:diamonds}#2# Diamond{} cards {C:inactive}[#1#]{} to',
-          'activate this joker and',
-          'prevent death {C:attention}#3#{} times',
+          'After scoring {C:attention}#2#{} cards with',
+          '{C:diamonds}Diamond{} suit {C:inactive}[#1#]{} this joker',
+          'activates, and will prevent',
+          'death up to {C:attention}#3#{} times'
         },
     },
     atlas = 'Jokers',
@@ -2352,7 +2353,7 @@ SMODS.Joker{
             card.ability.extra.diamonds = card.ability.extra.diamonds + 1 
             return {
                 card = card,
-                extra = {focus = card, message = "Crafting!"},
+                extra = {focus = card, message = "Crafting!", colour = G.C.BLUE},
                 colour = G.C.BLUE
             }
         end
@@ -2395,7 +2396,7 @@ SMODS.Joker{
     loc_txt = {
         name = 'Climb the Mountain',
         text = {
-          'This joker gains {C:mult}+#2#{} Mult',
+          'This Joker gains {C:mult}+#2#{} Mult',
           'for each scored {C:attention}#4#{}, rank',
           'increases every round',
           '{C:inactive}(Currently {C:red}+#1#{C:inactive} Mult)',
@@ -2426,7 +2427,7 @@ SMODS.Joker{
             card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
             return {
                 card = card,
-                extra = {focus = card, message = localize('k_upgrade_ex')},
+                extra = {focus = card, message = "Upgrade!", colour = G.C.MULT},
                 colour = G.C.MULT
             }
         end
@@ -2462,7 +2463,7 @@ SMODS.Joker{
             return {
                 card = card,
                 message = 'Climb!',
-                colour = G.C.MONEY
+                colour = G.C.BLUE
             }
             
         end
@@ -2502,7 +2503,7 @@ SMODS.Joker{
             return {
                 card = card,
                 repetitions = 1,
-                message = 'Again!', 
+                message = 'Decay...', 
                 colour = G.C.BLACK
             }
         end
