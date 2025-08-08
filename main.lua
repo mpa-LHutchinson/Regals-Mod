@@ -2149,16 +2149,16 @@ SMODS.Joker{
     loc_txt = {
         name = 'Lock Pick',
         text = {
-          'Skipping any {C:attention}Blind{}',
-          'generates {C:attention}#1#{} other',
-          'random {C:attention}tag(s){}. Number of',
-          '{C:attention}tags{} increases with each level',
+          'Skipping any {C:attention}Blind{} generates',
+          '{C:green}#1#{} other random {C:attention}tag(s){}.',
+          'Number of {C:attention}tags{}',
+          'increases with each level',
           '{C:inactive}Next level in ({C:attention}#3#{}{C:inactive}/#2#) skips'
         },
     },
     atlas = 'Jokers',
     rarity = 2, 
-    cost = 6,
+    cost = 7,
     unlocked = true, 
     discovered = true, 
     blueprint_compat = true, 
@@ -2243,9 +2243,9 @@ SMODS.Joker{
         name = 'Squirrel',
         text = {
           '{C:chips}+#1#{} Chips. Sell this',
-          'card during a {C:attention}blind{}',
-          'to replace it with a',
-          '{C:blue}Common{} Joker'
+          'card during a {C:attention}Blind{}',
+          'to replace it with',
+          'a {C:blue}Common{} Joker',
         },
         
     },
@@ -2268,7 +2268,8 @@ SMODS.Joker{
         return {vars = {center.ability.extra.chips}} 
     end,
     calculate = function(self,card,context)
-        if context.setting_blind and not context.blueprint then
+
+        if G.GAME.blind.in_blind and not card.ability.extra.canBeSacrificed and not context.blueprint then
 			card.ability.extra.canBeSacrificed = true
             local eval = function(card) return (card.ability.extra.canBeSacrificed == true) end
             juice_card_until(card, eval, true)
@@ -2279,7 +2280,7 @@ SMODS.Joker{
             }
 		end
 
-		if context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
+		if not G.GAME.blind.in_blind and card.ability.extra.canBeSacrificed and not context.blueprint then
 			card.ability.extra.canBeSacrificed = false
             return{
                 message = 'Thank you!',
@@ -2288,7 +2289,7 @@ SMODS.Joker{
             }
 		end
 
-        if context.selling_self and card.ability.extra.canBeSacrificed and not context.blueprint then
+        if context.selling_self and card.ability.extra.canBeSacrificed then
             G.E_MANAGER:add_event(Event({
                 func = function() 
                         local card = create_card('Joker', G.jokers, nil, 0.5, nil, nil, nil, 'dra')
