@@ -2478,7 +2478,8 @@ SMODS.Joker{
         name = 'Black Rose',
         text = {
           "Retrigger all",
-          "played {C:spades}Spade{} cards",
+          "played cards with",
+          "{C:spades}Spade{} suit"
         },
         
     },
@@ -2509,7 +2510,6 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        
         return true
     end,
 }
@@ -2567,7 +2567,6 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        
         return true
     end,
 }
@@ -2595,7 +2594,7 @@ SMODS.Joker{
     pos = {x = 1, y = 4}, 
     config = { 
       extra = {
-        odds = 7,
+        odds = 6,
         chips = 0,
         chips_mod = 36
       }
@@ -2633,7 +2632,6 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        
         return true
     end,
 }
