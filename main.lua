@@ -1671,6 +1671,7 @@ SMODS.Joker{
     },
     loc_vars = function(self,info_queue,center)
         info_queue[#info_queue+1] = {key = 'purple_seal', set = 'Other'}
+        info_queue[#info_queue+1] = {key = 'e_negative_consumable', set = 'Edition', config = {extra = 1}}
         return {vars = {}} 
     end,
     calculate = function(self, card, context)
@@ -2577,8 +2578,9 @@ SMODS.Joker{
         text = {
           "Cuts all {C:attention}listed",
           "{C:green,E:1,S:1.1}probabilities{} in half.",
-          "{C:green}#1# in #2#{} chance to add {C:chips}+#4#{}",
-          "chips when hand is played",
+          "{C:inactive}(ex: {C:green}1 in 3{C:inactive} -> {C:green}0.5 in 3{C:inactive})",
+          "{C:green}#1# in #2#{} chance to gain {C:chips}+#4#{}",
+          "Chips when hand is played",
           "{C:inactive}(Currently {C:chips}+#3#{C:inactive} Chips)"
         },
         
@@ -2640,8 +2642,8 @@ SMODS.Joker{
     loc_txt = { 
         name = 'Bruce',
         text = {
-          "When {C:attention}Blind{} is selected,",
-          "gain {X:mult,C:white} X#2# {} Mult and {C:attention}destroy{} a random",
+          "When {C:attention}Blind{} is selected, gain",
+          "{X:mult,C:white} X#2# {} Mult and {C:attention}destroy{} a random",
           "{C:attention}consumable{}. If there are no consumables,",
           "{C:attention}destroy{} a random Joker instead",
           "{C:inactive}(Must consume something to scale){}",
@@ -2724,7 +2726,6 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        
         return true
     end,
 }
@@ -2753,6 +2754,7 @@ SMODS.Joker{
       }
     },
     loc_vars = function(self,info_queue,center)
+        info_queue[#info_queue+1] = G.P_CENTERS.e_polychrome
         return {vars = {}} 
     end,
     add_to_deck = function(self, card, context)
@@ -2770,11 +2772,14 @@ SMODS.Joker{
                     end
                 }))
             end
+            return {
+                message = 'Rainbow!', 
+                colour = G.C.SECONDARY_SET.Enhanced
+            }
         end
     end,
 
     in_pool = function(self,wawa,wawa2)
-        
         return true
     end,
 }
@@ -2817,6 +2822,10 @@ SMODS.Joker{
             return true end }))
             G.GAME.current_round.free_rerolls = G.GAME.current_round.free_rerolls + 1
             calculate_reroll_cost(true)
+            return {
+                message = 'Free!', 
+                colour = HEX("FFc0cb")
+            }
         end
     end,
     remove_from_deck = function(self, card, from_debuff)
@@ -2830,7 +2839,6 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        
         return true
     end,
 }
