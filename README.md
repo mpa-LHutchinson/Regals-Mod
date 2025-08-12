@@ -11,4 +11,4 @@ Requires steamodded. May not be compatable with certain mods, if you run into an
 # Credits
 
 - Pinktheone(Regal): Developer
-- FoxboxRay(Ray): Artist ([Instagram](https://www.instagram.com/foxboxray/) [Youtube](https://www.youtube.com/@foxboxray))
+- FoxboxRay(Ray): Artist ([Instagram](https://www.instagram.com/foxboxray/), [Youtube](https://www.youtube.com/@foxboxray))
