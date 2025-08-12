@@ -2761,7 +2761,7 @@ SMODS.Joker{
         play_sound('rgl_rainbow', 1, 6)
     end,
     calculate = function(self, card, context)
-        if context.before and context.cardarea == G.jokers then
+        if context.before and context.cardarea == G.jokers and not context.blueprint then
             for k, v in ipairs(context.scoring_hand) do
                 v:set_edition('e_polychrome', true)
 
@@ -2814,7 +2814,7 @@ SMODS.Joker{
         play_sound('rgl_heyguysitsmeregal', 1, 6)
     end,
     calculate = function(self, card, context)
-        if context.starting_shop then
+        if context.starting_shop and not context.blueprint then
             G.E_MANAGER:add_event(Event({func = function()
                 for k, v in pairs(G.I.CARD) do
                     if v.set_cost then v.cost = 0 end
