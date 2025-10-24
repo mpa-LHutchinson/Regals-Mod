@@ -23,3 +23,14 @@ if (G.GAME.selected_back_key or {}).key == "b_rgl_pinkdeck" then
     end
 end
 '''
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = '''
+mail_card = {rank = 'Ace'},
+'''
+position = 'after'
+payload = '''
+treasure_rank = {rank = 'King'},
+'''
+match_indent = true

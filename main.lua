@@ -1,6 +1,6 @@
 
 
-
+local mod = SMODS.current_mod
 SMODS.Atlas{
     key = 'Jokers',
     path = 'Jokers.png',
@@ -2842,6 +2842,196 @@ SMODS.Joker{
         return true
     end,
 }
+SMODS.Joker{
+    key = 'spaceprincess', 
+    loc_txt = { 
+        name = 'Space Princess',
+        text = {
+          "{C:green}#1# in #2#{} chance for each",
+          "played {C:attention}Queen{} to create a",
+          "{C:planet}Planet{} card when scored",
+          "{C:inactive}(Must have room)",
+        },
+        
+    },
+    atlas = 'Jokers', 
+    rarity = 1, 
+    cost = 4, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
+    pos = {x = 0, y = 5}, 
+    config = { 
+      extra = {
+        odds = 2
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {G.GAME.probabilities.normal, center.ability.extra.odds}}
+    end,
+    calculate = function(self,card,context)
+        if context.individual and context.cardarea == G.play and context.other_card:get_id() == 12 and pseudorandom('rosalina') < G.GAME.probabilities.normal / card.ability.extra.odds then
+            if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                return {
+                    extra = {focus = card, message = 'Stars!', colour = G.C.BLUE, func = function()
+                        G.E_MANAGER:add_event(Event({
+                            trigger = 'before',
+                            delay = 0.0,
+                            func = (function()
+                                    local card = create_card('Planet',G.consumeables, nil, nil, nil, nil, nil, 'rosa')
+                                    card:add_to_deck()
+                                    G.consumeables:emplace(card)
+                                    G.GAME.consumeable_buffer = 0
+                                return true
+                            end)}))
+                    end},
+                    card = card
+                }
+            end
+        end
+    end,
+    in_pool = function(self,wawa,wawa2)
+        return true
+    end,
+}
+SMODS.Joker{
+    key = 'buriedtreasure', 
+    loc_txt = { 
+        name = 'Buried Treasure',
+        text = {
+          "Earn {C:money}$#1#{} for each",
+          "played {V:1}#2#{} rank,",
+          "rank is hidden and",
+          "changes every round",
+        },
+    },
+    atlas = 'Jokers', 
+    rarity = 1, 
+    cost = 6, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
+    pos = {x = 0, y = 5}, 
+    config = { 
+      extra = {
+        money = 6,
+        revealed_rank = "X",
+        current_colour = G.C.RED
+      }
+    },
+    loc_vars = function(self, info_queue, center)
+        return {vars = {center.ability.extra.money, center.ability.extra.revealed_rank, colours = {center.ability.extra.current_colour}}}
+    end,
+    calculate = function(self,card,context)
+        if context.individual and context.cardarea == G.play and context.other_card.base.value == G.GAME.current_round.treasure_rank.rank then
+            card.ability.extra.revealed_rank = G.GAME.current_round.treasure_rank.rank
+            card.ability.extra.current_colour = G.C.FILTER
+            return {
+                card = card,
+                dollars = card.ability.extra.money,
+                extra = {focus = card, message = "Treasure!", colour = G.C.MONEY}
+            }
+        end
+
+        if context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
+            card.ability.extra.revealed_rank = "X"
+            card.ability.extra.current_colour = G.C.RED
+        end
+        
+    end,
+    in_pool = function(self,wawa,wawa2)
+        return true
+    end,
+}
+SMODS.Joker{
+    key = 'hybridjoker', 
+    loc_txt = { 
+        name = 'Hybrid Joker',
+        text = {
+          "If {C:attention}first discard{} of round",
+          "has only {C:attention}2{} cards, add a",
+          "{C:attention}Hybridized{} card to your hand",
+        },
+        
+    },
+    atlas = 'Jokers', 
+    rarity = 3, 
+    cost = 8, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
+    pos = {x = 0, y = 5}, 
+    config = { 
+      extra = {
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        info_queue[#info_queue+1] = {key = 'hybridized_card', set = 'Other'}
+        return {vars = {}} 
+    end,
+    calculate = function(self, card, context)
+
+        if context.first_hand_drawn and not context.blueprint then
+            local eval = function(card) return (G.GAME.current_round.discards_used <= 0 and not G.RESET_JIGGLES) end
+            juice_card_until(card, eval, true)
+        end
+
+        if context.pre_discard then
+            if  G.GAME.current_round.discards_used <= 0 and #context.full_hand == 2 then
+                local _suits = {}
+                local _ranks = {}
+                local _enhancements = {}
+                local _seals = {}
+                local _editions = {}
+                for k, v in ipairs(context.full_hand) do
+                    table.insert(_suits, v.base.suit)
+                    table.insert(_ranks, v.base.value)
+                    if v.config.center ~= G.P_CENTERS.c_base then
+                        table.insert(_enhancements, v.config.center)
+                    end
+                    if v.seal ~= nil then
+                        table.insert(_seals, v.seal)
+                    end
+                    if v.edition ~= nil then
+                        table.insert(_editions, v.edition)
+                    end
+                end
+
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        local _suit = pseudorandom_element(_suits, pseudoseed('suhybr'))
+                        local _rank = pseudorandom_element(_ranks, pseudoseed('rhybr'))
+                        local _enhancement = (pseudorandom_element(_enhancements, pseudoseed('enhybr')) or G.P_CENTERS.c_base)
+                        local _seal = (pseudorandom_element(_seals, pseudoseed('sehybr')) or nil)
+                        local _edition = (pseudorandom_element(_editions, pseudoseed('edhybr')) or nil)
+                        local new_card = create_playing_card({front = G.P_CARDS['S_A'], center = _enhancement}, G.hand, nil, nil, {G.C.SECONDARY_SET.Enhanced})
+                        SMODS.change_base(new_card, _suit, _rank)
+                        new_card:set_seal(_seal, true)
+                        new_card:set_edition(_edition, true, true)
+                        playing_card_joker_effects({true})
+                        return true
+                    end
+                }))
+
+                return {
+                    message = 'Hybridized!', 
+                    colour = G.C.BLUE
+                }
+            end
+        end
+    end,
+
+    in_pool = function(self,wawa,wawa2)
+        return true
+    end,
+}
 
 --[[SMODS.Joker{
     key = 'burntothegroundguy', 
@@ -3078,6 +3268,22 @@ SMODS.Back{
     end
 }
 
+function reset_treasure_rank()
+    G.GAME.current_round.treasure_rank.rank = 'Ace'
+    local valid_treasure_cards = {}
+    for k, v in ipairs(G.playing_cards) do
+        if v.key ~= 'm_stone' then
+            valid_treasure_cards[#valid_treasure_cards+1] = v
+        end
+    end
+    if valid_treasure_cards[1] then 
+        local treasure_card = pseudorandom_element(valid_treasure_cards, pseudoseed('treasure'..G.GAME.round_resets.ante))
+        G.GAME.current_round.treasure_rank.rank = treasure_card.base.value
+        G.GAME.current_round.treasure_rank.id = treasure_card.base.id
+    end
+end
+
+
 SMODS.Sound({
 	key = "heyguysitsmeregal",
 	path = "hey guys its me regal.ogg",
@@ -3095,5 +3301,7 @@ SMODS.Sound({
 	path = "burn-to-the-ground-made-with-Voicemod.mp3",
 })]]
     
-
+mod.reset_game_globals = function(run_start)
+	reset_treasure_rank()
+end
     
