@@ -1494,7 +1494,6 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        
         return true
     end,
 }
@@ -3022,6 +3021,126 @@ SMODS.Joker{
 
                 return {
                     message = 'Hybridized!', 
+                    colour = G.C.BLUE
+                }
+            end
+        end
+    end,
+
+    in_pool = function(self,wawa,wawa2)
+        return true
+    end,
+}
+SMODS.Joker{
+    key = 'sapphirestaff',
+    loc_txt = {
+        name = 'Sapphire Staff',
+        text = {
+          "{C:green}#1# in #2#{} chance to",
+          "upgrade level of",
+          "played {C:attention}poker hand{}",
+          "if a {C:blue}Blue Seal{} is",
+          "held in hand"
+        },
+        
+    },
+    atlas = 'Jokers',
+    rarity = 2, 
+    cost = 6,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = true,
+    eternal_compat = false,
+    perishable_compat = true,
+    pos = {x = 0, y = 5}, 
+    config = { 
+      extra = {
+        odds = 3,
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        info_queue[#info_queue+1] = {key = 'blue_seal', set = 'Other'}
+        return {vars = {G.GAME.probabilities.normal, center.ability.extra.odds}}
+    end,
+    calculate = function(self, card, context)
+        if context.before and context.cardarea == G.jokers then
+            local function hasBlueSeal()
+                for k, v in ipairs(G.hand.cards) do
+                    if v.seal == 'Blue' then
+                        return true
+                    end
+                end
+                return false
+            end
+
+            if hasBlueSeal() and pseudorandom('sapp') < G.GAME.probabilities.normal / card.ability.extra.odds then
+                level_up_hand(context.blueprint_card or card, context.scoring_name, nil, 1)
+
+                return {
+                    card = card,
+                    message = 'Voilà!',
+                    colour = G.C.BLUE
+                }
+            end
+            
+            
+        end
+        
+    end,
+
+    in_pool = function(self,wawa,wawa2)
+        return true
+    end,
+}
+SMODS.Joker{
+    key = 'cityoftears', 
+    loc_txt = { 
+        name = 'City of Tears',
+        text = {
+          "If played hand has",
+          "a scoring {C:clubs}Club{} card,",
+          "every card held in hand",
+          "permanently gains {C:chips}+#1#{} Chips",
+        },
+        
+    },
+    atlas = 'Jokers', 
+    rarity = 2, 
+    cost = 5, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
+    pos = {x = 0, y = 5}, 
+    config = { 
+      extra = {
+        tear_chips = 5
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.tear_chips}} 
+    end,
+    calculate = function(self, card, context)
+        if context.before and context.cardarea == G.jokers then
+            local function hasClubs()
+                for k, v in ipairs(context.scoring_hand) do
+                    if v:is_suit("Clubs") then
+                        return true
+                    end
+                end
+                return false
+            end
+
+            if hasClubs() then
+                for k, v in ipairs(G.hand.cards) do
+                    v.ability.perma_bonus = v.ability.perma_bonus or 0
+                    v.ability.perma_bonus = v.ability.perma_bonus + card.ability.extra.tear_chips
+                end
+
+                return {
+                    card = card,
+                    message = 'Tears...',
                     colour = G.C.BLUE
                 }
             end
