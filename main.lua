@@ -3156,16 +3156,15 @@ SMODS.Joker{
     loc_txt = { 
         name = 'Jokle',
         text = {
-          "If played hand has",
-          "a scoring {C:clubs}Club{} card,",
-          "every card held in hand",
-          "permanently gains {C:chips}+#1#{} Chips",
+          "Jokers with the word",
+          "{C:attention}Joker{} in their name",
+          "each give {X:mult,C:white} X#1# {} Mult",
         },
         
     },
     atlas = 'Jokers', 
-    rarity = 3, 
-    cost = 8, 
+    rarity = 2, 
+    cost = 6, 
     unlocked = true,  
     discovered = true, 
     blueprint_compat = true, 
@@ -3181,17 +3180,20 @@ SMODS.Joker{
         return {vars = {center.ability.extra.Xmult}} 
     end,
     calculate = function(self, card, context)
-        if context.individual and context.other_joker.config.center.rarity == 2 then
-            G.E_MANAGER:add_event(Event({
-                func = function()
-                    context.other_joker:juice_up(0.5, 0.5)
-                    return true
-                end
-            })) 
-            return {
-                message = localize{type='variable',key='a_xmult',vars={card.ability.extra.Xmult}},
-                Xmult_mod = card.ability.extra.Xmult
-            }
+        if context.other_joker then 
+            if string.find(context.other_joker.config.center.name:lower(), "joker") then
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        context.other_joker:juice_up(0.5, 0.5)
+                        return true
+                    end
+                })) 
+                return {
+                    Xmult_mod = card.ability.extra.Xmult,
+                    message = 'Jokle!',
+                    colour = G.C.MULT
+                }
+            end
         end
     end,
 
