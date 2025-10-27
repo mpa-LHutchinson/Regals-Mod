@@ -2861,7 +2861,7 @@ SMODS.Joker{
     blueprint_compat = true, 
     eternal_compat = true, 
     perishable_compat = true, 
-    pos = {x = 0, y = 5}, 
+    pos = {x = 9, y = 4}, 
     config = { 
       extra = {
         odds = 2
@@ -2915,7 +2915,7 @@ SMODS.Joker{
     blueprint_compat = true, 
     eternal_compat = true, 
     perishable_compat = true, 
-    pos = {x = 0, y = 5}, 
+    pos = {x = 9, y = 4}, 
     config = { 
       extra = {
         money = 6,
@@ -2966,7 +2966,7 @@ SMODS.Joker{
     blueprint_compat = true, 
     eternal_compat = true, 
     perishable_compat = true, 
-    pos = {x = 0, y = 5}, 
+    pos = {x = 9, y = 4}, 
     config = { 
       extra = {
       }
@@ -3052,7 +3052,7 @@ SMODS.Joker{
     blueprint_compat = true,
     eternal_compat = false,
     perishable_compat = true,
-    pos = {x = 0, y = 5}, 
+    pos = {x = 3, y = 5}, 
     config = { 
       extra = {
         odds = 3,
@@ -3112,7 +3112,7 @@ SMODS.Joker{
     blueprint_compat = true, 
     eternal_compat = true, 
     perishable_compat = true, 
-    pos = {x = 0, y = 5}, 
+    pos = {x = 9, y = 4}, 
     config = { 
       extra = {
         tear_chips = 5
@@ -3152,7 +3152,7 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'Jokle', 
+    key = 'jokle', 
     loc_txt = { 
         name = 'Jokle',
         text = {
@@ -3170,7 +3170,7 @@ SMODS.Joker{
     blueprint_compat = true, 
     eternal_compat = true, 
     perishable_compat = true, 
-    pos = {x = 0, y = 5}, 
+    pos = {x = 5, y = 5}, 
     config = { 
       extra = {
         Xmult = 1.5
@@ -3194,6 +3194,53 @@ SMODS.Joker{
                     colour = G.C.MULT
                 }
             end
+        end
+    end,
+
+    in_pool = function(self,wawa,wawa2)
+        return false
+    end,
+}
+SMODS.Joker{
+    key = 'page', 
+    loc_txt = { 
+        name = 'Page',
+        text = {
+          "Jokers with the word",
+          "{C:attention}Joker{} in their name",
+          "each give {X:mult,C:white} X#1# {} Mult",
+        },
+        
+    },
+    atlas = 'Jokers', 
+    rarity = 2, 
+    cost = 6, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
+    pos = {x = 9, y = 4}, 
+    config = { 
+      extra = {
+        money = 1
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.money}} 
+    end,
+    calculate = function(self, card, context)
+        if context.playing_card_added and context.cards and context.cards[1] then
+            if not context.blueprint then
+                card.ability.extra.money = card.ability.extra.money + #context.cards
+            end
+            
+            return {
+                card = card,
+                extra = {focus = card, message = '...', colour = G.C.MONEY},
+                dollars = card.ability.extra.money
+            }
+            
         end
     end,
 
