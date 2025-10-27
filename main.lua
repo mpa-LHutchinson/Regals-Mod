@@ -3151,6 +3151,54 @@ SMODS.Joker{
         return false
     end,
 }
+SMODS.Joker{
+    key = 'Jokle', 
+    loc_txt = { 
+        name = 'Jokle',
+        text = {
+          "If played hand has",
+          "a scoring {C:clubs}Club{} card,",
+          "every card held in hand",
+          "permanently gains {C:chips}+#1#{} Chips",
+        },
+        
+    },
+    atlas = 'Jokers', 
+    rarity = 3, 
+    cost = 8, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
+    pos = {x = 0, y = 5}, 
+    config = { 
+      extra = {
+        Xmult = 1.5
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.Xmult}} 
+    end,
+    calculate = function(self, card, context)
+        if context.individual and context.other_joker.config.center.rarity == 2 then
+            G.E_MANAGER:add_event(Event({
+                func = function()
+                    context.other_joker:juice_up(0.5, 0.5)
+                    return true
+                end
+            })) 
+            return {
+                message = localize{type='variable',key='a_xmult',vars={card.ability.extra.Xmult}},
+                Xmult_mod = card.ability.extra.Xmult
+            }
+        end
+    end,
+
+    in_pool = function(self,wawa,wawa2)
+        return false
+    end,
+}
 
 --[[SMODS.Joker{
     key = 'burntothegroundguy', 
