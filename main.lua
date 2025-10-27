@@ -2893,7 +2893,7 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        return true
+        return false
     end,
 }
 SMODS.Joker{
@@ -2944,7 +2944,7 @@ SMODS.Joker{
         
     end,
     in_pool = function(self,wawa,wawa2)
-        return true
+        return false
     end,
 }
 SMODS.Joker{
@@ -3028,7 +3028,7 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        return true
+        return false
     end,
 }
 SMODS.Joker{
@@ -3089,7 +3089,7 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        return true
+        return false
     end,
 }
 SMODS.Joker{
@@ -3148,7 +3148,7 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        return true
+        return false
     end,
 }
 
