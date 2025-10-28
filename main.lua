@@ -2861,7 +2861,7 @@ SMODS.Joker{
     blueprint_compat = true, 
     eternal_compat = true, 
     perishable_compat = true, 
-    pos = {x = 9, y = 4}, 
+    pos = {x = 8, y = 4}, 
     config = { 
       extra = {
         odds = 2
@@ -2915,7 +2915,7 @@ SMODS.Joker{
     blueprint_compat = true, 
     eternal_compat = true, 
     perishable_compat = true, 
-    pos = {x = 9, y = 4}, 
+    pos = {x = 8, y = 4}, 
     config = { 
       extra = {
         money = 6,
@@ -2966,7 +2966,7 @@ SMODS.Joker{
     blueprint_compat = true, 
     eternal_compat = true, 
     perishable_compat = true, 
-    pos = {x = 9, y = 4}, 
+    pos = {x = 8, y = 4}, 
     config = { 
       extra = {
       }
@@ -3112,7 +3112,7 @@ SMODS.Joker{
     blueprint_compat = true, 
     eternal_compat = true, 
     perishable_compat = true, 
-    pos = {x = 9, y = 4}, 
+    pos = {x = 8, y = 4}, 
     config = { 
       extra = {
         tear_chips = 5
@@ -3206,9 +3206,11 @@ SMODS.Joker{
     loc_txt = { 
         name = 'Page',
         text = {
-          "Jokers with the word",
-          "{C:attention}Joker{} in their name",
-          "each give {X:mult,C:white} X#1# {} Mult",
+          "Earn {C:money}$#1#{} when adding",
+          "a {C:attention}playing card{} to your",
+          "deck, this joker is destroyed",
+          "after adding {C:attention}8{} cards",
+          "{C:inactive}(Currently {C:attention}#2#{C:inactive}/8)"
         },
         
     },
@@ -3220,27 +3222,56 @@ SMODS.Joker{
     blueprint_compat = true, 
     eternal_compat = true, 
     perishable_compat = true, 
-    pos = {x = 9, y = 4}, 
+    pos = {x = 6, y = 5}, 
     config = { 
       extra = {
-        money = 1
+        money = 5,
+        pages = 0,
+        lines = {'Follows...', 'Always watches...', 'Don\'t look...', 'Can\'t run...', 'Leave me alone...', 'Help me...', 'NO NO NO NO NO NO'}
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.money}} 
+        return {vars = {center.ability.extra.money, center.ability.extra.pages}} 
     end,
     calculate = function(self, card, context)
         if context.playing_card_added and context.cards and context.cards[1] then
             if not context.blueprint then
-                card.ability.extra.money = card.ability.extra.money + #context.cards
+                card.ability.extra.pages = card.ability.extra.pages + #context.cards
             end
             
             return {
                 card = card,
-                extra = {focus = card, message = '...', colour = G.C.MONEY},
-                dollars = card.ability.extra.money
+                extra = {focus = card, message = (pseudorandom_element(card.ability.extra.lines, pseudoseed('slender')) or nil), colour = G.C.BLACK},
+                dollars = card.ability.extra.money * #context.cards
             }
             
+        end
+
+        if not context.blueprint then
+            if card.ability.extra.pages >= 8 then
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        play_sound('tarot1')
+                        card.T.r = -0.2
+                        card:juice_up(0.3, 0.4)
+                        card.states.drag.is = true
+                        card.children.center.pinch.x = true
+                        G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+                            func = function()
+                                G.jokers:remove_card(self)
+                                card:remove()
+                                card = nil
+                                return true
+                            end
+                        }))
+                        return true
+                    end
+                }))
+                return {
+                    message = '...',
+                    colour = G.C.BLACK
+                }
+            end
         end
     end,
 
