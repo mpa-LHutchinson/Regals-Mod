@@ -744,12 +744,12 @@ SMODS.Joker{
     loc_txt = { 
         name = 'Workout Routine',
         text = {
-          'Cycles between reps',
+          'Cycles between scoring',
           '1. {C:chips}+#1#{} Chips',
           '2. {C:mult}+#2#{} Mult',
           '3. {X:mult,C:white}X#3#{} Mult',
           'when round ends',
-          '{C:inactive}(Currently on rep {C:attention}#4#{}{C:inactive})'
+          '{C:inactive}(Currently {B:2,V:1}#5##6#{}{C:inactive} #7#){}'
         },
         
     },
@@ -767,7 +767,12 @@ SMODS.Joker{
         chips = 75,
         mult = 15,
         Xmult = 2,
-        cycle = 1
+        cycle = 1,
+        current_text = "Chips",
+        current_operator = "+",
+        current_number = 75,
+        current_colour = G.C.CHIPS,
+        current_background = G.C.WHITE
       }
     },
     loc_vars = function(self, info_queue, center)
@@ -777,7 +782,7 @@ SMODS.Joker{
 
         local cycle = center.ability.extra.cycle
 
-        return {vars = {chips, mult, xmult, cycle}}
+        return {vars = {chips, mult, xmult, cycle, center.ability.extra.current_operator, center.ability.extra.current_number, center.ability.extra.current_text,  colours = {center.ability.extra.current_colour, center.ability.extra.current_background}}}
     end,
     calculate = function(self,card,context)
         if context.joker_main then
@@ -807,10 +812,28 @@ SMODS.Joker{
         if context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
             if card.ability.extra.cycle == 1 then
                 card.ability.extra.cycle = 2
+                card.ability.extra.current_text = "Mult"
+                card.ability.extra.current_colour = G.C.MULT
+                card.ability.extra.current_operator = "+"
+                card.ability.extra.current_number = card.ability.extra.mult
+                card.ability.extra.current_background = G.C.WHITE
+
             elseif card.ability.extra.cycle == 2 then
                 card.ability.extra.cycle = 3
+                card.ability.extra.current_text = "Mult"
+                card.ability.extra.current_colour = G.C.WHITE
+                card.ability.extra.current_operator = "X"
+                card.ability.extra.current_number = card.ability.extra.Xmult
+                card.ability.extra.current_background = G.C.MULT
+
             elseif card.ability.extra.cycle == 3 then
                 card.ability.extra.cycle = 1
+                card.ability.extra.current_text = "Chips"
+                card.ability.extra.current_colour = G.C.CHIPS
+                card.ability.extra.current_operator = "+"
+                card.ability.extra.current_number = card.ability.extra.chips
+                card.ability.extra.current_background = G.C.WHITE
+
             end
             return {
                 message = 'Next Rep!',
