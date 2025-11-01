@@ -104,12 +104,12 @@ SMODS.Joker{
         text = {
           'Sell this card to',
           'create {C:attention}#1#{} free',
-          '{C:attention}Voucher Tags',
+          '{C:attention}Voucher Tag{}',
         },
     },
     atlas = 'Jokers',
     rarity = 2,
-    cost = 7,
+    cost = 6,
     unlocked = true,
     discovered = true, 
     blueprint_compat = true,
@@ -118,7 +118,7 @@ SMODS.Joker{
     pos = {x = 2, y = 0},
     config = { 
       extra = {
-        new_tags = 2
+        new_tags = 1
       }
     },
     loc_vars = function(self,info_queue,center)
@@ -835,7 +835,7 @@ SMODS.Joker{
     },
     atlas = 'Jokers', 
     rarity = 3, 
-    cost = 8, 
+    cost = 7, 
     unlocked = true,  
     discovered = true, 
     blueprint_compat = true, 
@@ -1934,7 +1934,7 @@ SMODS.Joker{
     pos = {x = 1, y = 3}, 
     config = { 
       extra = {
-        odds = 6
+        odds = 4
       }
     },
     loc_vars = function(self,info_queue,center)
@@ -2325,7 +2325,8 @@ SMODS.Joker{
           'After scoring {C:attention}#2#{} cards with',
           '{C:diamonds}Diamond{} suit {C:inactive}[#1#]{} this joker',
           'activates, and will prevent',
-          'death up to {C:attention}#3#{} times'
+          'death up to {C:attention}#3#{} times if chips scored',
+          'are at least {C:attention}20%{} of required chips',
         },
     },
     atlas = 'Jokers',
@@ -2342,7 +2343,8 @@ SMODS.Joker{
         diamonds = 0,
         required = 24,
         lives = 2,
-        active = false
+        active = false,
+        min_score = 20
       }
     },
     loc_vars = function(self,info_queue,center)
@@ -2366,7 +2368,7 @@ SMODS.Joker{
             } 
         end 
 
-        if context.end_of_round and not context.blueprint and context.game_over and card.ability.extra.diamonds >= card.ability.extra.required then
+        if context.end_of_round and not context.blueprint and context.game_over and card.ability.extra.diamonds >= card.ability.extra.required and G.GAME.chips/G.GAME.blind.chips >= 0.2 then
             card.ability.extra.lives = card.ability.extra.lives - 1
             if card.ability.extra.lives <= 0 then
                 G.E_MANAGER:add_event(Event({
@@ -2734,7 +2736,7 @@ SMODS.Joker{
         name = 'Fox',
         text = {
           'Adds {C:dark_edition}Polychrome{} edition',
-          'to all scored cards'
+          'to first scored card'
         },
         
     },
@@ -2761,16 +2763,17 @@ SMODS.Joker{
     end,
     calculate = function(self, card, context)
         if context.before and context.cardarea == G.jokers and not context.blueprint then
-            for k, v in ipairs(context.scoring_hand) do
-                v:set_edition('e_polychrome', true)
+            if context.scoring_hand[1] then
+                context.scoring_hand[1]:set_edition('e_polychrome', true)
 
                 G.E_MANAGER:add_event(Event({
                     func = function()
-                        v:juice_up()
+                        context.scoring_hand[1]:juice_up()
                         return true
                     end
                 }))
             end
+
             return {
                 message = 'Rainbow!', 
                 colour = G.C.SECONDARY_SET.Enhanced
@@ -2787,8 +2790,10 @@ SMODS.Joker{
     loc_txt = { 
         name = 'Regal',
         text = {
-          'All {C:attention}initial shop{}',
-          '{C:attention}purchases{} are free',
+          'When entering the',
+          '{C:attention}shop{}, {C:attention}#1#{} random',
+          '{C:attention}purchasables{}',
+          'become free'
         },
         
     },
@@ -2804,10 +2809,11 @@ SMODS.Joker{
     soul_pos = { x = 6, y = 4}, 
     config = { 
       extra = {
+        free_items = 2
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {}} 
+        return {vars = {center.ability.extra.free_items}} 
     end,
     add_to_deck = function(self, card, context)
         play_sound('rgl_heyguysitsmeregal', 1, 6)
@@ -2815,12 +2821,33 @@ SMODS.Joker{
     calculate = function(self, card, context)
         if context.starting_shop and not context.blueprint then
             G.E_MANAGER:add_event(Event({func = function()
+                local shop_items = {}
                 for k, v in pairs(G.I.CARD) do
-                    if v.set_cost then v.cost = 0 end
+                    if (v.area == G.shop_jokers or v.area == G.shop_booster or v.area == G.shop_vouchers) and v.set_cost then 
+                        shop_items[#shop_items + 1] = v
+                    end
                 end
-            return true end }))
-            G.GAME.current_round.free_rerolls = G.GAME.current_round.free_rerolls + 1
-            calculate_reroll_cost(true)
+
+                local selected_items = {}
+                for i = 1, math.min(card.ability.extra.free_items, #shop_items) do
+                    local item = pseudorandom_element(shop_items, pseudoseed('regal'))
+                    selected_items[#selected_items+1] = item
+
+                    for j = #shop_items, 1, -1 do
+                        if shop_items[j] == item then
+                            table.remove(shop_items, j)
+                            break
+                        end
+                    end
+                end
+
+                for k, v in pairs(selected_items) do
+                    if (v.area == G.shop_jokers or v.area == G.shop_booster or v.area == G.shop_vouchers) and v.set_cost then 
+                        v.cost = 0 
+                    end
+                end
+                return true 
+            end }))
             return {
                 message = 'Free!', 
                 colour = HEX("FFc0cb")
@@ -2833,8 +2860,6 @@ SMODS.Joker{
                 if v.set_cost then v:set_cost() end
             end
         return true end }))
-        G.GAME.current_round.free_rerolls = G.GAME.current_round.free_rerolls - 1
-        calculate_reroll_cost(true)
     end,
 
     in_pool = function(self,wawa,wawa2)
@@ -3089,6 +3114,11 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
+        for _, playing_card in pairs(G.playing_cards) do
+            if playing_card.seal == 'Blue' then
+                return true
+            end
+        end
         return false
     end,
 }
@@ -3198,7 +3228,7 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        return false
+        return true
     end,
 }
 SMODS.Joker{
@@ -3207,9 +3237,9 @@ SMODS.Joker{
         name = 'Page',
         text = {
           "Earn {C:money}$#1#{} when adding",
-          "a {C:attention}playing card{} to your",
-          "deck, this joker is destroyed",
-          "after adding {C:attention}8{} cards",
+          "a {C:attention}playing card{} to your deck,",
+          "this joker is destroyed after",
+          "adding {C:attention}8{} or more cards",
           "{C:inactive}(Currently {C:attention}#2#{C:inactive}/8)"
         },
         
@@ -3239,11 +3269,20 @@ SMODS.Joker{
                 card.ability.extra.pages = card.ability.extra.pages + #context.cards
             end
             
-            return {
-                card = card,
-                extra = {focus = card, message = (pseudorandom_element(card.ability.extra.lines, pseudoseed('slender')) or nil), colour = G.C.BLACK},
-                dollars = card.ability.extra.money * #context.cards
-            }
+            if card.ability.extra.pages < 8 then
+                return {
+                    card = card,
+                    extra = {focus = card, message = (pseudorandom_element(card.ability.extra.lines, pseudoseed('slender')) or nil), colour = G.C.BLACK},
+                    dollars = card.ability.extra.money * #context.cards
+                }
+            else 
+                return {
+                    card = card,
+                    extra = {focus = card},
+                    dollars = card.ability.extra.money * #context.cards
+                }
+            end 
+            
             
         end
 
@@ -3276,7 +3315,7 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        return false
+        return true
     end,
 }
 
@@ -3381,9 +3420,10 @@ SMODS.Back{
         name = 'Lucky Deck',      
         text = {
           "Doubles all {C:attention}listed",
-          "{C:green,E:1,S:1.1}probabilities{}, start",
-          "run with {C:attention}2{} copies",
-          "of {C:tarot}Magician{}"
+          "{C:green,E:1,S:1.1}probabilities{}, gain a",
+          "{C:tarot}Magician{} after defeating",
+          "each {C:attention}Boss Blind{}",
+          "{C:inactive}(Must have room)"
         } 
     }, 
     atlas = "Decks",
@@ -3391,7 +3431,7 @@ SMODS.Back{
     unlocked = true,
     discovered = true,
     pos = { x = 1, y = 0 },
-	config = {consumables = {'c_magician', 'c_magician'}},
+	config = {},
     loc_vars = function(self, info_queue, center)
         return {vars = {}}
     end,
@@ -3404,7 +3444,23 @@ SMODS.Back{
     end,
 
     calculate = function(self, back, context)
-    
+        if context.end_of_round and not context.individual and not context.repetition and G.GAME.blind.boss then
+            if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                G.E_MANAGER:add_event(Event({
+                    func = (function()
+                        G.E_MANAGER:add_event(Event({
+                            func = function() 
+                                local card = create_card('Tarot',G.consumeables, nil, nil, nil, nil, 'c_magician', 'magic')
+                                card:add_to_deck()
+                                G.consumeables:emplace(card)
+                                G.GAME.consumeable_buffer = 0
+                                return true
+                            end}))             
+                        return true
+                    end)}))
+            end
+        end
     end
 }
 SMODS.Back{
@@ -3441,10 +3497,10 @@ SMODS.Back{
     loc_txt = {      
         name = 'Hive Deck',      
         text = {
-          "Start run with",
-          "{C:attention}13{} cards of the",
-          "same {C:attention}Suit{}, {C:red}-1{}",
-          "hand size"
+          "Start run with {C:attention}26{} cards",
+          "of 2 random {C:attention}Suits{},",
+          "{C:red}-1{} hand size",
+          "and {C:red}-1{} discard"
         } 
     }, 
     atlas = "Decks",
@@ -3452,32 +3508,41 @@ SMODS.Back{
     unlocked = true,
     discovered = true,
     pos = { x = 3, y = 0 },
-	config = {},
+	config = {discards = -1},
     loc_vars = function(self, info_queue, center)
         return {vars = {}}
     end,
-	
-	
+
     apply = function(self, back)
         local suits = {'Spades', 'Hearts', 'Clubs', 'Diamonds'}
-        local chosen_suit = pseudorandom_element(suits)
+
+        local suit1 = pseudorandom_element(suits)
+        local remaining_suits = {}
+        for k, v in ipairs(suits) do
+            if v ~= suit1 then
+                table.insert(remaining_suits, v)
+            end
+        end
+        local suit2 = pseudorandom_element(remaining_suits)
+
         G.E_MANAGER:add_event(Event({
             func = function()
                 local cards_to_remove = {}
                 for k, v in pairs(G.playing_cards) do
-                    if v.base.suit ~= chosen_suit then
+                    if v.base.suit ~= suit1 and v.base.suit ~= suit2 then
                         table.insert(cards_to_remove, v)
                     end
                 end
-                for i = 1, #cards_to_remove do
-                    cards_to_remove[i]:remove()
+
+                for k, v in ipairs(cards_to_remove) do
+                    v:remove()
                 end
+
                 G.hand:change_size(-1)
                 G.GAME.starting_deck_size = #G.playing_cards
                 return true
             end
         }))
-        
     end,
 
 
@@ -3491,8 +3556,9 @@ SMODS.Back{
         name = 'Companion Deck',      
         text = {
           "Start run with",
-          "{C:tarot}Soul{}, {C:red}-1{} card",
-          "slots in the shop",
+          "{C:tarot}Soul{}, {C:red}-1{} card slots",
+          "in the shop and",
+          "rerolls cost {C:money}$2{} more"
         } 
     }, 
     atlas = "Decks",
@@ -3508,6 +3574,14 @@ SMODS.Back{
 	
     apply = function(self, back)
         change_shop_size(-1)
+        G.E_MANAGER:add_event(Event({
+            func = function()
+                G.GAME.round_resets.reroll_cost = G.GAME.round_resets.reroll_cost + 2
+                G.GAME.current_round.reroll_cost = G.GAME.current_round.reroll_cost + 2
+                return true
+            end
+        }))
+        
     end,
 
     calculate = function(self, back, context)
