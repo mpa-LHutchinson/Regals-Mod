@@ -2909,7 +2909,7 @@ SMODS.Joker{
     blueprint_compat = true, 
     eternal_compat = true, 
     perishable_compat = true, 
-    pos = {x = 8, y = 4}, 
+    pos = {x = 0, y = 5}, 
     config = { 
       extra = {
         odds = 2
@@ -2941,7 +2941,7 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        return false
+        return true
     end,
 }
 SMODS.Joker{
