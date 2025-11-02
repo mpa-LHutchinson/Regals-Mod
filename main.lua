@@ -3273,7 +3273,7 @@ SMODS.Joker{
     unlocked = true,  
     discovered = true, 
     blueprint_compat = true, 
-    eternal_compat = true, 
+    eternal_compat = false, 
     perishable_compat = true, 
     pos = {x = 6, y = 5}, 
     config = { 
