@@ -1381,7 +1381,7 @@ SMODS.Joker{
     pos = {x = 2, y = 2}, 
     config = { 
       extra = {
-        chip_mod = 60
+        chip_mod = 70
       }
     },
     loc_vars = function(self,info_queue,center)
@@ -3443,10 +3443,8 @@ SMODS.Back{
         name = 'Lucky Deck',      
         text = {
           "Doubles all {C:attention}listed",
-          "{C:green,E:1,S:1.1}probabilities{}, gain a",
-          "{C:tarot}Magician{} after defeating",
-          "each {C:attention}Boss Blind{}",
-          "{C:inactive}(Must have room)"
+          "{C:green,E:1,S:1.1}probabilities{}, start",
+          "run with {C:tarot}Magician{}"
         } 
     }, 
     atlas = "Decks",
@@ -3454,7 +3452,7 @@ SMODS.Back{
     unlocked = true,
     discovered = true,
     pos = { x = 1, y = 0 },
-	config = {},
+	config = {consumables = {'c_magician'}},
     loc_vars = function(self, info_queue, center)
         return {vars = {}}
     end,
@@ -3467,23 +3465,7 @@ SMODS.Back{
     end,
 
     calculate = function(self, back, context)
-        if context.end_of_round and not context.individual and not context.repetition and G.GAME.blind.boss then
-            if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-                G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
-                G.E_MANAGER:add_event(Event({
-                    func = (function()
-                        G.E_MANAGER:add_event(Event({
-                            func = function() 
-                                local card = create_card('Tarot',G.consumeables, nil, nil, nil, nil, 'c_magician', 'magic')
-                                card:add_to_deck()
-                                G.consumeables:emplace(card)
-                                G.GAME.consumeable_buffer = 0
-                                return true
-                            end}))             
-                        return true
-                    end)}))
-            end
-        end
+        
     end
 }
 SMODS.Back{
