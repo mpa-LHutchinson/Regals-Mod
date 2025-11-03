@@ -2832,7 +2832,7 @@ SMODS.Joker{
     soul_pos = { x = 6, y = 4}, 
     config = { 
       extra = {
-        free_items = 2
+        free_items = 3
       }
     },
     loc_vars = function(self,info_queue,center)
