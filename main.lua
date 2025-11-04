@@ -2992,7 +2992,7 @@ SMODS.Joker{
         
     end,
     in_pool = function(self,wawa,wawa2)
-        return false
+        return true
     end,
 }
 SMODS.Joker{
