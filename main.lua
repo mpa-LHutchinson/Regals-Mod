@@ -2963,7 +2963,7 @@ SMODS.Joker{
     blueprint_compat = true, 
     eternal_compat = true, 
     perishable_compat = true, 
-    pos = {x = 8, y = 4}, 
+    pos = {x = 1, y = 5}, 
     config = { 
       extra = {
         money = 6,
@@ -2981,7 +2981,7 @@ SMODS.Joker{
             return {
                 card = card,
                 dollars = card.ability.extra.money,
-                extra = {focus = card, message = "Treasure!", colour = G.C.MONEY}
+                extra = {focus = card, message = "Arrgh!", colour = G.C.MONEY}
             }
         end
 
@@ -3076,7 +3076,7 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        return false
+        return true
     end,
 }
 SMODS.Joker{
