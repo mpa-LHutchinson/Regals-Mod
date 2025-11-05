@@ -3168,7 +3168,7 @@ SMODS.Joker{
     pos = {x = 4, y = 5}, 
     config = { 
       extra = {
-        tear_chips = 5
+        tear_chips = 10
       }
     },
     loc_vars = function(self,info_queue,center)
