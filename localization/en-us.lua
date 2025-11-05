@@ -8,6 +8,7 @@ return {
                     "{C:attention}rank{}, {C:attention}enhancement{},",
                     "{C:attention}seal{}, and {C:attention}edition{}",
                     "from either discarded card",
+                    "{C:inactive}(if available){}"
                     
                 }
             }
