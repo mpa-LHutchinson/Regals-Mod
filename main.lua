@@ -3593,6 +3593,61 @@ SMODS.Back{
     
     end
 }
+SMODS.Back{
+	key = "paydaydeck",  
+    loc_txt = {      
+        name = 'Payday Deck',      
+        text = {
+          "Start run with",
+          "{C:attention}Reroll Surplus{} and {C:attention}Clearance Sale{},",
+          "Adds {C:attention}Rental{} to a random Joker",
+          "after defeating {c:attention}Boss Blind{}"
+        } 
+    }, 
+    atlas = "Decks",
+    order = 21,
+    unlocked = true,
+    discovered = true,
+    pos = { x = 4, y = 0 },
+	config = {vouchers = {'v_reroll_surplus', 'v_clearance_sale'}},
+    loc_vars = function(self, info_queue, center)
+        return {vars = {}}
+    end,
+	
+	
+    apply = function(self, back)
+
+    end,
+
+    calculate = function(self, card, context)
+        if context.context == 'eval' and G.GAME.last_blind and G.GAME.last_blind.boss then
+            local rentable_jokers = {}
+            if #G.jokers.cards > 0 then
+                for i = 1, #G.jokers.cards do
+                    if not G.jokers.cards[i].getting_sliced and not G.jokers.cards[i].ability.rental then
+                        rentable_jokers[#rentable_jokers + 1] = G.jokers.cards[i]
+                    end
+                end
+                local joker_to_rent = pseudorandom_element(rentable_jokers, pseudoseed('payday'))
+
+                if joker_to_rent then
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            joker_to_rent:juice_up(0.5, 0.5)
+                            joker_to_rent.ability.rental = true
+                            return {
+                                card_eval_status_text(joker_to_rent, 'extra', nil, nil, nil, {
+                                    message = "Rental!",
+                                    colour = G.C.MONEY
+                                }),
+                            }
+                        end
+                    }))
+                end
+            end
+        end
+    end
+}
 
 function reset_treasure_rank()
     G.GAME.current_round.treasure_rank.rank = 'Ace'
