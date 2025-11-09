@@ -3599,9 +3599,10 @@ SMODS.Back{
         name = 'Payday Deck',      
         text = {
           "Start run with",
-          "{C:attention}Reroll Surplus{} and {C:attention}Clearance Sale{},",
-          "Adds {C:attention}Rental{} to a random Joker",
-          "after defeating {c:attention}Boss Blind{}"
+          "{C:attention}Reroll Surplus{} and",
+          "{C:attention}Clearance Sale{}, adds",
+          "{C:attention}Rental{} to a random Joker",
+          "after defeating each {C:attention}Boss Blind{}"
         } 
     }, 
     atlas = "Decks",
