@@ -2975,7 +2975,7 @@ SMODS.Joker{
         return {vars = {center.ability.extra.money, center.ability.extra.revealed_rank, colours = {center.ability.extra.current_colour}}}
     end,
     calculate = function(self,card,context)
-        if context.individual and context.cardarea == G.play and context.other_card.base.value == G.GAME.current_round.treasure_rank.rank then
+        if context.individual and context.cardarea == G.play and context.other_card:get_id() == G.GAME.current_round.treasure_rank.id then
             card.ability.extra.revealed_rank = G.GAME.current_round.treasure_rank.rank
             card.ability.extra.current_colour = G.C.FILTER
             return {
