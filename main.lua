@@ -3598,7 +3598,7 @@ SMODS.Back{
     loc_txt = {      
         name = 'Payday Deck',      
         text = {
-          "Start run with",
+          "Start with extra {C:money}$5{},",
           "{C:attention}Reroll Surplus{} and",
           "{C:attention}Clearance Sale{}, adds",
           "{C:attention}Rental{} to a random Joker",
@@ -3610,7 +3610,7 @@ SMODS.Back{
     unlocked = true,
     discovered = true,
     pos = { x = 4, y = 0 },
-	config = {vouchers = {'v_reroll_surplus', 'v_clearance_sale'}},
+	config = {vouchers = {'v_reroll_surplus', 'v_clearance_sale'}, dollars = 5},
     loc_vars = function(self, info_queue, center)
         return {vars = {}}
     end,
