@@ -3609,7 +3609,7 @@ SMODS.Back{
     order = 21,
     unlocked = true,
     discovered = true,
-    pos = { x = 4, y = 0 },
+    pos = { x = 5, y = 0 },
 	config = {vouchers = {'v_reroll_surplus', 'v_clearance_sale'}, dollars = 5},
     loc_vars = function(self, info_queue, center)
         return {vars = {}}
