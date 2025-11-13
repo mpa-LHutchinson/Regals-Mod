@@ -405,8 +405,8 @@ SMODS.Joker{
     pos = {x = 7, y = 0}, 
     config = { 
       extra = {
-        chips_mod = 75,
-        mult_mod = 10
+        chips_mod = 90,
+        mult_mod = 12
       }
     },
     loc_vars = function(self,info_queue,center)
