@@ -2968,7 +2968,7 @@ SMODS.Joker{
     pos = {x = 1, y = 5}, 
     config = { 
       extra = {
-        money = 7,
+        money = 6,
         revealed_rank = "X",
         current_colour = G.C.RED
       }
