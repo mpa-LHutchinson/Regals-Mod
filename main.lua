@@ -3071,7 +3071,7 @@ SMODS.Joker{
 
                 return {
                     message = 'Hybridized!', 
-                    colour = G.C.BLUE
+                    colour = G.C.GREEN
                 }
             end
         end
