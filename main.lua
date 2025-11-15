@@ -3207,65 +3207,6 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'cityoftears 2', 
-    loc_txt = { 
-        name = 'City of Tears 2',
-        text = {
-          "If played hand has",
-          "a scoring {C:clubs}Club{} card,",
-          "every card held in hand",
-          "permanently gains {C:chips}+#1#{} Chips",
-        },
-        
-    },
-    atlas = 'Jokers', 
-    rarity = 2, 
-    cost = 5, 
-    unlocked = true,  
-    discovered = true, 
-    blueprint_compat = true, 
-    eternal_compat = true, 
-    perishable_compat = true, 
-    pos = {x = 7, y = 5}, 
-    config = { 
-      extra = {
-        tear_chips = 15
-      }
-    },
-    loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.tear_chips}} 
-    end,
-    calculate = function(self, card, context)
-        if context.before and context.cardarea == G.jokers then
-            local function hasClubs()
-                for k, v in ipairs(context.scoring_hand) do
-                    if v:is_suit("Clubs") then
-                        return true
-                    end
-                end
-                return false
-            end
-
-            if hasClubs() then
-                for k, v in ipairs(G.hand.cards) do
-                    v.ability.perma_bonus = v.ability.perma_bonus or 0
-                    v.ability.perma_bonus = v.ability.perma_bonus + card.ability.extra.tear_chips
-                end
-
-                return {
-                    card = card,
-                    message = 'Tears...',
-                    colour = G.C.BLUE
-                }
-            end
-        end
-    end,
-
-    in_pool = function(self,wawa,wawa2)
-        return true
-    end,
-}
-SMODS.Joker{
     key = 'jokle', 
     loc_txt = { 
         name = 'Jokle',
