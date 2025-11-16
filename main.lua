@@ -3212,7 +3212,7 @@ SMODS.Joker{
         name = 'Jokle',
         text = {
           "Jokers with the word",
-          "{C:attention}Joker{} in their name",
+          "{C:attention}\"Joker\"{} in their name",
           "each give {X:mult,C:white} X#1# {} Mult",
         },
         
