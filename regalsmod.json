@@ -3,13 +3,13 @@
 	"name": "RegalsMod",
 	"display_name": "Regals Mod",
 	"author": ["Pinktheone"],
-	"description": "A mod containing 45 brand new jokers and 5 new decks with custom artwork and vanilla balancing in mind. My first attempt at a mod for this game so hope it goes well!",
+	"description": "A mod containing 50+ brand new jokers and 6 new decks with custom artwork and vanilla balancing in mind. My first attempt at a mod for this game so hope it goes well!",
 	"prefix": "rgl",
 	"main_file": "main.lua",
 	"priority": 0,
 	"badge_colour": "FF66FF",
 	"badge_text_colour": "FFFFFF",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"dependencies": [
 		"Steamodded (>=1.0.0~BETA-0404a)" 
 	]
