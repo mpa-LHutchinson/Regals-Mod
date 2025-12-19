@@ -3343,15 +3343,14 @@ SMODS.Joker{
         return true
     end,
 }
-
 SMODS.Joker{
     key = 'rubystaff', 
     loc_txt = { 
         name = 'Ruby Staff',
         text = {
-          'Each scored {C:attention}3{}',
-          'will earn between',
-          '{C:money}$#1#{} and {C:money}$#2#{}'
+          'Cards with a {C:red}Red Seal{}',
+          'are retriggered {C:attention}#1#{}',
+          'additional time'
         },
         
     },
@@ -3363,25 +3362,85 @@ SMODS.Joker{
     blueprint_compat = true, 
     eternal_compat = true, 
     perishable_compat = true, 
-    pos = {x = 4, y = 2}, 
+    pos = {x = 7, y = 5}, 
     config = { 
       extra = {
         retriggers = 1
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.min_money, center.ability.extra.max_money}} 
+        info_queue[#info_queue+1] = {key = 'red_seal', set = 'Other'}
+        return {vars = {center.ability.extra.retriggers}} 
     end,
     calculate = function(self,card,context)
-        if context.individual and context.cardarea == G.play and context.other_card.seal == 'Red' then
+        if context.repetition and context.other_card.seal == 'Red' then
                 return {
                     card = card,
-                    repetitions = 1,
-                    message = 'Decay...', 
+                    repetitions = card.ability.extra.retriggers,
+                    message = 'Zap!', 
                     colour = G.C.RED
                 }
         end
     end,
+    in_pool = function(self,wawa,wawa2)
+        return true
+    end,
+}
+SMODS.Joker{
+    key = 'Peashooter', 
+    loc_txt = { 
+        name = 'Peashooter',
+        text = {
+          "Jokers to the right",
+          "of this joker",
+          "each give {C:chips}+#1#{} Chips",
+        },
+        
+    },
+    atlas = 'Jokers', 
+    rarity = 1, 
+    cost = 4, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
+    pos = {x = 8, y = 5}, 
+    config = { 
+      extra = {
+        chips = 15
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.chips}} 
+    end,
+    calculate = function(self, card, context)
+        if context.other_joker then 
+            local pea_pos = nil
+            for i = 1, #G.jokers.cards do
+                if G.jokers.cards[i] == card then pea_pos = i; break end
+            end
+            local other_pos = nil
+            for i = 1, #G.jokers.cards do
+                if G.jokers.cards[i] == context.other_joker then other_pos = i; break end
+            end
+            if other_pos > pea_pos then
+                
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        context.other_joker:juice_up(0.5, 0.5)
+                        return true
+                    end
+                })) 
+                return {
+                    chip_mod = card.ability.extra.chips,
+                    message = 'Pop!',
+                    colour = G.C.CHIPS
+                }
+            end
+        end
+    end,
+
     in_pool = function(self,wawa,wawa2)
         return true
     end,
