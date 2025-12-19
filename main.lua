@@ -3344,6 +3344,49 @@ SMODS.Joker{
     end,
 }
 
+SMODS.Joker{
+    key = 'rubystaff', 
+    loc_txt = { 
+        name = 'Ruby Staff',
+        text = {
+          'Each scored {C:attention}3{}',
+          'will earn between',
+          '{C:money}$#1#{} and {C:money}$#2#{}'
+        },
+        
+    },
+    atlas = 'Jokers', 
+    rarity = 2, 
+    cost = 6, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
+    pos = {x = 4, y = 2}, 
+    config = { 
+      extra = {
+        retriggers = 1
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.min_money, center.ability.extra.max_money}} 
+    end,
+    calculate = function(self,card,context)
+        if context.individual and context.cardarea == G.play and context.other_card.seal == 'Red' then
+                return {
+                    card = card,
+                    repetitions = 1,
+                    message = 'Decay...', 
+                    colour = G.C.RED
+                }
+        end
+    end,
+    in_pool = function(self,wawa,wawa2)
+        return true
+    end,
+}
+
 --[[SMODS.Joker{
     key = 'burntothegroundguy', 
     loc_txt = { 
