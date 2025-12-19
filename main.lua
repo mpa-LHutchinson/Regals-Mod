@@ -3383,7 +3383,12 @@ SMODS.Joker{
         end
     end,
     in_pool = function(self,wawa,wawa2)
-        return true
+        for _, playing_card in pairs(G.playing_cards) do
+            if playing_card.seal == 'Red' then
+                return true
+            end
+        end
+        return false
     end,
 }
 SMODS.Joker{
@@ -3445,7 +3450,96 @@ SMODS.Joker{
         return true
     end,
 }
+SMODS.Joker{
+    key = 'springlocksuit', 
+    loc_txt = { 
+        name = 'Springlock Suit',
+        text = {
+          "All scored {C:attention}face{} cards",
+          "become {C:attention}Steel{} cards,",
+          "{C:green}#1# in #2#{} chance for",
+          "scored face cards to be destroyed",
+          "after hand is played"
+        },
+        
+    },
+    atlas = 'Jokers', 
+    rarity = 2, 
+    cost = 7, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = false, 
+    eternal_compat = true, 
+    perishable_compat = true, 
+    pos = {x = 8, y = 4}, 
+    config = { 
+      extra = {
+        odds = 4
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        info_queue[#info_queue+1] = G.P_CENTERS.m_steel
+        return {vars = {G.GAME.probabilities.normal, center.ability.extra.odds}} 
+    end,
+    calculate = function(self, card, context)
+        if context.before and context.cardarea == G.jokers and not context.blueprint then
+            local faces = 0
+            for k, v in ipairs(context.scoring_hand) do
+                if v:is_face() then
+                    faces = faces + 1
+                    v:set_ability(G.P_CENTERS.m_steel, nil, true)
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            v:juice_up()
+                            return true
+                        end
+                    }))
+                    G.GAME.blind:debuff_card(v)
+                end
+                
+            end
 
+            if faces > 0 then 
+                return {
+                    message = '...',
+                    colour = G.C.PURPLE,
+                    card = self
+                }
+            end
+            
+        end
+
+        if context.after and context.scoring_hand and not context.blueprint then
+            for k, v in ipairs(context.scoring_hand) do
+                if v:is_face() and pseudorandom('fnaf') < G.GAME.probabilities.normal / card.ability.extra.odds then
+                    G.E_MANAGER:add_event(Event({
+                        trigger = 'before',
+                        delay = 0.4,
+                        func = function()
+                            play_sound('tarot1')
+                                local card = v
+                                if card and not card.removed then
+                                    SMODS.destroy_cards(card)
+                                    if card.ability.name == 'Glass Card' then 
+                                        card:shatter()
+                                    else
+                                        card:start_dissolve()
+                                    end
+                                end
+                            
+                            return true
+                        end
+                    }))
+                end
+                
+            end
+        end
+    end,
+
+    in_pool = function(self,wawa,wawa2)
+        return true
+    end,
+}
 --[[SMODS.Joker{
     key = 'burntothegroundguy', 
     loc_txt = { 
