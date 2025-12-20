@@ -3509,12 +3509,46 @@ SMODS.Joker{
             
         end
 
+        -- if context.after and context.scoring_hand and not context.blueprint then
+        --     local destroyed_cards = {}
+        --     for k, v in ipairs(context.scoring_hand) do
+        --         if v:is_face() and pseudorandom('fnaf') < G.GAME.probabilities.normal / card.ability.extra.odds then
+        --             destroyed_cards[#destroyed_cards+1] = v
+        --         end
+                
+        --     end
+        --     G.E_MANAGER:add_event(Event({
+        --         trigger = 'before',
+        --         delay = 0.4,
+        --         func = function() 
+        --             for i=#destroyed_cards, 1, -1 do
+        --                 local card = destroyed_cards[i]
+        --                 if not card.removed then
+        --                     SMODS.destroy_cards(card)
+        --                     if card.ability.name == 'Glass Card' then 
+        --                         card:shatter()
+        --                     else
+        --                         card:start_dissolve({HEX('ffdfaa')}, nil, 3)
+        --                     end
+        --                 end
+                        
+        --             end
+        --     return true end }))
+        -- end
+
+        -- if context.destroy_card and not context.blueprint and context.cardarea == G.play then
+        --     if context.other_card:is_face() and pseudorandom('fnaf') < G.GAME.probabilities.normal / card.ability.extra.odds then
+        --         return { remove = true }
+        --     end
+        -- end
+
         if not context.blueprint and context.after and context.main_eval then
             local destroyed_cards = {}
 
             for _, v in ipairs(G.play.cards) do
-                if v:is_face() and pseudorandom('fnaf') < G.GAME.probabilities.normal / card.ability.extra.odds then
+                if v:is_face() and pseudorandom('fnaf') < G.GAME.probabilities.normal / card.ability.extra.odds and not v.shattered and not v.removed then
                     destroyed_cards[#destroyed_cards+1] = v
+                    v.removed = true
                 end
             end
 
