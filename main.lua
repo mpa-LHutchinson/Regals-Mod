@@ -3509,29 +3509,22 @@ SMODS.Joker{
             
         end
 
-        if context.after and context.scoring_hand and not context.blueprint then
-            for k, v in ipairs(context.scoring_hand) do
+        if not context.blueprint and context.after and context.main_eval then
+            local destroyed_cards = {}
+
+            for _, v in ipairs(G.play.cards) do
                 if v:is_face() and pseudorandom('fnaf') < G.GAME.probabilities.normal / card.ability.extra.odds then
-                    G.E_MANAGER:add_event(Event({
-                        trigger = 'before',
-                        delay = 0.4,
-                        func = function()
-                            play_sound('tarot1')
-                                local card = v
-                                if card and not card.removed then
-                                    SMODS.destroy_cards(card)
-                                    if card.ability.name == 'Glass Card' then 
-                                        card:shatter()
-                                    else
-                                        card:start_dissolve()
-                                    end
-                                end
-                            
-                            return true
-                        end
-                    }))
+                    destroyed_cards[#destroyed_cards+1] = v
                 end
-                
+            end
+
+            if #destroyed_cards > 0 then
+                SMODS.destroy_cards(destroyed_cards)
+
+                return {
+                    message = "Hahaha...",
+                    colour = G.C.MULT
+                }
             end
         end
     end,
