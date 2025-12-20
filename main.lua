@@ -2121,7 +2121,7 @@ SMODS.Joker{
           '{X:mult,C:white}X#1#{} Mult if played hand',
           'contains a {C:attention}Full House{}, then',
           'lose {C:money}$#2#{} and add {C:money}$#2#{} to the',
-          '{C:attention}Sell{} {C:attention}Value{} of this card'
+          '{C:attention}sell value{} of this card'
         },
         
     },
@@ -3565,6 +3565,120 @@ SMODS.Joker{
 
     in_pool = function(self,wawa,wawa2)
         return true
+    end,
+}
+SMODS.Joker{
+    key = 'bigbrother', 
+    loc_txt = { 
+        name = 'Big Brother',
+        text = {
+          "Earn {C:money}$#1#{} if played",
+          "hand contains an",
+          "{C:attention}Ace{}, {C:attention}9{}, {C:attention}8{}, or {C:attention}4{},",
+          "otherwise lose {C:money}$#2#{}",
+        },
+        
+    },
+    atlas = 'Jokers', 
+    rarity = 1, 
+    cost = 5, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
+    pos = {x = 8, y = 4}, 
+    config = { 
+      extra = {
+        money_gain = 2,
+        money_loss = 1
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.money_gain, center.ability.extra.money_loss}} 
+    end,
+    calculate = function(self, card, context)
+        if context.before and context.cardarea == G.jokers then
+            local function has1984()
+                for k, v in ipairs(context.scoring_hand) do
+                    if v:get_id() == 14 or v:get_id() == 9 or v:get_id() == 8 or v:get_id() == 4  then
+                        return true
+                    end
+                end
+                return false
+            end
+
+            if has1984() then
+                ease_dollars(card.ability.extra.money_gain)
+
+                return {
+                    card = card,
+                    message = 'Approved!',
+                    colour = G.C.MONEY
+                }
+            else
+                ease_dollars(-1 * card.ability.extra.money_loss)
+
+                return {
+                    card = card,
+                    message = 'Execution scheduled!',
+                    colour = G.C.RED
+                }
+            end
+        end
+    end,
+
+    in_pool = function(self,wawa,wawa2)
+        return true
+    end,
+}
+SMODS.Joker{
+    key = 'amberstaff', 
+    loc_txt = { 
+        name = 'Amber Staff',
+        text = {
+          "Gains {C:money}$#1#{} of",
+          "{C:attention}sell value{} when a",
+          "{C:gold}Gold Seal{} is scored",
+        },
+        
+    },
+    atlas = 'Jokers', 
+    rarity = 2, 
+    cost = 6, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = true, 
+    eternal_compat = true, 
+    perishable_compat = true, 
+    pos = {x = 9, y = 5}, 
+    config = { 
+      extra = {
+        money = 4
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        info_queue[#info_queue+1] = {key = 'gold_seal', set = 'Other'}
+        return {vars = {center.ability.extra.money}} 
+    end,
+    calculate = function(self,card,context)
+        if context.individual and context.cardarea == G.play and context.other_card.seal == 'Gold' then
+                return {
+                    func = function()
+                        card.ability.extra_value = card.ability.extra_value + card.ability.extra.money
+                        card:set_cost()
+                    end,
+                    extra = {focus = card, message = "Ta-Da!", colour = G.C.MONEY}
+                }
+        end
+    end,
+    in_pool = function(self,wawa,wawa2)
+        for _, playing_card in pairs(G.playing_cards) do
+            if playing_card.seal == 'Gold' then
+                return true
+            end
+        end
+        return false
     end,
 }
 --[[SMODS.Joker{
