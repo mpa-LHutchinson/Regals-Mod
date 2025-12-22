@@ -3802,6 +3802,61 @@ SMODS.Joker{
         return true
     end,
 }
+SMODS.Joker{
+    key = 'yak', 
+    loc_txt = { 
+        name = 'Yak',
+        text = {
+          "Up to {C:attention}#1#{} more card(s)",
+          "can be selected to play",
+          "or discard, limit increases",
+          "after defeating {C:attention}Boss Blind{}"
+        },
+        
+    },
+    atlas = 'Jokers', 
+    rarity = 4, 
+    cost = 20, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = false, 
+    eternal_compat = true, 
+    perishable_compat = true, 
+    pos = {x = 8, y = 4}, 
+    config = { 
+      extra = {
+        selection_limit = 1
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.selection_limit}} 
+    end,
+    calculate = function(self,card,context)
+        if context.end_of_round and G.GAME.blind.boss and not context.individual and not context.repetition and not context.blueprint then
+            card.ability.extra.selection_limit = card.ability.extra.selection_limit + 1
+            SMODS.change_play_limit(1)
+		    SMODS.change_discard_limit(1)
+            return {
+                card = card,
+                message = 'Munched!',
+                colour = HEX("F7D37E")
+            }
+        end
+    end,
+
+    add_to_deck = function(self, card, from_debuff)
+        SMODS.change_play_limit(card.ability.extra.selection_limit)
+		SMODS.change_discard_limit(card.ability.extra.selection_limit)
+    end,
+
+    remove_from_deck = function(self, card, from_debuff)
+        SMODS.change_play_limit(-card.ability.extra.selection_limit)
+		SMODS.change_discard_limit(-card.ability.extra.selection_limit)
+    end,
+    in_pool = function(self,wawa,wawa2)
+        return true
+    end,
+}
 --[[SMODS.Joker{
     key = 'burntothegroundguy', 
     loc_txt = { 
