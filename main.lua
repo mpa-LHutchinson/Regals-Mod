@@ -3681,6 +3681,65 @@ SMODS.Joker{
         return false
     end,
 }
+SMODS.Joker{
+    key = 'invitation',
+    loc_txt = {
+        name = 'Invitation',
+        text = {
+            'Sell this card after',
+            'defeating {C:attention}Boss Blind{}',
+            'to create a random',
+            '{C:dark_edition}Negative{} Joker',
+            '{C:inactive}(#2#){}'
+        },
+        
+    },
+    atlas = 'Jokers',
+    rarity = 3,
+    cost = 9,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = false,
+    eternal_compat = false,
+    perishable_compat = true,
+    pos = {x = 3, y = 2},
+    config = {
+        extra = {
+            active = false,
+            activeText = 'inactive'
+        }
+    },
+    loc_vars = function(self, info_queue, center)
+        info_queue[#info_queue+1] = G.P_CENTERS.e_negative
+        return { vars = { center.ability.extra.active, center.ability.extra.activeText} }
+    end,
+    calculate = function(self, card, context)
+
+        if context.end_of_round and G.GAME.blind.boss and not context.individual and not context.repetition and not context.blueprint then
+            card.ability.extra.active = true
+            card.ability.extra.activeText = 'active!'
+            local eval = function(card) return (card.ability.extra.active == true) end
+            juice_card_until(card, eval, true)
+            return {
+                card = card,
+                message = 'Active',
+                colour = G.C.MONEY,
+            }
+        end
+
+        if context.selling_self and card.ability.extra.active and not context.blueprint then
+            G.E_MANAGER:add_event(Event {
+                func = function()
+                    SMODS.add_card {set = 'Joker', edition = 'e_negative'}
+                    return true
+                end
+            })
+        end
+    end,
+    in_pool = function(self, wawa, wawa2)
+        return true
+    end,
+}
 --[[SMODS.Joker{
     key = 'burntothegroundguy', 
     loc_txt = { 
