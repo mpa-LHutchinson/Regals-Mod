@@ -3702,7 +3702,7 @@ SMODS.Joker{
     blueprint_compat = false,
     eternal_compat = false,
     perishable_compat = true,
-    pos = {x = 3, y = 2},
+    pos = {x = 8, y = 4},
     config = {
         extra = {
             active = false,
@@ -3734,9 +3734,71 @@ SMODS.Joker{
                     return true
                 end
             })
+            return {
+                card = card,
+                message = 'Invited!',
+                colour = G.C.MONEY,
+            }
         end
     end,
     in_pool = function(self, wawa, wawa2)
+        return true
+    end,
+}
+SMODS.Joker{
+    key = 'portalgun', 
+    loc_txt = { 
+        name = 'Portal Gun',
+        text = {
+          'If played hand contains',
+          'a {C:attention}Straight{}, add {C:dark_edition}Foil{}',
+          'edition to the first scored',
+          'card and {C:dark_edition}Holographic{} edition',
+          'to the last scored card'
+        },
+        
+    },
+    atlas = 'Jokers', 
+    rarity = 2, 
+    cost = 6, 
+    unlocked = true,  
+    discovered = true, 
+    blueprint_compat = false, 
+    eternal_compat = true, 
+    perishable_compat = true, 
+    pos = {x = 8, y = 4}, 
+    config = { 
+      extra = {
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        info_queue[#info_queue+1] = G.P_CENTERS.e_foil
+        info_queue[#info_queue+1] = G.P_CENTERS.e_holo
+        return {vars = {}} 
+    end,
+    calculate = function(self,card,context)
+        if context.before and context.poker_hands and next(context.poker_hands["Straight"]) and not context.blueprint then
+            if context.scoring_hand[1] and context.scoring_hand[#context.scoring_hand]  then
+                context.scoring_hand[1]:set_edition('e_foil', true)
+                context.scoring_hand[#context.scoring_hand]:set_edition('e_holo', true)
+
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        context.scoring_hand[1]:juice_up()
+                        context.scoring_hand[#context.scoring_hand]:juice_up()
+                        return true
+                    end
+                }))
+            end
+
+            return {
+                message = 'Portaled!', 
+                colour = G.C.DARK_EDITION
+            }
+        end
+        
+    end,
+    in_pool = function(self,wawa,wawa2)
         return true
     end,
 }
