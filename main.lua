@@ -4164,6 +4164,60 @@ SMODS.Back{
         end
     end
 }
+SMODS.Back{
+	key = "geologistdeck",  
+    loc_txt = {      
+        name = 'Geologist Deck',      
+        text = {
+          "Start run with",
+          "4 {C:attention}Stone Cards{} in",
+          "the deck, each with",
+          "a unique {C:attention}seal{}",
+        } 
+    }, 
+    atlas = "Decks",
+    order = 22,
+    unlocked = true,
+    discovered = true,
+    pos = { x = 6, y = 0 },
+	config = {},
+    loc_vars = function(self, info_queue, center)
+        return {vars = {}}
+    end,
+
+    apply = function(self, back)
+        
+        G.E_MANAGER:add_event(Event({
+            func = function()
+                local startingCards = {}
+                local cardsToStone = {}
+                local seals = {'Red', 'Blue', 'Purple', 'Gold'}
+                for k, v in pairs(G.playing_cards) do
+                    table.insert(startingCards, v)
+                end
+
+                for i=1, #seals do
+                    local index = pseudorandom('geol'..i, 1, #startingCards)
+                    local card = startingCards[index]
+
+                    table.remove(startingCards, index)
+                    table.insert(cardsToStone, card)
+                end
+
+                for i=1, #cardsToStone do
+                    cardsToStone[i]:set_ability(G.P_CENTERS.m_stone, nil, true)
+                    cardsToStone[i]:set_seal(seals[i], true)
+                end
+                return true
+            end
+        }))
+    end,
+
+
+    calculate = function(self, back, context)
+    
+    end
+}
 
 function reset_treasure_rank()
     G.GAME.current_round.treasure_rank.rank = 'Ace'
