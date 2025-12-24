@@ -4254,7 +4254,8 @@ SMODS.Back{
 
     calculate = function(self, back, context)
         if context.before then
-            local roll = pseudorandom('d20d'..G.GAME.round_resets.ante, 1, 20)
+            -- local roll = pseudorandom('d20d'..G.GAME.round_resets.ante, 1, 20)
+            local roll = 19
             self.config.extra.last_roll_number = roll
 
             if roll == 1 then
@@ -4384,8 +4385,8 @@ SMODS.Back{
                 self.config.extra.retrigger_all = true
 
             elseif roll == 19 then
-                self.config.extra.last_roll_text = 'Money doubled'
-                ease_dollars(G.GAME.dollars)
+                self.config.extra.last_roll_text = 'Money doubled, max $30'
+                ease_dollars(math.max(0,math.min(G.GAME.dollars, 30)))
 
             elseif roll == 20 then
                 self.config.extra.last_roll_text = 'Negative tag created'
