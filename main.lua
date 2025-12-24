@@ -4218,46 +4218,110 @@ SMODS.Back{
     
     end
 }
--- SMODS.Back{
--- 	key = "d20deck",  
---     loc_txt = {      
---         name = 'D20 Deck',      
---         text = {
---           "When hand is played, a number",
---           "between {C:attention}1{} and {C:attention}20{} is rolled",
---           "and a {C:attention}random event{} occurs",
---           "{C:inactive}last roll: #1#{}",
---           "{C:inactive}last event: #2#{}",
---         } 
---     }, 
---     atlas = "Decks",
---     order = 23,
---     unlocked = true,
---     discovered = true,
---     pos = { x = 0, y = 1 },
--- 	config = {
---         extra = {
---             last_roll_number = 0,
---             last_roll_text = 'None'
---         }
---     },
---     loc_vars = function(self, info_queue, center)
---         return {vars = {center.ability.extra.last_roll_number, center.ability.extra.last_roll_text}}
---     end,
+SMODS.Back{
+	key = "d20deck",  
+    loc_txt = {      
+        name = 'D20 Deck',      
+        text = {
+          "When hand is played, a number",
+          "between {C:attention}1{} and {C:attention}20{} is rolled",
+          "and a {C:attention}random event{} occurs",
+          "(last roll:{C:green} #1#{}, last event:",
+          "{C:attention}#2#{})",
+        } 
+    }, 
+    atlas = "Decks",
+    order = 23,
+    unlocked = true,
+    discovered = true,
+    pos = { x = 0, y = 1 },
+	config = {
+        extra = {
+            last_roll_number = 0,
+            last_roll_text = 'None'
+        }
+    },
+    loc_vars = function(self, info_queue, center)
+        return {vars = {self.config.extra.last_roll_number, self.config.extra.last_roll_text}}
+    end,
 
---     apply = function(self, back)
+    apply = function(self, back)
         
---     end,
+    end,
 
---     calculate = function(self, back, context)
---         if context.before then
---             return {
---                 message = 'Rainbow!', 
---                 colour = G.C.SECONDARY_SET.Enhanced
---             }
---         end
---     end
--- }
+    calculate = function(self, back, context)
+        if context.before then
+            -- local roll = pseudorandom('d20d'..G.GAME.round_resets.ante, 1, 20)
+            local roll = 8
+            self.config.extra.last_roll_number = roll
+
+            if roll == 1 then
+                self.config.extra.last_roll_text = 'Set money to $1'
+                ease_dollars(-G.GAME.dollars + 1)
+
+            elseif roll == 2 then
+                self.config.extra.last_roll_text = 'Base score halved'
+                G.GAME.hands[context.scoring_name].chips = math.floor(G.GAME.hands[context.scoring_name].chips / 2)
+
+            elseif roll == 5 then
+                self.config.extra.last_roll_text = 'Poker hand deleveled'
+                if G.GAME.hands[context.scoring_name].level > 1 then
+                    level_up_hand(back, context.scoring_name, nil, -1)
+                end
+
+            elseif roll == 8 then
+                self.config.extra.last_roll_text = '+1 planet card'
+                if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                    SMODS.add_card {set = 'Planet'}
+                end
+
+            elseif roll == 10 then
+                self.config.extra.last_roll_text = 'Earn $10'
+                ease_dollars(10)
+
+            elseif roll == 11 then
+                self.config.extra.last_roll_text = '+1 random joker'
+                if #G.jokers.cards + G.GAME.joker_buffer < G.jokers.config.card_limit then
+                    SMODS.add_card {set = 'Joker'}
+                end
+
+            elseif roll == 12 then
+                self.config.extra.last_roll_text = '+1 discard'
+                ease_discard(1)
+
+            elseif roll == 13 then
+                self.config.extra.last_roll_text = '+1 tarot card'
+                if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                    SMODS.add_card {set = 'Tarot'}
+                end
+
+            elseif roll == 15 then
+                self.config.extra.last_roll_text = 'Poker hand leveled up'
+                level_up_hand(back, context.scoring_name, nil, 1)
+
+            elseif roll == 16 then
+                self.config.extra.last_roll_text = '+1 spectral card'
+                if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                    SMODS.add_card {set = 'Spectral'}
+                end
+
+            elseif roll == 17 then
+                self.config.extra.last_roll_text = '+1 hand'
+                ease_hands_played(1)
+
+            elseif roll == 19 then
+                self.config.extra.last_roll_text = 'Money doubled'
+                ease_dollars(G.GAME.dollars)
+
+            end
+
+            return {
+                message = tostring(roll), 
+                colour = G.C.GREEN
+            }
+        end
+    end
+}
 function reset_treasure_rank()
     G.GAME.current_round.treasure_rank.rank = 'Ace'
     local valid_treasure_cards = {}
