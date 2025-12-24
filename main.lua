@@ -4240,6 +4240,7 @@ SMODS.Back{
             last_roll_number = 0,
             last_roll_text = 'None',
             flinted = false,
+            debuffed_joker = nil,
             retrigger_all = false,
         }
     },
@@ -4254,7 +4255,7 @@ SMODS.Back{
     calculate = function(self, back, context)
         if context.before then
             -- local roll = pseudorandom('d20d'..G.GAME.round_resets.ante, 1, 20)
-            local roll = 3
+            local roll = 4
             self.config.extra.last_roll_number = roll
 
             if roll == 1 then
@@ -4270,13 +4271,48 @@ SMODS.Back{
                 for k, v in ipairs(context.scoring_hand) do
                     v:set_debuff(true)
                 end
-                
 
+            elseif roll == 4 then
+                self.config.extra.last_roll_text = 'Debuff random joker'
+
+                local jokers = {}
+                for i = 1, #G.jokers.cards do
+                    if not G.jokers.cards[i].debuff or #G.jokers.cards < 2 then jokers[#jokers+1] =G.jokers.cards[i] end
+                    G.jokers.cards[i]:set_debuff(false)
+                end 
+                local _card = pseudorandom_element(jokers, pseudoseed('crimson_heart'))
+                if _card then
+                    self.config.extra.debuffed_joker = _card
+                    _card:set_debuff(true)
+                    _card:juice_up()
+                end
+                
             elseif roll == 5 then
                 self.config.extra.last_roll_text = 'Poker hand deleveled'
                 if G.GAME.hands[context.scoring_name].level > 1 then
                     level_up_hand(back, context.scoring_name, nil, -1)
                 end
+
+            elseif roll == 6 then
+                self.config.extra.last_roll_text = 'Randomize played cards'
+
+                for k, v in ipairs(context.scoring_hand) do
+                    
+                    SMODS.change_base(v, pseudorandom_element(SMODS.Suits, pseudoseed('d20d')).key, pseudorandom_element(SMODS.Ranks, pseudoseed('d20d')).key)
+
+                    if G.GAME.blind.boss then
+                        v.ability.played_this_ante = false;
+                    end
+
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            v:juice_up()
+                            return true
+                        end
+                    }))
+                    G.GAME.blind:debuff_card(v)
+                
+            end
 
             elseif roll == 7 then
                 self.config.extra.last_roll_text = 'Nothing...'
@@ -4285,6 +4321,16 @@ SMODS.Back{
                 self.config.extra.last_roll_text = '+1 planet card'
                 if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
                     SMODS.add_card {set = 'Planet'}
+                end
+
+            elseif roll == 9 then
+                self.config.extra.last_roll_text = 'Destroy a card'
+                local destroyed_cards = {}
+                destroyed_cards[#destroyed_cards+1] = pseudorandom_element(G.hand.cards, pseudoseed('random_destroy'))
+
+                if #destroyed_cards > 0 then
+                    destroyed_cards[1].removed = true
+                    SMODS.destroy_cards(destroyed_cards)
                 end
 
             elseif roll == 10 then
@@ -4307,12 +4353,22 @@ SMODS.Back{
                     SMODS.add_card {set = 'Tarot'}
                 end
 
-            
-                
-
-            elseif roll == 15 then
+            elseif roll == 14 then
                 self.config.extra.last_roll_text = 'Poker hand leveled up'
                 level_up_hand(back, context.scoring_name, nil, 1)
+
+            elseif roll == 15 then
+                self.config.extra.last_roll_text = '+1 fancy card'
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        local new_card = create_playing_card({front = pseudorandom_element(G.P_CARDS, pseudoseed('cert_fr')), 
+                            center = pseudorandom_element(G.P_CENTER_POOLS["Enhanced"], pseudoseed('d20d'))}, G.hand, nil, nil, {G.C.SECONDARY_SET.Enhanced})
+                        new_card:set_seal(SMODS.poll_seal({guaranteed = true}), true)
+                        new_card:set_edition(poll_edition('d20d', nil, true, true), true, true)
+                        playing_card_joker_effects({true})
+                        return true
+                    end
+                }))
 
             elseif roll == 16 then
                 self.config.extra.last_roll_text = '+1 spectral card'
@@ -4360,6 +4416,19 @@ SMODS.Back{
         elseif context.after then
             self.config.extra.flinted = false
             self.config.extra.retrigger_all = false
+
+            G.E_MANAGER:add_event(Event({
+                func = function()
+                    if self.config.extra.debuffed_joker then
+                        self.config.extra.debuffed_joker:set_debuff(false)
+                        self.config.extra.debuffed_joker:juice_up()
+                        self.config.extra.debuffed_joker = nil
+                    end
+                    return true
+                end
+            }))
+
+            
 
         end
 
