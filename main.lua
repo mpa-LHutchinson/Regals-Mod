@@ -4218,7 +4218,46 @@ SMODS.Back{
     
     end
 }
+-- SMODS.Back{
+-- 	key = "d20deck",  
+--     loc_txt = {      
+--         name = 'D20 Deck',      
+--         text = {
+--           "When hand is played, a number",
+--           "between {C:attention}1{} and {C:attention}20{} is rolled",
+--           "and a {C:attention}random event{} occurs",
+--           "{C:inactive}last roll: #1#{}",
+--           "{C:inactive}last event: #2#{}",
+--         } 
+--     }, 
+--     atlas = "Decks",
+--     order = 23,
+--     unlocked = true,
+--     discovered = true,
+--     pos = { x = 0, y = 1 },
+-- 	config = {
+--         extra = {
+--             last_roll_number = 0,
+--             last_roll_text = 'None'
+--         }
+--     },
+--     loc_vars = function(self, info_queue, center)
+--         return {vars = {center.ability.extra.last_roll_number, center.ability.extra.last_roll_text}}
+--     end,
 
+--     apply = function(self, back)
+        
+--     end,
+
+--     calculate = function(self, back, context)
+--         if context.before then
+--             return {
+--                 message = 'Rainbow!', 
+--                 colour = G.C.SECONDARY_SET.Enhanced
+--             }
+--         end
+--     end
+-- }
 function reset_treasure_rank()
     G.GAME.current_round.treasure_rank.rank = 'Ace'
     local valid_treasure_cards = {}
