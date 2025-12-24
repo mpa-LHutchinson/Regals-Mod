@@ -4238,7 +4238,9 @@ SMODS.Back{
 	config = {
         extra = {
             last_roll_number = 0,
-            last_roll_text = 'None'
+            last_roll_text = 'None',
+            flinted = false,
+            retrigger_all = false,
         }
     },
     loc_vars = function(self, info_queue, center)
@@ -4252,7 +4254,7 @@ SMODS.Back{
     calculate = function(self, back, context)
         if context.before then
             -- local roll = pseudorandom('d20d'..G.GAME.round_resets.ante, 1, 20)
-            local roll = 8
+            local roll = 3
             self.config.extra.last_roll_number = roll
 
             if roll == 1 then
@@ -4261,13 +4263,23 @@ SMODS.Back{
 
             elseif roll == 2 then
                 self.config.extra.last_roll_text = 'Base score halved'
-                G.GAME.hands[context.scoring_name].chips = math.floor(G.GAME.hands[context.scoring_name].chips / 2)
+                self.config.extra.flinted = true
+
+            elseif roll == 3 then
+                self.config.extra.last_roll_text = 'Debuff played cards'
+                for k, v in ipairs(context.scoring_hand) do
+                    v:set_debuff(true)
+                end
+                
 
             elseif roll == 5 then
                 self.config.extra.last_roll_text = 'Poker hand deleveled'
                 if G.GAME.hands[context.scoring_name].level > 1 then
                     level_up_hand(back, context.scoring_name, nil, -1)
                 end
+
+            elseif roll == 7 then
+                self.config.extra.last_roll_text = 'Nothing...'
 
             elseif roll == 8 then
                 self.config.extra.last_roll_text = '+1 planet card'
@@ -4295,6 +4307,9 @@ SMODS.Back{
                     SMODS.add_card {set = 'Tarot'}
                 end
 
+            
+                
+
             elseif roll == 15 then
                 self.config.extra.last_roll_text = 'Poker hand leveled up'
                 level_up_hand(back, context.scoring_name, nil, 1)
@@ -4309,9 +4324,19 @@ SMODS.Back{
                 self.config.extra.last_roll_text = '+1 hand'
                 ease_hands_played(1)
 
+            elseif roll == 18 then
+                self.config.extra.last_roll_text = 'Retrigger played cards'
+                self.config.extra.retrigger_all = true
+
             elseif roll == 19 then
                 self.config.extra.last_roll_text = 'Money doubled'
                 ease_dollars(G.GAME.dollars)
+
+            elseif roll == 20 then
+                self.config.extra.last_roll_text = 'Negative tag created'
+                add_tag(Tag('tag_negative'))
+                play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
+                play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)
 
             end
 
@@ -4319,7 +4344,26 @@ SMODS.Back{
                 message = tostring(roll), 
                 colour = G.C.GREEN
             }
+        
+        elseif context.modify_hand and self.config.extra.flinted == true then
+            mult = math.max(math.floor(mult*0.5 + 0.5), 1)
+            hand_chips = math.max(math.floor(hand_chips*0.5 + 0.5), 0)
+            update_hand_text({ sound = 'chips2', modded = true }, { chips = hand_chips, mult = mult })
+
+        elseif context.cardarea == G.play and context.repetition and self.config.extra.retrigger_all == true then
+            return {
+                message = "Again!",
+                repetitions = 1,
+                card = card
+            }
+
+        elseif context.after then
+            self.config.extra.flinted = false
+            self.config.extra.retrigger_all = false
+
         end
+
+        
     end
 }
 function reset_treasure_rank()
