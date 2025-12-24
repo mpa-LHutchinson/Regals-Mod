@@ -4234,7 +4234,7 @@ SMODS.Back{
     order = 23,
     unlocked = true,
     discovered = true,
-    pos = { x = 0, y = 1 },
+    pos = { x = 0, y = 0 },
 	config = {
         extra = {
             last_roll_number = 0,
@@ -4254,8 +4254,7 @@ SMODS.Back{
 
     calculate = function(self, back, context)
         if context.before then
-            -- local roll = pseudorandom('d20d'..G.GAME.round_resets.ante, 1, 20)
-            local roll = 4
+            local roll = pseudorandom('d20d'..G.GAME.round_resets.ante, 1, 20)
             self.config.extra.last_roll_number = roll
 
             if roll == 1 then
@@ -4294,7 +4293,7 @@ SMODS.Back{
                 end
 
             elseif roll == 6 then
-                self.config.extra.last_roll_text = 'Randomize played cards'
+                self.config.extra.last_roll_text = 'Randomize scored cards'
 
                 for k, v in ipairs(context.scoring_hand) do
                     
