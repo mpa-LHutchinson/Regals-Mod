@@ -4337,26 +4337,32 @@ SMODS.Back{
                 ease_dollars(10)
 
             elseif roll == 11 then
+                self.config.extra.last_roll_text = 'Boss tag created'
+                add_tag(Tag('tag_boss'))
+                play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
+                play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)
+
+            elseif roll == 12 then
                 self.config.extra.last_roll_text = '+1 random joker'
                 if #G.jokers.cards + G.GAME.joker_buffer < G.jokers.config.card_limit then
                     SMODS.add_card {set = 'Joker'}
                 end
 
-            elseif roll == 12 then
+            elseif roll == 13 then
                 self.config.extra.last_roll_text = '+1 discard'
                 ease_discard(1)
 
-            elseif roll == 13 then
+            elseif roll == 14 then
                 self.config.extra.last_roll_text = '+1 tarot card'
                 if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
                     SMODS.add_card {set = 'Tarot'}
                 end
 
-            elseif roll == 14 then
+            elseif roll == 15 then
                 self.config.extra.last_roll_text = 'Poker hand leveled up'
                 level_up_hand(back, context.scoring_name, nil, 1)
 
-            elseif roll == 15 then
+            elseif roll == 16 then
                 self.config.extra.last_roll_text = '+1 fancy card'
                 G.E_MANAGER:add_event(Event({
                     func = function()
@@ -4369,29 +4375,23 @@ SMODS.Back{
                     end
                 }))
 
-            elseif roll == 16 then
+            elseif roll == 17 then
                 self.config.extra.last_roll_text = '+1 spectral card'
                 if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
                     SMODS.add_card {set = 'Spectral'}
                 end
 
-            elseif roll == 17 then
+            elseif roll == 18 then
                 self.config.extra.last_roll_text = '+1 hand'
                 ease_hands_played(1)
 
-            elseif roll == 18 then
+            elseif roll == 19 then
                 self.config.extra.last_roll_text = 'Retrigger played cards'
                 self.config.extra.retrigger_all = true
 
-            elseif roll == 19 then
+            elseif roll == 20 then
                 self.config.extra.last_roll_text = 'Money doubled, max $30'
                 ease_dollars(math.max(0,math.min(G.GAME.dollars, 30)))
-
-            elseif roll == 20 then
-                self.config.extra.last_roll_text = 'Negative tag created'
-                add_tag(Tag('tag_negative'))
-                play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
-                play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)
 
             end
 
