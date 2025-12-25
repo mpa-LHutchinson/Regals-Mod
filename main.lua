@@ -4284,7 +4284,7 @@ SMODS.Back{
                 if _card then
                     self.config.extra.debuffed_joker = _card
                     _card:set_debuff(true)
-                    _card:juice_up()
+                    --_card:juice_up()
                 end
                 
             elseif roll == 5 then
@@ -4307,7 +4307,7 @@ SMODS.Back{
 
                         G.E_MANAGER:add_event(Event({
                             func = function()
-                                v:juice_up()
+                                --v:juice_up()
                                 return true
                             end
                         }))
