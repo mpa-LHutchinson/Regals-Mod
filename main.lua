@@ -4349,14 +4349,14 @@ SMODS.Back{
                 end
 
             elseif roll == 13 then
-                self.config.extra.last_roll_text = '+1 discard'
-                ease_discard(1)
-
-            elseif roll == 14 then
                 self.config.extra.last_roll_text = '+1 tarot card'
                 if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
                     SMODS.add_card {set = 'Tarot'}
                 end
+
+            elseif roll == 14 then
+                self.config.extra.last_roll_text = '+1 discard'
+                ease_discard(1)
 
             elseif roll == 15 then
                 self.config.extra.last_roll_text = 'Poker hand leveled up'
