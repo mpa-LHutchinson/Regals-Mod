@@ -4249,12 +4249,13 @@ SMODS.Back{
     end,
 
     apply = function(self, back)
-        
+        back.juiceup = back.juice_up
     end,
 
     calculate = function(self, back, context)
         if context.before then
             local roll = pseudorandom('d20d'..G.GAME.round_resets.ante, 1, 20)
+            roll = 19
             self.config.extra.last_roll_number = roll
 
             if roll == 1 then
@@ -4408,13 +4409,11 @@ SMODS.Back{
             update_hand_text({ sound = 'chips2', modded = true }, { chips = hand_chips, mult = mult })
 
         elseif context.cardarea == G.play and context.repetition and self.config.extra.retrigger_all == true then
-            if context.card then
-                return {
-                    message = "Again!",
-                    repetitions = 1,
-                    card = context.card
-                }
-            end
+            return {
+                card = card,
+                message = "Again!",
+                repetitions = 1,
+            }
 
         elseif context.after then
             self.config.extra.flinted = false
