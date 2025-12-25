@@ -4255,7 +4255,6 @@ SMODS.Back{
     calculate = function(self, back, context)
         if context.before then
             local roll = pseudorandom('d20d'..G.GAME.round_resets.ante, 1, 20)
-            roll = 6
             self.config.extra.last_roll_number = roll
 
             if roll == 1 then
