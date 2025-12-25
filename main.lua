@@ -4408,11 +4408,13 @@ SMODS.Back{
             update_hand_text({ sound = 'chips2', modded = true }, { chips = hand_chips, mult = mult })
 
         elseif context.cardarea == G.play and context.repetition and self.config.extra.retrigger_all == true then
-            return {
-                message = "Again!",
-                repetitions = 1,
-                card = card
-            }
+            if context.card then
+                return {
+                    message = "Again!",
+                    repetitions = 1,
+                    card = context.card
+                }
+            end
 
         elseif context.after then
             self.config.extra.flinted = false
