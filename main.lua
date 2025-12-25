@@ -4234,7 +4234,7 @@ SMODS.Back{
     order = 23,
     unlocked = true,
     discovered = true,
-    pos = { x = 0, y = 0 },
+    pos = { x = 0, y = 1 },
 	config = {
         extra = {
             last_roll_number = 0,
@@ -4423,7 +4423,7 @@ SMODS.Back{
                 func = function()
                     if self.config.extra.debuffed_joker then
                         self.config.extra.debuffed_joker:set_debuff(false)
-                        self.config.extra.debuffed_joker:juice_up()
+                        --self.config.extra.debuffed_joker:juice_up()
                         self.config.extra.debuffed_joker = nil
                     end
                     return true
