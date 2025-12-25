@@ -4255,6 +4255,7 @@ SMODS.Back{
     calculate = function(self, back, context)
         if context.before then
             local roll = pseudorandom('d20d'..G.GAME.round_resets.ante, 1, 20)
+            roll = 6
             self.config.extra.last_roll_number = roll
 
             if roll == 1 then
@@ -4296,21 +4297,23 @@ SMODS.Back{
                 self.config.extra.last_roll_text = 'Randomize scored cards'
 
                 for k, v in ipairs(context.scoring_hand) do
-                    
-                    SMODS.change_base(v, pseudorandom_element(SMODS.Suits, pseudoseed('d20d')).key, pseudorandom_element(SMODS.Ranks, pseudoseed('d20d')).key)
 
-                    if G.GAME.blind.boss then
-                        v.ability.played_this_ante = false;
-                    end
+                    if v then
+                        SMODS.change_base(v, pseudorandom_element(SMODS.Suits, pseudoseed('d20d')).key, pseudorandom_element(SMODS.Ranks, pseudoseed('d20d')).key)
 
-                    G.E_MANAGER:add_event(Event({
-                        func = function()
-                            v:juice_up()
-                            return true
+                        if G.GAME.blind.boss then
+                            v.ability.played_this_ante = false;
                         end
-                    }))
-                    G.GAME.blind:debuff_card(v)
-                
+
+                        G.E_MANAGER:add_event(Event({
+                            func = function()
+                                v:juice_up()
+                                return true
+                            end
+                        }))
+                        G.GAME.blind:debuff_card(v)
+                    end
+                    
             end
 
             elseif roll == 7 then
