@@ -4289,7 +4289,7 @@ SMODS.Back{
             elseif roll == 5 then
                 self.config.extra.last_roll_text = 'Poker hand deleveled'
                 if G.GAME.hands[context.scoring_name].level > 1 then
-                    level_up_hand(back, context.scoring_name, nil, -1)
+                    level_up_hand(nil, context.scoring_name, nil, -1)
                 end
 
             elseif roll == 6 then
@@ -4362,7 +4362,7 @@ SMODS.Back{
 
             elseif roll == 15 then
                 self.config.extra.last_roll_text = 'Poker hand leveled up'
-                level_up_hand(back, context.scoring_name, nil, 1)
+                level_up_hand(nil, context.scoring_name, nil, 1)
 
             elseif roll == 16 then
                 self.config.extra.last_roll_text = '+1 fancy card'
