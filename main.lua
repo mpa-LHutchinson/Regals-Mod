@@ -4225,7 +4225,7 @@ SMODS.Back{
         text = {
           "Start run with",
           "{C:red}Director's Cut{}, every",
-          "{C:attention}other{} card drawn is",
+          "{C:attention}fourth{} card drawn is",
           "drawn {C:attention}face down{}",
         } 
     }, 
@@ -4236,7 +4236,8 @@ SMODS.Back{
     pos = { x = 0, y = 0 },
 	config = {vouchers = {'v_directors_cut'},
         extra = { 
-            should_hide = true 
+            draw_num = 1,
+            draw_limit = 4 
         }
     },
     loc_vars = function(self, info_queue, center)
@@ -4250,13 +4251,13 @@ SMODS.Back{
 
     calculate = function(self, back, context)
         if context.stay_flipped and context.to_area == G.hand then
-            if self.config.extra.should_hide then
-                self.config.extra.should_hide = false
+            if self.config.extra.draw_num >= self.config.extra.draw_limit then
+                self.config.extra.draw_num = 1
                 return {
                     stay_flipped = true
                 }
             else
-                self.config.extra.should_hide = true
+                self.config.extra.draw_num = self.config.extra.draw_num + 1
             end
             
         end     
