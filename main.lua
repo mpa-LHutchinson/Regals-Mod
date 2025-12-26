@@ -4219,6 +4219,50 @@ SMODS.Back{
     end
 }
 SMODS.Back{
+	key = "staticdeck",  
+    loc_txt = {      
+        name = 'Static Deck',      
+        text = {
+          "Start run with",
+          "{C:red}Director's Cut{}, every",
+          "{C:attention}other{} card drawn is",
+          "drawn {C:attention}face down{}",
+        } 
+    }, 
+    atlas = "Decks",
+    order = 23,
+    unlocked = true,
+    discovered = true,
+    pos = { x = 0, y = 0 },
+	config = {vouchers = {'v_directors_cut'},
+        extra = { 
+            should_hide = true 
+        }
+    },
+    loc_vars = function(self, info_queue, center)
+        return {vars = {}}
+    end,
+	
+	
+    apply = function(self, back)
+       
+    end,
+
+    calculate = function(self, back, context)
+        if context.stay_flipped and context.to_area == G.hand then
+            if self.config.extra.should_hide then
+                self.config.extra.should_hide = false
+                return {
+                    stay_flipped = true
+                }
+            else
+                self.config.extra.should_hide = true
+            end
+            
+        end     
+    end
+}
+SMODS.Back{
 	key = "d20deck",  
     loc_txt = {      
         name = 'D20 Deck',      
@@ -4231,7 +4275,7 @@ SMODS.Back{
         } 
     }, 
     atlas = "Decks",
-    order = 23,
+    order = 24,
     unlocked = true,
     discovered = true,
     pos = { x = 0, y = 1 },
