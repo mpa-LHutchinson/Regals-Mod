@@ -4255,6 +4255,7 @@ SMODS.Back{
     calculate = function(self, back, context)
         if context.before then
             local roll = pseudorandom('d20d'..G.GAME.round_resets.ante, 1, 20)
+            --roll = 11
             self.config.extra.last_roll_number = roll
 
             if roll == 1 then
@@ -4339,10 +4340,12 @@ SMODS.Back{
                 ease_dollars(10)
 
             elseif roll == 11 then
-                self.config.extra.last_roll_text = 'Boss tag created'
-                add_tag(Tag('tag_boss'))
-                play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
-                play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)
+                self.config.extra.last_roll_text = 'Boss rerolled'
+                -- add_tag(Tag('tag_boss'))
+                -- play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
+                -- play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)
+                G.from_boss_tag = true
+                G.FUNCS.reroll_boss()
 
             elseif roll == 12 then
                 self.config.extra.last_roll_text = '+1 random joker'
