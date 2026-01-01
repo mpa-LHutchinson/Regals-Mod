@@ -3722,7 +3722,7 @@ SMODS.Joker{
             juice_card_until(card, eval, true)
             return {
                 card = card,
-                message = 'Active',
+                message = 'Challenger approaching!',
                 colour = G.C.MONEY,
             }
         end
