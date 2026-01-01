@@ -4233,7 +4233,7 @@ SMODS.Back{
     order = 23,
     unlocked = true,
     discovered = true,
-    pos = { x = 0, y = 0 },
+    pos = { x = 1, y = 1 },
 	config = {vouchers = {'v_directors_cut'},
         extra = { 
             draw_num = 1,
