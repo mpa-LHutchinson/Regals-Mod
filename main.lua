@@ -3803,9 +3803,9 @@ SMODS.Joker{
     end,
 }
 SMODS.Joker{
-    key = 'yak', 
+    key = 'theyak', 
     loc_txt = { 
-        name = 'Yak',
+        name = 'The Yak',
         text = {
           "Up to {C:attention}#1#{} more card(s)",
           "can be selected to play",
@@ -3822,7 +3822,8 @@ SMODS.Joker{
     blueprint_compat = false, 
     eternal_compat = true, 
     perishable_compat = true, 
-    pos = {x = 8, y = 4}, 
+    pos = {x = 8, y = 4},
+    soul_pos = { x = 4, y = 4}, 
     config = { 
       extra = {
         selection_limit = 1
