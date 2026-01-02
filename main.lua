@@ -3280,7 +3280,7 @@ SMODS.Joker{
     pos = {x = 6, y = 5}, 
     config = { 
       extra = {
-        money = 5,
+        money = 6,
         pages = 0,
         lines = {'Follows...', 'Always watches...', 'Don\'t look...', 'Can\'t run...', 'Leave me alone...', 'Help me...', 'NO NO NO NO NO NO'}
       }
@@ -3668,7 +3668,7 @@ SMODS.Joker{
                         card.ability.extra_value = card.ability.extra_value + card.ability.extra.money
                         card:set_cost()
                     end,
-                    extra = {focus = card, message = "Ta-Da!", colour = G.C.MONEY}
+                    extra = {focus = card, message = "More...", colour = G.C.MONEY}
                 }
         end
     end,
