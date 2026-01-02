@@ -4094,11 +4094,11 @@ SMODS.Back{
 	
 	
     apply = function(self, back)
-        change_shop_size(-1)
+        --change_shop_size(-1)
         G.E_MANAGER:add_event(Event({
             func = function()
-                G.GAME.round_resets.reroll_cost = G.GAME.round_resets.reroll_cost + 1
-                G.GAME.current_round.reroll_cost = G.GAME.current_round.reroll_cost + 1
+                G.GAME.round_resets.reroll_cost = G.GAME.round_resets.reroll_cost + 2
+                G.GAME.current_round.reroll_cost = G.GAME.current_round.reroll_cost + 2
                 return true
             end
         }))
