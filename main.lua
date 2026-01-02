@@ -4079,7 +4079,7 @@ SMODS.Back{
           "Start run with",
           "{C:tarot}Soul{}, {C:red}-1{} card slots",
           "in the shop and",
-          "rerolls cost {C:money}$2{} more"
+          "rerolls cost {C:money}$1{} more"
         } 
     }, 
     atlas = "Decks",
@@ -4097,8 +4097,8 @@ SMODS.Back{
         change_shop_size(-1)
         G.E_MANAGER:add_event(Event({
             func = function()
-                G.GAME.round_resets.reroll_cost = G.GAME.round_resets.reroll_cost + 2
-                G.GAME.current_round.reroll_cost = G.GAME.current_round.reroll_cost + 2
+                G.GAME.round_resets.reroll_cost = G.GAME.round_resets.reroll_cost + 1
+                G.GAME.current_round.reroll_cost = G.GAME.current_round.reroll_cost + 1
                 return true
             end
         }))
