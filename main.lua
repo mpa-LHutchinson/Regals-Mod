@@ -3471,7 +3471,7 @@ SMODS.Joker{
     blueprint_compat = false, 
     eternal_compat = true, 
     perishable_compat = true, 
-    pos = {x = 8, y = 4}, 
+    pos = {x = 9, y = 5}, 
     config = { 
       extra = {
         odds = 4
@@ -3553,6 +3553,7 @@ SMODS.Joker{
             end
 
             if #destroyed_cards > 0 then
+                play_sound('slice1', 0.96+math.random()*0.08)
                 SMODS.destroy_cards(destroyed_cards)
 
                 return {
@@ -3564,7 +3565,7 @@ SMODS.Joker{
     end,
 
     in_pool = function(self,wawa,wawa2)
-        return false
+        return true
     end,
 }
 SMODS.Joker{
