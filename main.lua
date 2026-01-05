@@ -3553,7 +3553,12 @@ SMODS.Joker{
             end
 
             if #destroyed_cards > 0 then
-                play_sound('slice1', 0.96+math.random()*0.08)
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        play_sound('slice1', 0.96+math.random()*0.08)
+                        return true
+                    end
+                }))
                 SMODS.destroy_cards(destroyed_cards)
 
                 return {
