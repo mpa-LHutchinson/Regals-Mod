@@ -3457,8 +3457,8 @@ SMODS.Joker{
         text = {
           "All scored {C:attention}face{} cards",
           "become {C:attention}Steel{} cards,",
-          "{C:green}#1# in #2#{} chance for",
-          "scored face cards to be destroyed",
+          "{C:green}#1# in #2#{} chance for scored",
+          "face cards to be destroyed",
           "after hand is played"
         },
         
