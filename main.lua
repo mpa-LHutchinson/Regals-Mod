@@ -4082,10 +4082,8 @@ SMODS.Back{
     loc_txt = {      
         name = 'Companion Deck',      
         text = {
-          "Start run with",
-          "{C:tarot}Soul{}, {C:red}-1{} card slots",
-          "in the shop and",
-          "rerolls cost {C:money}$1{} more"
+          "Start run with {C:tarot}Soul{},",
+          "rerolls cost {C:money}$2{} more"
         } 
     }, 
     atlas = "Decks",
