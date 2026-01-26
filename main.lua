@@ -3828,8 +3828,8 @@ SMODS.Joker{
     blueprint_compat = false, 
     eternal_compat = true, 
     perishable_compat = true, 
-    pos = {x = 8, y = 4},
-    soul_pos = { x = 4, y = 4}, 
+    pos = {x = 4, y = 6},
+    soul_pos = { x = 6, y = 4}, 
     config = { 
       extra = {
         selection_limit = 1
