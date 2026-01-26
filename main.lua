@@ -3852,6 +3852,7 @@ SMODS.Joker{
     end,
 
     add_to_deck = function(self, card, from_debuff)
+        play_sound('rgl_rubberpile', 1, 6)
         SMODS.change_play_limit(card.ability.extra.selection_limit)
 		SMODS.change_discard_limit(card.ability.extra.selection_limit)
     end,
@@ -4512,6 +4513,10 @@ SMODS.Sound({
 SMODS.Sound({
 	key = "rainbow",
 	path = "RAINBOW.ogg",
+})
+SMODS.Sound({
+	key = "rubberpile",
+	path = "rubberpile.ogg",
 })
 --[[SMODS.Sound({
 	key = "burn",
