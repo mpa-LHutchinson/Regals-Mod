@@ -3829,7 +3829,7 @@ SMODS.Joker{
     eternal_compat = true, 
     perishable_compat = true, 
     pos = {x = 4, y = 6},
-    soul_pos = { x = 6, y = 4}, 
+    soul_pos = { x = 7, y = 4}, 
     config = { 
       extra = {
         selection_limit = 1
