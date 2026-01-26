@@ -3862,7 +3862,7 @@ SMODS.Joker{
 		SMODS.change_discard_limit(-card.ability.extra.selection_limit)
     end,
     in_pool = function(self,wawa,wawa2)
-        return false
+        return true
     end,
 }
 --[[SMODS.Joker{
