@@ -723,17 +723,24 @@ SMODS.Joker{
     end,
     calculate = function(self, card, context)
         if context.before and context.cardarea == G.jokers and G.GAME.current_round.hands_played == 0 and not context.blueprint then
+            local stones = 0
             for k, v in ipairs(context.scoring_hand) do
-                v:set_ability(G.P_CENTERS.m_stone, nil, true)
-                G.E_MANAGER:add_event(Event({
-                    func = function()
-                        v:juice_up()
-                        return true
-                    end
-                }))
-                G.GAME.blind:debuff_card(v) 
+                if not v.debuff then
+                    stones = stones + 1
+                    v:set_ability(G.P_CENTERS.m_stone, nil, true)
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            v:juice_up()
+                            return true
+                        end
+                    }))
+                    G.GAME.blind:debuff_card(v) 
+                end
             end
-            return {message = 'Gaze!', colour = G.C.PURPLE}
+            if stones > 0 then
+                return {message = 'Gaze!', colour = G.C.PURPLE}
+            end
+            
         end
     end,
 
@@ -1136,9 +1143,9 @@ SMODS.Joker{
     loc_txt = { 
         name = 'Jackpot',
         text = {
-          'If played hand contains {C:attention}3',
-          'scoring {C:attention}7s{}, score {C:mult}+#2# mult{}',
-          'and earn {C:money}$#1#{} at',
+          'If played poker hand contains',
+          '{C:attention}3 {C:attention}7s{}, score {C:mult}+#2#{}',
+          'Mult and earn {C:money}$#1#{} at',
           'the end of the round'
         },
         
@@ -1700,7 +1707,7 @@ SMODS.Joker{
     end,
     calculate = function(self, card, context)
         if context.discard then
-            if context.other_card.seal == 'Purple' then
+            if context.other_card.seal == 'Purple' and not context.other_card.debuff then
                     G.E_MANAGER:add_event(Event({
                         func = function() 
                             local card = create_card('Tarot',G.consumeables, nil, nil, nil, nil, nil, 'amethyst')
@@ -1976,7 +1983,7 @@ SMODS.Joker{
             end
             
             for k, v in ipairs(context.scoring_hand) do
-                if pseudorandom('cray') < G.GAME.probabilities.normal / card.ability.extra.odds then
+                if pseudorandom('cray') < G.GAME.probabilities.normal / card.ability.extra.odds and not v.debuff then
                     successful = true
                     v:set_ability(pseudorandom_element(cen_pool, pseudoseed('cray')), nil, true)
                     G.E_MANAGER:add_event(Event({
@@ -2789,20 +2796,25 @@ SMODS.Joker{
     calculate = function(self, card, context)
         if context.before and context.cardarea == G.jokers and not context.blueprint then
             if context.scoring_hand[1] then
-                context.scoring_hand[1]:set_edition('e_polychrome', true)
+                if not context.scoring_hand[1].debuff then
+                    context.scoring_hand[1]:set_edition('e_polychrome', true)
 
-                G.E_MANAGER:add_event(Event({
-                    func = function()
-                        context.scoring_hand[1]:juice_up()
-                        return true
-                    end
-                }))
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            context.scoring_hand[1]:juice_up()
+                            return true
+                        end
+                    }))
+
+                    return {
+                        message = 'Rainbow!', 
+                        colour = G.C.SECONDARY_SET.Enhanced
+                    }
+                end
+
+                
             end
-
-            return {
-                message = 'Rainbow!', 
-                colour = G.C.SECONDARY_SET.Enhanced
-            }
+            
         end
     end,
 
