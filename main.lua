@@ -3419,7 +3419,7 @@ SMODS.Joker{
         name = 'Peashooter',
         text = {
           "Jokers to the right",
-          "of this joker",
+          "of this Joker",
           "each give {C:chips}+#1#{} Chips",
         },
         
@@ -3442,11 +3442,19 @@ SMODS.Joker{
         return {vars = {center.ability.extra.chips}} 
     end,
     calculate = function(self, card, context)
-        if context.other_joker then 
+        if context.other_joker then
+
             local pea_pos = nil
-            for i = 1, #G.jokers.cards do
-                if G.jokers.cards[i] == card then pea_pos = i; break end
+            if not context.blueprint then
+                for i = 1, #G.jokers.cards do
+                    if G.jokers.cards[i] == card then pea_pos = i; break end
+                end
+            else
+                for i = 1, #G.jokers.cards do
+                    if G.jokers.cards[i] == context.blueprint_card then pea_pos = i; break end
+                end
             end
+            
             local other_pos = nil
             for i = 1, #G.jokers.cards do
                 if G.jokers.cards[i] == context.other_joker then other_pos = i; break end
