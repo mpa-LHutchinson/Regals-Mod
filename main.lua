@@ -361,13 +361,23 @@ SMODS.Joker{
         return {vars = {center.ability.extra.mult, center.ability.extra.mult_mod}} 
     end,
     calculate = function(self, card, context)
-        if context.before and context.cardarea == G.jokers and #context.scoring_hand == 5 and not context.blueprint then
-            card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
-            return {
-                card = card,
-                message = 'Weight gained!',
-                colour = G.C.MULT
-            }
+        if context.before and context.cardarea == G.jokers and not context.blueprint then
+            local scored_cards = 0
+            for k, v in ipairs(context.scoring_hand) do
+                if not v.debuff then
+                    scored_cards = scored_cards + 1
+                end
+            end
+
+            if scored_cards == 5 then
+                card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+                return {
+                    card = card,
+                    message = 'Weight gained!',
+                    colour = G.C.MULT
+                }
+            end
+            
         elseif context.joker_main then
             return {
                 card = card,
