@@ -3138,7 +3138,7 @@ SMODS.Joker{
         if context.before and context.cardarea == G.jokers then
             local function hasBlueSeal()
                 for k, v in ipairs(G.hand.cards) do
-                    if v.seal == 'Blue' then
+                    if v.seal == 'Blue' and not v.debuff then
                         return true
                     end
                 end
