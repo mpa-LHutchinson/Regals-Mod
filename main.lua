@@ -3843,10 +3843,11 @@ SMODS.Joker{
     loc_txt = { 
         name = 'The Yak',
         text = {
-          "Up to {C:attention}#1#{} more card(s)",
-          "can be selected to play",
-          "or discard, limit increases",
-          "after defeating {C:attention}Boss Blind{}"
+          "{C:attention}+#2#{} hand size. Up to",
+          "{C:attention}#1#{} more card(s) can be",
+          "selected to play or discard,",
+          "limit increases after",
+          "defeating {C:attention}Boss Blind{}"
         },
         
     },
@@ -3862,11 +3863,12 @@ SMODS.Joker{
     soul_pos = { x = 7, y = 4}, 
     config = { 
       extra = {
-        selection_limit = 1
+        selection_limit = 1,
+        extra_hand_size = 1
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.selection_limit}} 
+        return {vars = {center.ability.extra.selection_limit, center.ability.extra.extra_hand_size}} 
     end,
     calculate = function(self,card,context)
         if context.end_of_round and G.GAME.blind.boss and not context.individual and not context.repetition and not context.blueprint then
@@ -3883,11 +3885,13 @@ SMODS.Joker{
 
     add_to_deck = function(self, card, from_debuff)
         play_sound('rgl_rubberpile', 1, 6)
+        G.hand:change_size(card.ability.extra.extra_hand_size)
         SMODS.change_play_limit(card.ability.extra.selection_limit)
 		SMODS.change_discard_limit(card.ability.extra.selection_limit)
     end,
 
     remove_from_deck = function(self, card, from_debuff)
+        G.hand:change_size(-card.ability.extra.extra_hand_size)
         SMODS.change_play_limit(-card.ability.extra.selection_limit)
 		SMODS.change_discard_limit(-card.ability.extra.selection_limit)
     end,
