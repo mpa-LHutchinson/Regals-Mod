@@ -3531,7 +3531,7 @@ SMODS.Joker{
 
             if faces > 0 then 
                 return {
-                    message = '...',
+                    message = 'Springlocked!',
                     colour = G.C.PURPLE,
                     card = self
                 }
@@ -3609,7 +3609,7 @@ SMODS.Joker{
         name = 'Big Brother',
         text = {
           "Earn {C:money}$#1#{} if played",
-          "hand contains an",
+          "hand contains a scoring",
           "{C:attention}Ace{}, {C:attention}9{}, {C:attention}8{}, or {C:attention}4{},",
           "otherwise lose {C:money}$#2#{}",
         },
@@ -3637,7 +3637,7 @@ SMODS.Joker{
         if context.before and context.cardarea == G.jokers then
             local function has1984()
                 for k, v in ipairs(context.scoring_hand) do
-                    if v:get_id() == 14 or v:get_id() == 9 or v:get_id() == 8 or v:get_id() == 4  then
+                    if (v:get_id() == 14 or v:get_id() == 9 or v:get_id() == 8 or v:get_id() == 4) and not v.debuff  then
                         return true
                     end
                 end
@@ -3657,7 +3657,7 @@ SMODS.Joker{
 
                 return {
                     card = card,
-                    message = 'Execution scheduled!',
+                    message = 'Executed!',
                     colour = G.C.RED
                 }
             end
