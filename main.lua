@@ -3735,7 +3735,7 @@ SMODS.Joker{
     cost = 9,
     unlocked = true,
     discovered = true,
-    blueprint_compat = false,
+    blueprint_compat = true,
     eternal_compat = false,
     perishable_compat = true,
     pos = {x = 2, y = 6},
@@ -3763,7 +3763,7 @@ SMODS.Joker{
             }
         end
 
-        if context.selling_self and card.ability.extra.active and not context.blueprint then
+        if context.selling_self and card.ability.extra.active then
             G.E_MANAGER:add_event(Event {
                 func = function()
                     SMODS.add_card {set = 'Joker', edition = 'e_negative'}
@@ -3815,22 +3815,39 @@ SMODS.Joker{
     calculate = function(self,card,context)
         if context.before and context.poker_hands and next(context.poker_hands["Straight"]) and not context.blueprint then
             if context.scoring_hand[1] and context.scoring_hand[#context.scoring_hand]  then
-                context.scoring_hand[1]:set_edition('e_foil', true)
-                context.scoring_hand[#context.scoring_hand]:set_edition('e_holo', true)
-
-                G.E_MANAGER:add_event(Event({
-                    func = function()
-                        context.scoring_hand[1]:juice_up()
-                        context.scoring_hand[#context.scoring_hand]:juice_up()
-                        return true
-                    end
-                }))
+                
+                local portals = 0
+                if not context.scoring_hand[1].debuff then
+                    context.scoring_hand[1]:set_edition('e_foil', true)
+                    portals = portals + 1
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            context.scoring_hand[1]:juice_up()
+                            return true
+                        end
+                    }))
+                end
+                if not context.scoring_hand[#context.scoring_hand].debuff then
+                    context.scoring_hand[#context.scoring_hand]:set_edition('e_holo', true)
+                    portals = portals + 1
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            context.scoring_hand[#context.scoring_hand]:juice_up()
+                            return true
+                        end
+                    }))
+                end
+                
+                if portals > 0 then
+                    return {
+                        message = 'Portaled!', 
+                        colour = G.C.DARK_EDITION
+                    }
+                end
+                
             end
 
-            return {
-                message = 'Portaled!', 
-                colour = G.C.DARK_EDITION
-            }
+            
         end
         
     end,
