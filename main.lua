@@ -3684,7 +3684,7 @@ SMODS.Joker{
     cost = 6, 
     unlocked = true,  
     discovered = true, 
-    blueprint_compat = true, 
+    blueprint_compat = false, 
     eternal_compat = true, 
     perishable_compat = true, 
     pos = {x = 1, y = 6}, 
@@ -3698,7 +3698,7 @@ SMODS.Joker{
         return {vars = {center.ability.extra.money}} 
     end,
     calculate = function(self,card,context)
-        if context.individual and context.cardarea == G.play and context.other_card.seal == 'Gold' then
+        if context.individual and context.cardarea == G.play and context.other_card.seal == 'Gold' and not context.blueprint then
                 return {
                     func = function()
                         card.ability.extra_value = card.ability.extra_value + card.ability.extra.money
