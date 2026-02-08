@@ -12,3 +12,4 @@ Requires steamodded. May not be compatable with certain mods, if you run into an
 
 - Pinktheone(Regal): Developer
 - FoxboxRay(Ray): Artist ([Instagram](https://www.instagram.com/foxboxray/), [Youtube](https://www.youtube.com/@foxboxray))
+- Samantha: Artist for The Yak joker ([Instagram](https://www.instagram.com/samantha.gbbs/))
